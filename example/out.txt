@@ -1,0 +1,344 @@
+Installing dependencies from Pipfile.lock (63cb98)…
+Created temporary directory: /tmp/pip-ephem-wheel-cache-icpibp2j
+Created temporary directory: /tmp/pip-req-tracker-eed3rlto
+Created requirements tracker '/tmp/pip-req-tracker-eed3rlto'
+Created temporary directory: /tmp/pip-install-3bxftkjm
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: certifi==2019.6.16 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-nqry3lzw-requirement.txt (line 1)) (2019.6.16)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-eed3rlto'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-92ejozwc
+Created temporary directory: /tmp/pip-req-tracker-72eslnkd
+Created requirements tracker '/tmp/pip-req-tracker-72eslnkd'
+Created temporary directory: /tmp/pip-install-vth36b1x
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: chardet==3.0.4 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-yswsxwu3-requirement.txt (line 1)) (3.0.4)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-72eslnkd'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-lji3bm6h
+Created temporary directory: /tmp/pip-req-tracker-tx_s9zch
+Created requirements tracker '/tmp/pip-req-tracker-tx_s9zch'
+Created temporary directory: /tmp/pip-install-lymai4tg
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: coreapi==2.3.3 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-dsepbqjo-requirement.txt (line 1)) (2.3.3)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-tx_s9zch'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-mvndxr78
+Created temporary directory: /tmp/pip-req-tracker-bld9r59n
+Created requirements tracker '/tmp/pip-req-tracker-bld9r59n'
+Created temporary directory: /tmp/pip-install-ucg3eku9
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: coreschema==0.0.4 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-e5ikluu_-requirement.txt (line 1)) (0.0.4)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-bld9r59n'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-v_aun63x
+Created temporary directory: /tmp/pip-req-tracker-ga9tde23
+Created requirements tracker '/tmp/pip-req-tracker-ga9tde23'
+Created temporary directory: /tmp/pip-install-1ebbkdoh
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: defusedxml==0.6.0 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-8wzqrgtt-requirement.txt (line 1)) (0.6.0)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-ga9tde23'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-axb6o2kq
+Created temporary directory: /tmp/pip-req-tracker-veosyffd
+Created requirements tracker '/tmp/pip-req-tracker-veosyffd'
+Created temporary directory: /tmp/pip-install-ilqohzm_
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: django==2.2 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-4tth9_04-requirement.txt (line 1)) (2.2)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-veosyffd'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-j1sfs3xb
+Created temporary directory: /tmp/pip-req-tracker-q08n8o9f
+Created requirements tracker '/tmp/pip-req-tracker-q08n8o9f'
+Created temporary directory: /tmp/pip-install-65uali_h
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: django-allauth==0.39.1 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-g86unbgp-requirement.txt (line 1)) (0.39.1)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-q08n8o9f'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-b9prurlz
+Created temporary directory: /tmp/pip-req-tracker-ie2njjn5
+Created requirements tracker '/tmp/pip-req-tracker-ie2njjn5'
+Created temporary directory: /tmp/pip-install-n96olz4_
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: django-environ==0.4.5 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-mfl22ams-requirement.txt (line 1)) (0.4.5)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-ie2njjn5'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-2yzx434b
+Created temporary directory: /tmp/pip-req-tracker-1v7sid29
+Created requirements tracker '/tmp/pip-req-tracker-1v7sid29'
+Created temporary directory: /tmp/pip-install-7tgizuwr
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: django-rest-swagger==2.2.0 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-qr0keqrz-requirement.txt (line 1)) (2.2.0)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-1v7sid29'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-ylhukngq
+Created temporary directory: /tmp/pip-req-tracker-oep_tl5v
+Created requirements tracker '/tmp/pip-req-tracker-oep_tl5v'
+Created temporary directory: /tmp/pip-install-mmq4ywvw
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: djangorestframework==3.10.2 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-qu4upezh-requirement.txt (line 1)) (3.10.2)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-oep_tl5v'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-w2hu3lch
+Created temporary directory: /tmp/pip-req-tracker-5vw2b01k
+Created requirements tracker '/tmp/pip-req-tracker-5vw2b01k'
+Created temporary directory: /tmp/pip-install-_4nher8v
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: idna==2.8 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-xycl9ocu-requirement.txt (line 1)) (2.8)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-5vw2b01k'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-uwrfyhh9
+Created temporary directory: /tmp/pip-req-tracker-37vciij9
+Created requirements tracker '/tmp/pip-req-tracker-37vciij9'
+Created temporary directory: /tmp/pip-install-23w5abii
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: itypes==1.1.0 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-77cdfoai-requirement.txt (line 1)) (1.1.0)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-37vciij9'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-scn9hl47
+Created temporary directory: /tmp/pip-req-tracker-vhwnr1rb
+Created requirements tracker '/tmp/pip-req-tracker-vhwnr1rb'
+Created temporary directory: /tmp/pip-install-s3phzpnf
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: jinja2==2.10.1 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-j5ffw_z0-requirement.txt (line 1)) (2.10.1)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-vhwnr1rb'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-y4auoa2l
+Created temporary directory: /tmp/pip-req-tracker-10dps1a3
+Created requirements tracker '/tmp/pip-req-tracker-10dps1a3'
+Created temporary directory: /tmp/pip-install-hr8th_bg
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: markupsafe==1.1.1 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-s1a49jko-requirement.txt (line 1)) (1.1.1)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-10dps1a3'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-b28ofd4k
+Created temporary directory: /tmp/pip-req-tracker-il3ggboo
+Created requirements tracker '/tmp/pip-req-tracker-il3ggboo'
+Created temporary directory: /tmp/pip-install-fv3k9j__
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: oauthlib==3.1.0 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-er0o4r79-requirement.txt (line 1)) (3.1.0)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-il3ggboo'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-n5_6r_xq
+Created temporary directory: /tmp/pip-req-tracker-ad4ltwy8
+Created requirements tracker '/tmp/pip-req-tracker-ad4ltwy8'
+Created temporary directory: /tmp/pip-install-p432fed_
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: openapi-codec==1.3.2 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-2so0xfpp-requirement.txt (line 1)) (1.3.2)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-ad4ltwy8'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-_png2_h6
+Created temporary directory: /tmp/pip-req-tracker-p0u514z1
+Created requirements tracker '/tmp/pip-req-tracker-p0u514z1'
+Created temporary directory: /tmp/pip-install-kzm501rk
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: python3-openid==3.1.0 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-5ixf44h6-requirement.txt (line 1)) (3.1.0)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-p0u514z1'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-crcfiie3
+Created temporary directory: /tmp/pip-req-tracker-cun92x8f
+Created requirements tracker '/tmp/pip-req-tracker-cun92x8f'
+Created temporary directory: /tmp/pip-install-le7_pd63
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: pytz==2019.2 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-7_vmtlv8-requirement.txt (line 1)) (2019.2)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-cun92x8f'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-quuyikcf
+Created temporary directory: /tmp/pip-req-tracker-h8h2l8fp
+Created requirements tracker '/tmp/pip-req-tracker-h8h2l8fp'
+Created temporary directory: /tmp/pip-install-3alhjz32
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: requests==2.22.0 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-wir2odtw-requirement.txt (line 1)) (2.22.0)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-h8h2l8fp'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-tshjs23s
+Created temporary directory: /tmp/pip-req-tracker-6syuc7wx
+Created requirements tracker '/tmp/pip-req-tracker-6syuc7wx'
+Created temporary directory: /tmp/pip-install-sltwk_qc
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: requests-oauthlib==1.2.0 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-4fxpy_vz-requirement.txt (line 1)) (1.2.0)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-6syuc7wx'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-e5_x4zc_
+Created temporary directory: /tmp/pip-req-tracker-k3ec7pxx
+Created requirements tracker '/tmp/pip-req-tracker-k3ec7pxx'
+Created temporary directory: /tmp/pip-install-0kde9ta2
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: simplejson==3.16.0 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-j4bv3fac-requirement.txt (line 1)) (3.16.0)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-k3ec7pxx'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-x00hwm6g
+Created temporary directory: /tmp/pip-req-tracker-r188kot6
+Created requirements tracker '/tmp/pip-req-tracker-r188kot6'
+Created temporary directory: /tmp/pip-install-3yxbtct7
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: sqlparse==0.3.0 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-9rebkx3i-requirement.txt (line 1)) (0.3.0)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-r188kot6'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-yb21bj2j
+Created temporary directory: /tmp/pip-req-tracker-whpc3whf
+Created requirements tracker '/tmp/pip-req-tracker-whpc3whf'
+Created temporary directory: /tmp/pip-install-8wuprxss
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: uritemplate==3.0.0 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-8gfmt3jo-requirement.txt (line 1)) (3.0.0)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-whpc3whf'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-p_nsgjra
+Created temporary directory: /tmp/pip-req-tracker-8s0r1rnv
+Created requirements tracker '/tmp/pip-req-tracker-8s0r1rnv'
+Created temporary directory: /tmp/pip-install-l2kk4awd
+Looking in indexes: https://pypi.python.org/simple
+Requirement already satisfied: urllib3==1.25.3 in /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages (from -r /tmp/pipenv-_zrzj9df-requirements/pipenv-grujm8r2-requirement.txt (line 1)) (1.25.3)
+  Since it is already installed, we are trusting this package without checking its hash. To ensure a completely repeatable environment, install into an empty virtualenv.
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-8s0r1rnv'
+You are using pip version 19.0.3, however version 19.2.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.
+
+Created temporary directory: /tmp/pip-ephem-wheel-cache-3xiyhkkv
+Created temporary directory: /tmp/pip-req-tracker-tmqz36yv
+Created requirements tracker '/tmp/pip-req-tracker-tmqz36yv'
+Created temporary directory: /tmp/pip-install-qqnmj9u9
+Looking in indexes: https://pypi.python.org/simple
+Obtaining file:///home/allyn.treshansky/Dropbox/WORK/ASTROSAT/COMMON/django-astrosat
+  Added file:///home/allyn.treshansky/Dropbox/WORK/ASTROSAT/COMMON/django-astrosat to build tracker '/tmp/pip-req-tracker-tmqz36yv'
+    Running setup.py (path:/home/allyn.treshansky/Dropbox/WORK/ASTROSAT/COMMON/django-astrosat/setup.py) egg_info for package from file:///home/allyn.treshansky/Dropbox/WORK/ASTROSAT/COMMON/django-astrosat
+    Running command python setup.py egg_info
+    /home/allyn.treshansky/.pyenv/versions/3.7.3/lib/python3.7/distutils/dist.py:274: UserWarning: Unknown distribution option: 'install_requres'
+      warnings.warn(msg)
+    running egg_info
+    writing django_astrosat.egg-info/PKG-INFO
+    writing dependency_links to django_astrosat.egg-info/dependency_links.txt
+    writing top-level names to django_astrosat.egg-info/top_level.txt
+    reading manifest file 'django_astrosat.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    warning: no files found matching 'LICENSE'
+    warning: no files found matching '*' under directory 'astrosat/static'
+    warning: no files found matching '*' under directory 'astrosat/templates'
+    writing manifest file 'django_astrosat.egg-info/SOURCES.txt'
+  Source in /home/allyn.treshansky/Dropbox/WORK/ASTROSAT/COMMON/django-astrosat has version 1.0.0, which satisfies requirement django-astrosat==1.0.0 from file:///home/allyn.treshansky/Dropbox/WORK/ASTROSAT/COMMON/django-astrosat
+  Removed django-astrosat==1.0.0 from file:///home/allyn.treshansky/Dropbox/WORK/ASTROSAT/COMMON/django-astrosat from build tracker '/tmp/pip-req-tracker-tmqz36yv'
+Installing collected packages: django-astrosat
+  Found existing installation: django-astrosat 1.0.0
+    Uninstalling django-astrosat-1.0.0:
+      Created temporary directory: /tmp/pip-uninstall-6ivjeiwc
+      Removing file or directory /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages/django-astrosat.egg-link
+      Removing pth entries from /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages/easy-install.pth:
+      Removing entry: /home/allyn.treshansky/Dropbox/WORK/ASTROSAT/COMMON/django-astrosat
+      Successfully uninstalled django-astrosat-1.0.0
+  Running setup.py develop for django-astrosat
+    Running command /home/allyn.treshansky/.virtualenvs/django-astrosat/bin/python3.7 -c "import setuptools, tokenize;__file__='/home/allyn.treshansky/Dropbox/WORK/ASTROSAT/COMMON/django-astrosat/setup.py';f=getattr(tokenize, 'open', open)(__file__);code=f.read().replace('\r\n', '\n');f.close();exec(compile(code, __file__, 'exec'))" develop --no-deps
+    /home/allyn.treshansky/.pyenv/versions/3.7.3/lib/python3.7/distutils/dist.py:274: UserWarning: Unknown distribution option: 'install_requres'
+      warnings.warn(msg)
+    running develop
+    running egg_info
+    writing django_astrosat.egg-info/PKG-INFO
+    writing dependency_links to django_astrosat.egg-info/dependency_links.txt
+    writing top-level names to django_astrosat.egg-info/top_level.txt
+    reading manifest file 'django_astrosat.egg-info/SOURCES.txt'
+    reading manifest template 'MANIFEST.in'
+    warning: no files found matching 'LICENSE'
+    warning: no files found matching '*' under directory 'astrosat/static'
+    warning: no files found matching '*' under directory 'astrosat/templates'
+    writing manifest file 'django_astrosat.egg-info/SOURCES.txt'
+    running build_ext
+    Creating /home/allyn.treshansky/.virtualenvs/django-astrosat/lib/python3.7/site-packages/django-astrosat.egg-link (link to .)
+    Adding django-astrosat 1.0.0 to easy-install.pth file
+
+    Installed /home/allyn.treshansky/Dropbox/WORK/ASTROSAT/COMMON/django-astrosat
+Successfully installed django-astrosat
+Cleaning up...
+Removed build tracker '/tmp/pip-req-tracker-tmqz36yv'
+

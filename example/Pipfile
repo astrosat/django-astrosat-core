@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==2.2"
+django-environ = "*"
+djangorestframework = "*"
+django-rest-swagger = "*"
+
+[dev-packages]
+django-debug-toolbar = "*"
+
+[requires]
+python_version = "3.7"
+
+[packages.ed0a5ba]
+path = "./.."
+editable = true

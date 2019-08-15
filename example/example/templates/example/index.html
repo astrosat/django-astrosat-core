@@ -1,0 +1,42 @@
+{% load static %}
+{% load astrosat_tags %}
+
+<html>
+
+    <head>
+        <title>example project for astrosat apps</title>
+        <link rel="icon" href="{% static 'astrosat/img/favicon.png' %}">
+        <style>
+            body { padding: 2em; margin: 2em; }
+            .header { border-bottom: 1px solid #999; font-weight: bold; }
+            .footer { border-top: 1px solid #999; font-style: italic; }
+            .logo { height: 2rem; padding: 0.5rem; vertical-align: middle; }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <img class="logo" src="{% static 'astrosat/img/logo_light_background.png' %}" />
+            Behold Django-Astrosat-Core!
+        </div>
+        <div>
+            <p>
+                This is an example project demonstrating astrosat.
+                It is meant to be used as a pure API (except where it isn't).
+                Here are some useful links:
+                <ul>
+                    <li><a href="{% url 'admin:index' %}">{% url 'admin:index' %}</a></li>
+                    <li><a href="{% url 'astrosat-swagger' %}">{% url 'astrosat-swagger' %}</a></li>
+                    <li>/astrosat/api</li>
+
+                </ul>
+            </p>
+        </div>
+        <div class="footer">
+            <ul>
+                <li>title:&nbsp;{% astrosat_title %}</li>
+                <li>author:&nbsp;{% astrosat_author %}</li>
+                <li>version:&nbsp;{% astrosat_version %}</li>
+            </ul>
+        </div>
+    </body>
+</html>
