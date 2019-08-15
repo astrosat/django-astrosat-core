@@ -1,0 +1,53 @@
+body {
+    margin: 0;
+  }
+
+#astrosat .container,
+#astrosat .box-container {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#astrosat .box {
+  border: 2px solid black;
+  background-color: #fff;
+}
+
+#astrosat div.content {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+#astrosat div.logo {
+  background: black;
+  padding: 0.5rem;
+}
+
+#astrosat img.logo {
+  height: 50px;
+}
+
+#astrosat .errorlist {
+  color: rgb(255, 50, 0);
+  list-style-type: none;
+}
+
+#astrosat .messages .error {
+  color: rgb(255, 50, 0);
+}
+
+#astrosat .messages .warning {
+  color: rgb(255, 175, 0);
+}
+
+#astrosat .messages .info {
+  color: rgb(0, 210, 255);
+}
+
+#astrosat .messages .success {
+  color: rgb(50, 200, 50);
+}
