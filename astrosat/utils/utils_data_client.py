@@ -5,7 +5,7 @@ import re
 from collections import namedtuple
 from botocore.exceptions import ClientError
 
-from astrosat.app_settings import *
+from astrosat.conf import app_settings
 
 
 BucketObjectTuple = namedtuple(
@@ -35,14 +35,14 @@ class DataClient():
         logging_level = kwargs.pop("logging_level", logging.ERROR)
         set_boto3_logging_level(level=logging_level)
 
-        assert AWS_BUCKET_NAME and AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+        assert app_settings.AWS_BUCKET_NAME and app_settings.AWS_ACCESS_KEY_ID and app_settings.AWS_SECRET_ACCESS_KEY
 
         self.client = boto3.client(
             "s3",
-            aws_access_key_id=AWS_ACCESS_KEY_ID,
-            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            aws_access_key_id=app_settings.AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=app_settings.AWS_SECRET_ACCESS_KEY,
         )
-        self.bucket = AWS_BUCKET_NAME
+        self.bucket = app_settings.AWS_BUCKET_NAME
 
     def get_all_matching_objects(self, pattern, metadata_only=False):
         """

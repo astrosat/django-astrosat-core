@@ -12,6 +12,8 @@ import os
 
 from django.utils.translation import ugettext_lazy as _
 
+from astrosat.utils import DynamicSetting
+
 env = environ.Env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)

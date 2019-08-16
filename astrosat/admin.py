@@ -1,7 +1,14 @@
+from django.contrib import admin
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.urls import resolve
 
+from .models import AstrosatSettings
+
+
+###############
+# base admins #
+###############
 
 class CannotAddModelAdminBase(BaseModelAdmin):
 
@@ -94,4 +101,13 @@ class DeleteOnlyModelAdminBase(CannotAddModelAdminBase, CannotUpdateModelAdminBa
     Prevents doing anything to a model, except for deletion
     """
 
+    pass
+
+
+#################
+# normal admins #
+#################
+
+@admin.register(AstrosatSettings)
+class AstrosatSettingsAdmin(admin.ModelAdmin):
     pass
