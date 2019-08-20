@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ThermCERT{% endblock title %}</title>
+    <link rel="icon" href="{% static 'core/img/favicon.ico' %}">
+
+    {% block style %}
+      <link href="{% static 'astrosat/css/base.css' %}" rel="stylesheet">
+    {% endblock style %}
+
+  </head>
+
+  <body id="astrosat">
+
+    <div class="container">
+      <div class="box">
+        <a href="/" title="home">
+         <div class="logo">
+            <img class="logo" src="{% static 'astrosat/img/logo_dark_background.png' %}" alt="Astrosat logo" />
+          </div>  <!-- /.logo -->
+        </a>
+        <div class="content">
+          {% block content %}
+            you forgot to add content!
+          {% endblock content %}
+        </div> <!-- /.content -->
+      </div>  <!-- /.box -->
+    </div>  <!-- /.container -->
+
+    {% block javascript %}
+      <!-- local scripts go here -->
+    {% endblock javascript %}
+
+  </body>
+
+</html>
