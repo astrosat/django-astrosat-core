@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}ThermCERT{% endblock title %}</title>
+    <title>{% block title %}{% endblock title %}</title>
     <link rel="icon" href="{% static 'core/img/favicon.ico' %}">
 
     {% block style %}
@@ -24,7 +24,7 @@
       <div class="box">
         <a href="/" title="home">
          <div class="logo">
-            <img class="logo" src="{% static 'astrosat/img/logo_dark_background.png' %}" alt="Astrosat logo" />
+            <img class="logo" src="{% static 'astrosat/img/astrosat.png' %}" alt="Astrosat logo" />
           </div>  <!-- /.logo -->
         </a>
         <div class="content">
@@ -38,7 +38,10 @@
     {% block javascript %}
       <!-- local scripts go here -->
     {% endblock javascript %}
+ pipenv update django-astrosat-core
 
-  </body>
+  </body> pipenv update django-astrosat-core
+
+ pipenv update django-astrosat-core
 
 </html>
