@@ -1,10 +1,23 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import SimpleRouter
 
-from rest_framework_swagger.views import get_swagger_view
+from .views import ProxyS3View
 
 
-swagger_view = get_swagger_view(title="ThermCERT API")
+##############
+# API routes #
+##############
 
-urlpatterns = [
-    path('swagger/', swagger_view, name="astrosat-swagger"),
+api_router = SimpleRouter()
+# (if I had apps that used ViewSets (instead of CBVs or fns), I would register them here)
+api_urlpatterns = [
+    path("", include(api_router.urls)),
+    path("proxy/s3", ProxyS3View.as_view(), name="proxy-s3")
 ]
+
+
+#################
+# normal routes #
+#################
+
+urlpatterns = []

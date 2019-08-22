@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib.postgres.fields import ArrayField
-from django.db.fields import BigIntegerField
+from django.db.models.fields import BigIntegerField
 from django.core import exceptions
 
 

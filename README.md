@@ -26,7 +26,7 @@
 
 django-astrosat-core comes w/ an example project to help w/ developing/testing
 
-1. `git clone <repo> django-astrosat-core`
+1. `git clone https://github.com/astrosat/django-astrosat-core.git`
 2. `cd django-astrosat-core/example`
 3. activate virtual environments as desired
 4. `pipenv install`

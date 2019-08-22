@@ -6,12 +6,12 @@ from django.shortcuts import redirect
 def conditional_redirect(conditional, redirect_name):
 
     """
-    A decorator for a view that redirects to "redirect" if "conditional" is true
+    A decorator for a view that redirects to "redirect_name" if "conditional" is true
     Parameters
     ----------
     conditional : fn
         the function to check if a redirect will ocurr
-    redirect_name: fn
+    redirect_name: str
         the view name to redirect to
     """
 
@@ -21,7 +21,7 @@ def conditional_redirect(conditional, redirect_name):
         def conditional_redirect_wrapper(*args, **kwargs):
 
             if conditional():
-                return redirect(redirect_name, *args, **kwargs)
+                return redirect(redirect_nam)  # *args, **kwargs)
             return view_fn(*args, **kwargs)
 
         return conditional_redirect_wrapper

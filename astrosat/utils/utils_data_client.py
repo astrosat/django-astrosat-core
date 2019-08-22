@@ -1,7 +1,7 @@
 import boto3
 import logging
 import re
-
+from io import BytesIO
 from collections import namedtuple
 from botocore.exceptions import ClientError
 

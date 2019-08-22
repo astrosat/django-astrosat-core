@@ -1,20 +1,22 @@
 [[source]]
-url = "https://pypi.python.org/simple"
-verify_ssl = true
 name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pytest = "*"
+pytest-django = "*"
+factory-boy = "*"
+django-debug-toolbar = "*"
+pytest-sugar = "*"
 
 [packages]
 django = "==2.2"
 django-environ = "*"
 djangorestframework = "*"
 django-rest-swagger = "*"
-
-[dev-packages]
-django-debug-toolbar = "*"
+django-astrosat-core = {editable = true,path = "./.."}
+psycopg2-binary = "*"
 
 [requires]
 python_version = "3.7"
-
-[packages.ed0a5ba]
-path = "./.."
-editable = true

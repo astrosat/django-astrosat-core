@@ -9,7 +9,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock title %}</title>
+    <title>{% block head_title %}{% endblock head_title %}</title>
     <link rel="icon" href="{% static 'core/img/favicon.ico' %}">
 
     {% block style %}
@@ -31,6 +31,7 @@
           {% block content %}
             you forgot to add content!
           {% endblock content %}
+          <br>&nbsp;
         </div> <!-- /.content -->
       </div>  <!-- /.box -->
     </div>  <!-- /.container -->
@@ -38,7 +39,6 @@
     {% block javascript %}
       <!-- local scripts go here -->
     {% endblock javascript %}
- pipenv update django-astrosat-core
 
   </body>
 

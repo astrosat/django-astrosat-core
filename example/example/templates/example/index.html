@@ -10,7 +10,7 @@
             body { padding: 2em; margin: 2em; }
             .header { border-bottom: 1px solid #999; font-weight: bold; }
             .footer { border-top: 1px solid #999; font-style: italic; }
-            .logo { height: 2rem; padding: 0.5rem; vertical-align: middle; }
+            .logo { height: 3rem; padding: 0.5rem; vertical-align: middle; }
         </style>
     </head>
     <body>
@@ -20,13 +20,21 @@
         </div>
         <div>
             <p>
-                This is an example project demonstrating astrosat.
+                This is an example project demonstrating astrosat stuff.
                 It is meant to be used as a pure API (except where it isn't).
                 Here are some useful links:
                 <ul>
                     <li><a href="{% url 'admin:index' %}">{% url 'admin:index' %}</a></li>
-                    <li><a href="{% url 'astrosat-swagger' %}">{% url 'astrosat-swagger' %}</a></li>
+                    <li><a href="{% url 'swagger' %}">{% url 'swagger' %}</a></li>
                     <li>/astrosat/api</li>
+                    <li>backend errors (exposed just for testing):
+                        <ul>
+                            <li><a href="/400">400</a></li>
+                            <li><a href="/403">403</a></li>
+                            <li><a href="/404">404</a></li>
+                            <li><a href="/400">500</a></li>
+                        </ul>
+                    </li>
 
                 </ul>
             </p>
@@ -36,6 +44,8 @@
                 <li>title:&nbsp;{% astrosat_title %}</li>
                 <li>author:&nbsp;{% astrosat_author %}</li>
                 <li>version:&nbsp;{% astrosat_version %}</li>
+                <li>source:&nbsp;<a href="https://github.com/astrosat/thermcert/django-astrosat-core">https://github.com/astrosat/thermcert/django-astrosat-core</a></li>
+                <li>documentation:&nbsp;TODO</li>
             </ul>
         </div>
     </body>

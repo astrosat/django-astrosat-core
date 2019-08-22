@@ -17,8 +17,6 @@ install_requires = [
     "django>=2.2",
     # api
     "djangorestframework>=3.9",
-    # api documentation
-    "django-rest-swagger>=2.2",
     # easier json validation
     "jsonschema>=3.0",
     # S3 access
