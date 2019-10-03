@@ -5,6 +5,9 @@ import operator
 import pstats
 import sys
 
+from django.apps import apps
+from django.template import Context, Template
+
 from pympler.classtracker import ClassTracker
 from pympler.process import ProcessMemoryInfo
 from pympler.util.stringutils import pp
@@ -64,6 +67,7 @@ def track_memory(path=""):
     """
     A decorator that reports the memory usage of a function.
     This simulates the django-debug-toolbar panel that pympler provides.
+    (note: b/c this decorator takes arguments, it must be called as a fn)
     Parameters
     ----------
     path : str
@@ -71,7 +75,6 @@ def track_memory(path=""):
     """
 
     def track_memory_decorator(fn):
-
 
         @functools.wraps(fn)
         def track_memory_wrapper(*args, **kwargs):
