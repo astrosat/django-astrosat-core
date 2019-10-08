@@ -1,14 +1,9 @@
-from itertools import filterfalse, islice, tee, zip_longest
-
-
-#############
-# iterators #
-#############
+from itertools import filterfalse, tee, zip_longest
 
 
 def grouper(iterable, n, fillvalue=None):
     """
-    Collect data into fixed-length chunks or blocks"
+    Collect data into fixed-length chunks or blocks
     from: https://docs.python.org/3/library/itertools.html#itertools-recipes
     """
     # grouper('ABCDEFG', 3, 'x') --> ABC DEF Gxx"

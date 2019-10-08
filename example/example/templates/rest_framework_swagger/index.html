@@ -1,0 +1,11 @@
+{% extends "rest_framework_swagger/index.html" %} {% load i18n %} {% load
+staticfiles %}
+
+<!-- adds a custom header for Swagger templates to help me quickly navigate during development -->
+
+{% block user_context_message %}
+<div>
+  <a href="/" title="index">goto site</a>
+</div>
+{{ block.super }}
+{% endblock %}

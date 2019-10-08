@@ -11,6 +11,8 @@ from astrosat.urls import (
     api_urlpatterns as astrosat_api_urlpatterns,
 )
 
+from .views import index_view
+
 
 admin.site.site_header = "Admin for Example Project for Astrosat Apps"
 
@@ -26,9 +28,7 @@ handler500 = "astrosat.views.handler400"
 
 api_router = SimpleRouter()
 # (if I had apps that used ViewSets (instead of CBVs or fns), I would register them here)
-api_urlpatterns = [
-    path("", include(api_router.urls)),
-]
+api_urlpatterns = [path("", include(api_router.urls))]
 api_urlpatterns += astrosat_api_urlpatterns
 
 
@@ -38,26 +38,31 @@ api_urlpatterns += astrosat_api_urlpatterns
 
 urlpatterns = [
     # admin...
-    path('admin/', admin.site.urls),
-
+    path("admin/", admin.site.urls),
     # api...
     path("api/", include(api_urlpatterns)),
-    path("swagger/", get_swagger_view(title="Django-Astrosat-Core API"), name="swagger"),
-
+    path(
+        "swagger/", get_swagger_view(title="Django-Astrosat-Core API"), name="swagger"
+    ),
     # astrosat...
-    path('astrosat/', include(astrosat_urlpatterns)),
-
+    path("astrosat/", include(astrosat_urlpatterns)),
     # index...
-    path('', TemplateView.as_view(template_name="example/index.html"))
-
+    path("", index_view, name="index"),
 ]
 
 if settings.DEBUG:
 
     # allow the error pages to be accessed during development...
 
-    from functools import partial  # (using partial to pretend there's an exception below)
-    from django.http import HttpResponseBadRequest, HttpResponseForbidden, HttpResponseNotFound, HttpResponseServerError
+    from functools import (
+        partial,
+    )  # (using partial to pretend there's an exception below)
+    from django.http import (
+        HttpResponseBadRequest,
+        HttpResponseForbidden,
+        HttpResponseNotFound,
+        HttpResponseServerError,
+    )
     from astrosat.views import handler400, handler403, handler404, handler500
 
     urlpatterns += [
@@ -73,6 +78,4 @@ if settings.DEBUG:
 
         import debug_toolbar
 
-        urlpatterns = [
-            path("__debug__/", include(debug_toolbar.urls))
-        ] + urlpatterns
+        urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
