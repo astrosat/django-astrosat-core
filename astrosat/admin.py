@@ -10,6 +10,7 @@ from .models import AstrosatSettings
 # base admins #
 ###############
 
+
 class CannotAddModelAdminBase(BaseModelAdmin):
 
     """
@@ -35,7 +36,8 @@ class CannotDeleteModelAdminBase(BaseModelAdmin):
 
         actions = super().get_actions(request)
         return {
-            action_name: action_function for action_name, action_function in actions.items()
+            action_name: action_function
+            for action_name, action_function in actions.items()
             if action_name not in self.invalid_actions
         }
 
@@ -46,7 +48,7 @@ class CannotUpdateModelAdminBase(BaseModelAdmin):
     Prevents updating existing models via the admin
     """
 
-    def changeform_view(self, request, object_id=None, form_url='', extra_context=None):
+    def changeform_view(self, request, object_id=None, form_url="", extra_context=None):
 
         extra_context = extra_context or {}
         extra_context["show_save"] = False
@@ -56,7 +58,9 @@ class CannotUpdateModelAdminBase(BaseModelAdmin):
         # [https://github.com/django/django/blob/2.0.3/django/contrib/admin/templatetags/admin_modify.py#L59-L62]
         # hence, the ugly overloaded "has_add_permission" function below...
         extra_context["show_save_and_add_another"] = False
-        return super().changeform_view(request, object_id, form_url=form_url, extra_context=extra_context)
+        return super().changeform_view(
+            request, object_id, form_url=form_url, extra_context=extra_context
+        )
 
     def has_add_permission(self, request, obj=None):
         current_url = resolve(request.path_info).url_name
@@ -78,15 +82,22 @@ class CannotEditModelAdminBase(BaseModelAdmin):
         # if fieldsets:
         #     return flatten_fieldsets(fieldsets)
 
-        local_fields = list(set(
-            # using 'local_fields' to exclude reverse relationships
-            [f.name for f in self.opts.local_fields] +
-            [f.name for f in self.opts.local_many_to_many]
-        ))
+        local_fields = list(
+            set(
+                # using 'local_fields' to exclude reverse relationships
+                [f.name for f in self.opts.local_fields]
+                + [f.name for f in self.opts.local_many_to_many]
+            )
+        )
         return local_fields
 
 
-class ReadOnlyModelAdminBase(CannotAddModelAdminBase, CannotDeleteModelAdminBase, CannotUpdateModelAdminBase, CannotEditModelAdminBase):
+class ReadOnlyModelAdminBase(
+    CannotAddModelAdminBase,
+    CannotDeleteModelAdminBase,
+    CannotUpdateModelAdminBase,
+    CannotEditModelAdminBase,
+):
 
     """"
     Prevents doing anything to a model
@@ -95,7 +106,9 @@ class ReadOnlyModelAdminBase(CannotAddModelAdminBase, CannotDeleteModelAdminBase
     actions = None
 
 
-class DeleteOnlyModelAdminBase(CannotAddModelAdminBase, CannotUpdateModelAdminBase, CannotEditModelAdminBase):
+class DeleteOnlyModelAdminBase(
+    CannotAddModelAdminBase, CannotUpdateModelAdminBase, CannotEditModelAdminBase
+):
 
     """"
     Prevents doing anything to a model, except for deletion
@@ -107,6 +120,7 @@ class DeleteOnlyModelAdminBase(CannotAddModelAdminBase, CannotUpdateModelAdminBa
 #################
 # normal admins #
 #################
+
 
 @admin.register(AstrosatSettings)
 class AstrosatSettingsAdmin(admin.ModelAdmin):

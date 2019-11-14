@@ -10,10 +10,7 @@ from django.core.exceptions import ImproperlyConfigured
 from astrosat.conf import app_settings
 
 
-BucketObjectTuple = namedtuple(
-    "BucketObjectTuple",
-    ["stream", "metadata"]
-)
+BucketObjectTuple = namedtuple("BucketObjectTuple", ["stream", "metadata"])
 
 
 def set_boto3_logging_level(level=logging.CRITICAL):
@@ -27,7 +24,7 @@ def set_boto3_logging_level(level=logging.CRITICAL):
             logging.getLogger(logger_name).setLevel(level)
 
 
-class DataClient():
+class DataClient:
 
     client = None
     bucket = None
@@ -37,7 +34,11 @@ class DataClient():
         logging_level = kwargs.pop("logging_level", logging.ERROR)
         set_boto3_logging_level(level=logging_level)
 
-        if not app_settings.AWS_BUCKET_NAME and app_settings.AWS_ACCESS_KEY_ID and app_settings.AWS_SECRET_ACCESS_KEY:
+        if (
+            not app_settings.AWS_BUCKET_NAME
+            and app_settings.AWS_ACCESS_KEY_ID
+            and app_settings.AWS_SECRET_ACCESS_KEY
+        ):
             raise ImproperlyConfigured("AWS ACCESS KEYS are not set")
 
         self.client = boto3.client(
@@ -60,10 +61,11 @@ class DataClient():
             for metadata_obj in response["Contents"]:
                 key = metadata_obj["Key"]
                 if pattern.match(key):
-                    matching_obj = self.client.get_object(
-                        Bucket=self.bucket,
-                        Key=key
-                    ) if not metadata_only else None
+                    matching_obj = (
+                        self.client.get_object(Bucket=self.bucket, Key=key)
+                        if not metadata_only
+                        else None
+                    )
                     yield BucketObjectTuple(
                         matching_obj.get("Body") if not metadata_only else None,
                         metadata_obj,
@@ -78,7 +80,9 @@ class DataClient():
         Gets the first object from the current bucket matching a regex pattern
         """
         try:
-            return next(self.get_all_matching_objects(pattern, metadata_only=metadata_only))
+            return next(
+                self.get_all_matching_objects(pattern, metadata_only=metadata_only)
+            )
         except StopIteration:
             return None
 
@@ -90,17 +94,14 @@ class DataClient():
         """
         if key is not None:
             try:
-                obj = self.client.get_object(
-                    Bucket=self.bucket,
-                    Key=key,
-                )
+                obj = self.client.get_object(Bucket=self.bucket, Key=key)
                 if obj:
                     return obj.get("Body")
             except ClientError as e:
                 # if the key is wrong, don't return anthing...
                 if e.response["Error"]["Code"] != "NoSuchKey":
                     # ...but if some other error ocurred, raise it
-                    raise(e)
+                    raise (e)
 
     def get_objects(self, key, metadata_only=True):
         """
@@ -110,10 +111,7 @@ class DataClient():
         """
         if key is not None:
             try:
-                response = self.client.list_objects_v2(
-                    Bucket=self.bucket,
-                    Prefix=key,
-                )
+                response = self.client.list_objects_v2(Bucket=self.bucket, Prefix=key)
                 if response["KeyCount"]:
                     objs = []
                     for obj in response["Contents"]:
@@ -122,15 +120,22 @@ class DataClient():
                             obj_tags = {
                                 obj_tagset["Key"]: obj_tagset["Value"]
                                 for obj_tagset in self.client.get_object_tagging(
-                                    Bucket=self.bucket,
-                                    Key=obj_key,
-                                )["TagSet"]  # tags are in "sets", hence this dictionary comprehension
+                                    Bucket=self.bucket, Key=obj_key
+                                )[
+                                    "TagSet"
+                                ]  # tags are in "sets", hence this dictionary comprehension
                             }
-                            assert "key" not in obj_tags, "object tagset must not use the reserved word 'key'"
+                            assert (
+                                "key" not in obj_tags
+                            ), "object tagset must not use the reserved word 'key'"
                             obj_tags["key"] = obj_key
                             objs.append(
                                 BucketObjectTuple(
-                                    self.client.get_object(Bucket=self.bucket, Key=obj_key)["Body"] if not metadata_only else None,
+                                    self.client.get_object(
+                                        Bucket=self.bucket, Key=obj_key
+                                    )["Body"]
+                                    if not metadata_only
+                                    else None,
                                     obj_tags,
                                 )
                             )
@@ -141,7 +146,7 @@ class DataClient():
                 # if the key is wrong, don't return anything...
                 if e.response["Error"]["Code"] != "NoSuchKey":
                     # ...but if some other error ocurred, raise it
-                    raise(e)
+                    raise (e)
 
     def get_data(self, pattern):
         """
@@ -165,9 +170,6 @@ class DataClient():
             url = self.client.generate_presigned_url(
                 ClientMethod=method,
                 ExpiresIn=expiry,
-                Params={
-                    "Bucket": self.bucket,
-                    "Key": obj.metadata["Key"],
-                }
+                Params={"Bucket": self.bucket, "Key": obj.metadata["Key"]},
             )
             return url

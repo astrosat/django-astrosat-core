@@ -9,8 +9,7 @@ from .factories import ExampleEpochModelFactory
 
 
 @pytest.mark.django_db
-class TestEpoch():
-
+class TestEpoch:
     def test_initialise(self):
         fake_str = "2000-01-01"
         fake_date = datetime.datetime.strptime(fake_str, "%Y-%m-%d")
@@ -50,7 +49,7 @@ class TestEpoch():
         pst_zone = pytz.timezone("America/Los_Angeles")
         est_zone = pytz.timezone("America/New_York")
 
-        fake_date = datetime.datetime(2001, 1, 1, 1, 0, 0) # add HH:MM:SS
+        fake_date = datetime.datetime(2001, 1, 1, 1, 0, 0)  # add HH:MM:SS
         fake_pst_date = pst_zone.localize(fake_date)
         fake_est_date = est_zone.localize(fake_date)
 

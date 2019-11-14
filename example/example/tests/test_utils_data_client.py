@@ -9,10 +9,7 @@ from astrosat.tests.utils import mock_data_client
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 TEST_DATA_PATHS = [
-    (
-        os.path.join(TEST_DATA_DIR, file_name),  # path
-        file_name,  # key
-    )
+    (os.path.join(TEST_DATA_DIR, file_name), file_name)  # path  # key
     for file_name in os.listdir(TEST_DATA_DIR)
 ]
 
@@ -58,7 +55,9 @@ def test_data_client(mock_data_client):
     assert data_content["value"] == 1
 
     # test get metadata only...
-    matching_metadata_objects = data_client.get_all_matching_objects(".*", metadata_only=True)
+    matching_metadata_objects = data_client.get_all_matching_objects(
+        ".*", metadata_only=True
+    )
     for i, obj in enumerate(matching_metadata_objects, start=1):
         assert obj.stream is None
         assert obj.metadata is not None

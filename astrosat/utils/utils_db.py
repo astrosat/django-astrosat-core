@@ -21,7 +21,8 @@ def bulk_update_or_create(model_class, model_data, comparator_fn=None):
     # get all the fields that uniquely identify a model object...
     # TODO: deal w/ unique_together fields
     unique_field_names = [
-        field.name for field in model_class._meta.get_fields()
+        field.name
+        for field in model_class._meta.get_fields()
         if field.concrete and not field.primary_key and field.unique
     ]
     all_data_record_field_names = set()
@@ -46,8 +47,14 @@ def bulk_update_or_create(model_class, model_data, comparator_fn=None):
         }
 
         matching_object = next(
-            (obj for obj in existing_objects if all([getattr(obj, k) == v for k, v in unique_data_record_fields.items()])),
-            None
+            (
+                obj
+                for obj in existing_objects
+                if all(
+                    [getattr(obj, k) == v for k, v in unique_data_record_fields.items()]
+                )
+            ),
+            None,
         )
         if matching_object:
             if comparator_fn is None or not comparator_fn(matching_object, data_record):
@@ -65,4 +72,3 @@ def bulk_update_or_create(model_class, model_data, comparator_fn=None):
 
     # returns a tuple of created objects & updated objects
     return (objects_to_create, objects_to_update)
-

@@ -33,7 +33,7 @@ class Command(BaseCommand):
             "--index",
             dest="index",
             action="store_true",
-            help="whether or not to include the index in the output (default is False)."
+            help="whether or not to include the index in the output (default is False).",
         )
         self.parser = parser  # save the parser to use w/ error messages below
 
@@ -45,9 +45,7 @@ class Command(BaseCommand):
 
         try:
             geo_data_frame = gpd.read_file(input_path)
-            data_frame = pd.DataFrame(
-                geo_data_frame.drop(columns="geometry")
-            )
+            data_frame = pd.DataFrame(geo_data_frame.drop(columns="geometry"))
             data_frame.to_csv(output_path, index=include_index)
         except Exception as e:
             raise CommandError(str(e) + "\n\n" + self.parser.format_help())

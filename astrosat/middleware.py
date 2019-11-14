@@ -23,10 +23,11 @@ class JSONDebugToolbarMiddleware:
         # the view (and later middleware) are called.
 
         response = self.get_response(request)
-        if self.QUERY_PARAMETER in request.GET and self.JSON_CONTENT_TYPE == response["Content-Type"]:
+        if (
+            self.QUERY_PARAMETER in request.GET
+            and self.JSON_CONTENT_TYPE == response["Content-Type"]
+        ):
             content = json.dumps(json.loads(response.content))
-            response = HttpResponse(
-                f"<html><body><pre>{content}</pre></body></html>"
-            )
+            response = HttpResponse(f"<html><body><pre>{content}</pre></body></html>")
 
         return response

@@ -9,7 +9,7 @@ from astrosat.management.commands.update_site import SITE_ENVIRONMENT_VARIABLE
 
 
 @pytest.mark.django_db
-class TestUpdateSite():
+class TestUpdateSite:
 
     command_name = "update_site"
 
@@ -55,7 +55,12 @@ class TestUpdateSite():
         # make sure we can't specify a duplicate domain
         with pytest.raises(CommandError):
             another_test_id = test_id + 1
-            call_command(self.command_name, domain=test_domain, name=test_name, id=another_test_id)
+            call_command(
+                self.command_name,
+                domain=test_domain,
+                name=test_name,
+                id=another_test_id,
+            )
         assert Site.objects.count() == 2
 
     def test_update_site_from_env(self, create_env_file):

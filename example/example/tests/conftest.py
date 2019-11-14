@@ -17,7 +17,6 @@ def api_client():
 
 @pytest.fixture
 def create_env_file():
-
     def _create_env_file(**kwargs):
 
         assert len(kwargs) >= 1

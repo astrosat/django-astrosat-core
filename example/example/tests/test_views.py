@@ -12,10 +12,7 @@ from astrosat.tests.utils import mock_data_client
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 TEST_DATA_PATHS = [
-    (
-        os.path.join(TEST_DATA_DIR, file_name),  # path
-        file_name,  # key
-    )
+    (os.path.join(TEST_DATA_DIR, file_name), file_name)  # path  # key
     for file_name in os.listdir(TEST_DATA_DIR)
 ]
 
@@ -30,9 +27,7 @@ def test_proxy_s3_view(api_client, mock_data_client):
     data_client = mock_data_client(TEST_DATA_PATHS)
 
     # test a valid key returns the expected resource...
-    valid_url_params = urllib.parse.urlencode({
-        "key": "one.json",
-    })
+    valid_url_params = urllib.parse.urlencode({"key": "one.json"})
     url = f"{reverse(view_name)}?{valid_url_params}"
     response = api_client.get(url)
     assert response.status_code == status.HTTP_200_OK
@@ -41,9 +36,7 @@ def test_proxy_s3_view(api_client, mock_data_client):
     assert content["value"] == 1
 
     # test an invalid key returns an error...
-    invalid_url_params = urllib.parse.urlencode({
-        "key": "invalid",
-    })
+    invalid_url_params = urllib.parse.urlencode({"key": "invalid"})
     url = f"{reverse(view_name)}?{invalid_url_params}"
     response = api_client.get(url)
     assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR

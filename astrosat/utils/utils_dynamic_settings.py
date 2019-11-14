@@ -20,7 +20,7 @@ class DynamicSetting(object):
         This will try to assign the value of my_app.MyModel.my_setting (which must be a singleton) to MY_SETTING.
         If anything goes wrong, it will fall back to the default value.
         """
-        if len(source.split('.')) != 3:
+        if len(source.split(".")) != 3:
             msg = f"Invalid DynamicSetting value; format is <app>.<model>.<attr>"
             raise ImproperlyConfigured(msg)
         self.source = source
@@ -28,7 +28,7 @@ class DynamicSetting(object):
 
     @property
     def value(self):
-        app_name, model_name, attr_name = self.source.split('.')
+        app_name, model_name, attr_name = self.source.split(".")
         try:
             model = apps.get_model(app_label=app_name, model_name=model_name)
             # model is a SingletonMixin, so pk will always equal 1
@@ -50,6 +50,7 @@ class DynamicSetting(object):
         see if the attr is an instance of a DynamicSetting; if so, it returns
         the current value from the db.
         """
+
         def _new_getattr(instance, name):
             if instance._wrapped is empty:
                 instance._setup(name)
@@ -116,6 +117,7 @@ class DynamicAppSettings(LazyObject):
             for app_setting in dir(app_settings_module)
             if app_setting.isupper()
         }
+
 
 # class DynamicAppSettings(object):
 

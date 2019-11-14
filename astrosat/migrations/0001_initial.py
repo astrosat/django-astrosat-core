@@ -7,18 +7,25 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='AstrosatSettings',
+            name="AstrosatSettings",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                )
             ],
             options={
-                'verbose_name': 'Astrosat Settings',
-                'verbose_name_plural': 'Astrosat Settings',
+                "verbose_name": "Astrosat Settings",
+                "verbose_name_plural": "Astrosat Settings",
             },
-        ),
+        )
     ]

@@ -41,7 +41,9 @@ class WritableNestedListSerializer(serializers.ListSerializer):
         """
         self.id_field = kwargs.get("id_field", "id")
         super().__init__(*args, **kwargs)
-        assert self.id_field in self.child.fields, "WriteableNestedListSerializer requires a valid id field"
+        assert (
+            self.id_field in self.child.fields
+        ), "WriteableNestedListSerializer requires a valid id field"
 
     def crud(self, instances=[], validated_data=[], delete_missing=False):
 
@@ -49,14 +51,12 @@ class WritableNestedListSerializer(serializers.ListSerializer):
 
         # map of existing instances...
         instance_mapping = {
-            getattr(instance, self.id_field): instance
-            for instance in instances
+            getattr(instance, self.id_field): instance for instance in instances
         }
 
         # map of instances specified in data...
         data_mapping = {
-            data.get(self.id_field, id(data)): data
-            for data in validated_data
+            data.get(self.id_field, id(data)): data for data in validated_data
         }
 
         # create every instance in data_mapping NOT in instance_mapping

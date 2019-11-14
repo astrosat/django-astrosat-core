@@ -20,10 +20,7 @@ class PrettyLoremProvider(BaseProvider):
         returns a list of pretty words
         """
         words = fake.words(nb=3, ext_word_list=ext_word_list)
-        return [
-            w.title()
-            for w in words
-        ]
+        return [w.title() for w in words]
 
     def pretty_sentence(self, nb_words=6, ext_word_list=None):
         """
@@ -45,22 +42,14 @@ class GeometryProvider(BaseProvider):
 
     def line_string(self, n_points=2):
         assert n_points >= 2
-        points = [
-            self.generator.point()
-            for _ in range(n_points)
-        ]
+        points = [self.generator.point() for _ in range(n_points)]
         line_string = LineString(points, srid=SRID)
         return line_string
 
     def linear_ring(self, n_points=4):
         assert n_points >= 4
-        points = [
-            self.generator.point()
-            for _ in range(n_points-1)
-        ]
-        points.append(
-            deepcopy(points[0])
-        )
+        points = [self.generator.point() for _ in range(n_points - 1)]
+        points.append(deepcopy(points[0]))
         linear_ring = LinearRing(points, srid=SRID)
         return linear_ring
 
@@ -72,10 +61,7 @@ class GeometryProvider(BaseProvider):
 
     def multi_polygon(self, n_polygons=2):
         assert n_polygons >= 2
-        polygons = [
-            self.generator.polygon()
-            for _ in range(n_polygons)
-        ]
+        polygons = [self.generator.polygon() for _ in range(n_polygons)]
         multi_polygon = MultiPolygon(polygons, srid=SRID)
         return multi_polygon
 
@@ -95,10 +81,7 @@ class ValidatedProvider(BaseProvider):
 
             value = faker()
             try:
-                validity = [
-                    validator(value)
-                    for validator in validators
-                ]
+                validity = [validator(value) for validator in validators]
                 # assume that a validator returns nothing or a truthy value if it passes
                 # or a falsey value or raises an exception (below) if it fails
                 if all(map(lambda x: x is None or bool(x), validity)):
@@ -118,9 +101,6 @@ class ValidatedProvider(BaseProvider):
         faker = lambda: fake.word(**kwargs)
 
         word = self._generate_valid_value(
-            faker,
-            validators=validators,
-            max_attempts=max_attempts,
+            faker, validators=validators, max_attempts=max_attempts
         )
         return word
-

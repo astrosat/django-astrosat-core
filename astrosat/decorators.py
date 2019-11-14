@@ -16,7 +16,6 @@ def conditional_redirect(conditional, redirect_name):
     """
 
     def conditional_redirect_decorator(view_fn):
-
         @functools.wraps(view_fn)
         def conditional_redirect_wrapper(*args, **kwargs):
 

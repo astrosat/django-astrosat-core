@@ -6,11 +6,12 @@ from astrosat.utils import DynamicSetting
 from example.models import ExampleSingletonModel
 
 
-class TestSettings():
+class TestSettings:
     """
     Includes some tests to confirm that environ.Env can read
     both from the OS Environment and an environment file.
     """
+
     env = environ.Env()
 
     def test_env_missing(self):
@@ -47,14 +48,8 @@ class TestSettings():
         env_key_3 = "KEY3"
 
         env_files = [
-            create_env_file(**{
-                env_key_1: "one",
-                env_key_2: "one",
-            }),
-            create_env_file(**{
-                env_key_2: "two",
-                env_key_3: "two",
-            }),
+            create_env_file(**{env_key_1: "one", env_key_2: "one"}),
+            create_env_file(**{env_key_2: "two", env_key_3: "two"}),
         ]
 
         for env_file in reversed(env_files):
@@ -83,15 +78,11 @@ class TestSettings():
         assert self.env(file_env_key) == file_env_value
 
 
-class TestDynamicSettings():
-
+class TestDynamicSettings:
     @pytest.mark.django_db
     def test_dynamic_settings(self, settings):
 
-        settings.TEST_FLAG = DynamicSetting(
-            "example.ExampleSingletonModel.flag",
-            False
-        )
+        settings.TEST_FLAG = DynamicSetting("example.ExampleSingletonModel.flag", False)
 
         assert ExampleSingletonModel.objects.count() == 0
 

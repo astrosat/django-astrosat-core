@@ -1,5 +1,7 @@
 import factory
-from factory.faker import Faker as FactoryFaker  # note I use FactoryBoy's wrapper of Faker
+from factory.faker import (
+    Faker as FactoryFaker,
+)  # note I use FactoryBoy's wrapper of Faker
 
 from astrosat.tests.providers import GeometryProvider, ValidatedProvider
 from astrosat.tests.utils import optional_declaration
@@ -44,7 +46,10 @@ class ExampleBulkModelFactory(factory.DjangoModelFactory):
 
     something_unique = FactoryFaker(
         "validated_word",
-        validators=[lambda x: not ExampleBulkModel.objects.filter(something_unique=x).exists()] + ExampleBulkModel._meta.get_field("something_unique").validators
+        validators=[
+            lambda x: not ExampleBulkModel.objects.filter(something_unique=x).exists()
+        ]
+        + ExampleBulkModel._meta.get_field("something_unique").validators,
     )
     something_non_unique = FactoryFaker("word")
 

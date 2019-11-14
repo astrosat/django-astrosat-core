@@ -20,32 +20,27 @@ To use these in a project simply add the following code to ROOT_URLCONF:
 >handler500 = "astrosat.views.handler400"
 """
 
+
 def handler400(request, *args, **kwargs):
-    defaults = {
-        "template_name": "astrosat/400.html",
-    }
+    defaults = {"template_name": "astrosat/400.html"}
     defaults.update(kwargs)
     return default_views.bad_request(request, *args, **defaults)
 
 
 def handler403(request, *args, **kwargs):
-    defaults = {
-        "template_name": "astrosat/403.html",
-    }
+    defaults = {"template_name": "astrosat/403.html"}
     defaults.update(kwargs)
     return default_views.permission_denied(request, *args, **defaults)
 
+
 def handler404(request, *args, **kwargs):
-    defaults = {
-        "template_name": "astrosat/404.html",
-    }
+    defaults = {"template_name": "astrosat/404.html"}
     defaults.update(kwargs)
     return default_views.page_not_found(request, *args, **defaults)
 
+
 def handler500(request, *args, **kwargs):
-    defaults = {
-        "template_name": "astrosat/500.html",
-    }
+    defaults = {"template_name": "astrosat/500.html"}
     defaults.update(kwargs)
     return default_views.server_error(request, *args, **defaults)
 
@@ -53,6 +48,7 @@ def handler500(request, *args, **kwargs):
 ###########
 # proxies #
 ###########
+
 
 class ProxyS3View(APIView):
     """

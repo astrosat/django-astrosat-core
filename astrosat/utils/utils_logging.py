@@ -14,7 +14,9 @@ class RestrictLogsByNameFilter(logging.Filter):
 
     def __init__(self, *args, **kwargs):
         if not (self.names_to_restrict and self.level_to_allow):
-            raise NotImplementedError(f"{self} requires 'names_to_restrict' and 'level_to_allow' to be set")
+            raise NotImplementedError(
+                f"{self} requires 'names_to_restrict' and 'level_to_allow' to be set"
+            )
         self.names_to_restrict = re.compile(self.names_to_restrict)
         super().__init__(*args, **kwargs)
 

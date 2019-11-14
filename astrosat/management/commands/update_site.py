@@ -50,19 +50,21 @@ class Command(BaseCommand):
 
         try:
 
-            domain = options["domain"] if options["domain"] is not None else env(SITE_ENVIRONMENT_VARIABLE)
+            domain = (
+                options["domain"]
+                if options["domain"] is not None
+                else env(SITE_ENVIRONMENT_VARIABLE)
+            )
             name = options["name"] if options["name"] is not None else domain
 
             Site.objects.update_or_create(
-                id=options["id"],
-                defaults={
-                    "domain": domain,
-                    "name": name,
-                },
+                id=options["id"], defaults={"domain": domain, "name": name}
             )
 
         except ImproperlyConfigured:
-            raise CommandError("You must either specify a domain on the command-line or set the DJANGO_SITE_DOMAIN environment variable.")
+            raise CommandError(
+                "You must either specify a domain on the command-line or set the DJANGO_SITE_DOMAIN environment variable."
+            )
 
         except IntegrityError:
             raise CommandError(f"The domain '{domain}' is already in use.")

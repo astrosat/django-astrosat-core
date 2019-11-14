@@ -8,47 +8,79 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='ExampleBulkModel',
+            name="ExampleBulkModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('something_unique', models.CharField(max_length=255, unique=True)),
-                ('something_non_unique', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("something_unique", models.CharField(max_length=255, unique=True)),
+                ("something_non_unique", models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
-            name='ExampleEpochModel',
+            name="ExampleEpochModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('date', astrosat.fields.EpochField(blank=True, null=True)),
-                ('tz_aware_date', astrosat.fields.EpochField(blank=True, format='%Y-%m-%d %H:%M:%S', null=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("date", astrosat.fields.EpochField(blank=True, null=True)),
+                (
+                    "tz_aware_date",
+                    astrosat.fields.EpochField(
+                        blank=True, format="%Y-%m-%d %H:%M:%S", null=True
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='ExampleHashableModel',
+            name="ExampleHashableModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('_hash', models.UUIDField(blank=True, null=True)),
-                ('name', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("_hash", models.UUIDField(blank=True, null=True)),
+                ("name", models.CharField(max_length=255)),
             ],
-            options={
-                'abstract': False,
-            },
+            options={"abstract": False},
         ),
         migrations.CreateModel(
-            name='ExampleSingletonModel',
+            name="ExampleSingletonModel",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('flag', models.BooleanField(default=True)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=255)),
+                ("flag", models.BooleanField(default=True)),
             ],
-            options={
-                'abstract': False,
-            },
+            options={"abstract": False},
         ),
     ]

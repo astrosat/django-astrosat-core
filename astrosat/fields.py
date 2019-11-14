@@ -57,7 +57,6 @@ class EpochField(BigIntegerField):
 
 
 class LazyCharArrayField(ArrayField):
-
     def get_db_prep_value(self, value, connection, prepared=False):
         """
         Converts value in code (which may not be a list) to db format (list of base types)

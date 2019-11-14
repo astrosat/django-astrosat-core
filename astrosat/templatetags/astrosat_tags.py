@@ -10,6 +10,7 @@ register = template.Library()
 # some constants #
 ##################
 
+
 @register.simple_tag
 def astrosat_title():
     return mark_safe(astrosat.__title__)
@@ -28,6 +29,7 @@ def astrosat_version():
 #####################
 # some useful utils #
 #####################
+
 
 @register.filter
 def get_value(dictionary, key):

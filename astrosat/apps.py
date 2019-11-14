@@ -3,6 +3,7 @@ from django.apps import AppConfig
 from . import APP_NAME
 from .utils import DynamicSetting
 
+
 class AstrosatConfig(AppConfig):
     name = APP_NAME
 

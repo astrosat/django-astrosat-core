@@ -46,9 +46,9 @@ def get_list_combinations(lst):
     n_items = len(lst) + 1
     lists = []
     for i in range(0, n_items):
-	    temp = [list(c) for c in combinations(lst, i)]
-	    if len(temp):
-	        lists.extend(temp)
+        temp = [list(c) for c in combinations(lst, i)]
+        if len(temp):
+            lists.extend(temp)
     return lists
 
 
@@ -61,7 +61,7 @@ MockDataClientPathInfo = namedtuple(
     # the mocker uses this structure to associate
     # the local path with the (pretend) remote key
     "MockDataClientPathInfo",
-    ["path", "key"]
+    ["path", "key"],
 )
 
 
@@ -78,16 +78,10 @@ def mock_data_client(monkeypatch):
 
     def _mock_data_client(data_paths):
 
-        data_paths = [
-            MockDataClientPathInfo(*data_path)
-            for data_path in data_paths
-        ]
+        data_paths = [MockDataClientPathInfo(*data_path) for data_path in data_paths]
 
         def list_objects_v2(*args, **kwargs):
-            objs = [
-                {"Key": data_path.key}
-                for data_path in data_paths
-            ]
+            objs = [{"Key": data_path.key} for data_path in data_paths]
             return {"Contents": objs}
 
         def get_object(*args, **kwargs):
@@ -105,7 +99,9 @@ def mock_data_client(monkeypatch):
             # make sure that data_client uses the patched adapted_data_client_class
             self.client = data_client.client
 
-        monkeypatch.setattr(adapted_data_client_class, "list_objects_v2", list_objects_v2)
+        monkeypatch.setattr(
+            adapted_data_client_class, "list_objects_v2", list_objects_v2
+        )
         monkeypatch.setattr(adapted_data_client_class, "get_object", get_object)
         monkeypatch.setattr(DataClient, "__init__", init)
 
