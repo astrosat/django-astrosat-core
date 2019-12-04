@@ -3,7 +3,8 @@ from django.contrib import admin
 from django.urls import include, path
 
 from rest_framework.routers import SimpleRouter
-from rest_framework_swagger.views import get_swagger_view
+
+from astrosat.views import api_schema_views
 
 from astrosat.urls import (
     urlpatterns as astrosat_urlpatterns,
@@ -13,7 +14,7 @@ from astrosat.urls import (
 from .views import index_view
 
 
-admin.site.site_header = "Admin for Example Project for Astrosat Apps"
+admin.site.site_header = "Admin for Example Project for Django-Astrosat"
 
 handler400 = "astrosat.views.handler400"
 handler403 = "astrosat.views.handler403"
@@ -27,7 +28,10 @@ handler500 = "astrosat.views.handler400"
 
 api_router = SimpleRouter()
 # (if I had apps that used ViewSets (instead of CBVs or fns), I would register them here)
-api_urlpatterns = [path("", include(api_router.urls))]
+api_urlpatterns = [
+    path("", include(api_router.urls)),
+    path("", include(api_schema_views)),
+]
 api_urlpatterns += astrosat_api_urlpatterns
 
 
@@ -38,11 +42,8 @@ api_urlpatterns += astrosat_api_urlpatterns
 urlpatterns = [
     # admin...
     path("admin/", admin.site.urls),
-    # api...
+    # API...
     path("api/", include(api_urlpatterns)),
-    path(
-        "swagger/", get_swagger_view(title="Django-Astrosat-Core API"), name="swagger"
-    ),
     # astrosat...
     path("astrosat/", include(astrosat_urlpatterns)),
     # index...

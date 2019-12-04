@@ -6,15 +6,15 @@ verify_ssl = true
 [dev-packages]
 pytest = "*"
 pytest-django = "*"
+pytest-sugar = "*"
 factory-boy = "*"
 django-debug-toolbar = "*"
-pytest-sugar = "*"
 
 [packages]
-django = ">=2.2.0"
+django = "~=2.2"
 django-environ = "*"
 djangorestframework = "*"
-django-rest-swagger = "*"
+drf-yasg = "*"
 django-astrosat-core = {editable = true,path = "./.."}
 psycopg2-binary = "*"
 

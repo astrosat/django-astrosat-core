@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     # api...
     "rest_framework",
-    "rest_framework_swagger",
+    "drf_yasg",
     # astrosat...
     "astrosat",
     # this app...
@@ -147,10 +147,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # API
 
 REST_FRAMEWORK = {
-    # the jump from DRF 3.9 to 3.10 broke lots of stuff
-    # to continue to use swagger w/ DRF, add the following line
-    # (as per https://www.django-rest-framework.org/community/3.10-announcement/#continuing-to-use-coreapi)
-    "DEFAULT_SCHEMA_CLASS": "rest_framework.schemas.coreapi.AutoSchema"
+
+}
+
+SWAGGER_SETTINGS = {
+    "DOC_EXPANSION": "none",
+    "OPERATIONS_SORTER": None,
+    "TAGS_SORTER": "alpha",
+    "DEFAULT_MODEL_RENDERING": "example",
 }
 
 # Profiling
