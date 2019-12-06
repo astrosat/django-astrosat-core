@@ -25,9 +25,10 @@ class IsAdminOrDebug(BasePermission):
         user = request.user
         return user.is_superuser or settings.DEBUG
 
+API_SCHEMA_TILE = f"{getattr(settings, 'PROJECT_NAME', 'Django-Astrosat')} API"
 
 api_schema_view = get_schema_view(
-    openapi.Info(title="Django-Astrosat-Users API", default_version="v1"),
+    openapi.Info(title=API_SCHEMA_TILE, default_version="v1"),
     public=True,
     permission_classes=(IsAdminOrDebug,),
 )
