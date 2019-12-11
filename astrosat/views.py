@@ -7,6 +7,8 @@ from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.views import APIView
 
+from django_filters import Filter
+
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -24,6 +26,7 @@ class IsAdminOrDebug(BasePermission):
         # and only to the admin in all other cases
         user = request.user
         return user.is_superuser or settings.DEBUG
+
 
 API_SCHEMA_TILE = f"{getattr(settings, 'PROJECT_NAME', 'Django-Astrosat')} API"
 
@@ -86,6 +89,33 @@ def handler500(request, *args, **kwargs):
     defaults = {"template_name": "astrosat/500.html"}
     defaults.update(kwargs)
     return default_views.server_error(request, *args, **defaults)
+
+
+###########
+# filters #
+###########
+
+TRUE_VALUES = ["True", "true", "1"]
+FALSE_VALUES = ["False", "false", "0"]
+
+
+class BetterBooleanFilter(Filter):
+    def filter(self, qs, value):
+        """
+        Overrides the built-in boolean filter to accept more than just "True" and "False"
+        :param qs:
+        :param value:
+        :return:
+        """
+        if value is not None:
+            if value in TRUE_VALUES:
+                value = True
+            elif value in FALSE_VALUES:
+                value = False
+            else:
+                msg = f"{value} is an invalid search term for the boolean field {self.name}.  Valid terms include: {', '.join(TRUE_VALUES + FALSE_VALUES)}"
+                raise SyntaxError(msg)
+            return qs.filter(**{self.name: value})
 
 
 ###########

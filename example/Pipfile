@@ -13,6 +13,7 @@ django-debug-toolbar = "*"
 [packages]
 django = "~=2.2"
 django-environ = "*"
+django-filter = "*"
 djangorestframework = "*"
 drf-yasg = "*"
 django-astrosat-core = {editable = true,path = "./.."}

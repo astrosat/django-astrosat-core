@@ -9,6 +9,7 @@ from .conf import app_settings
 # apps required by astrosat
 APP_DEPENDENCIES = [
     "rest_framework",
+    "django_filters",
     "drf_yasg",
 ]
 
