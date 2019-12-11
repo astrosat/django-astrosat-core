@@ -1,4 +1,6 @@
+from django import forms
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.http.response import StreamingHttpResponse
 from django.urls import re_path
 from django.views import defaults as default_views
@@ -8,6 +10,7 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.views import APIView
 
 from django_filters import Filter
+from django_filters.constants import EMPTY_VALUES
 
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -95,27 +98,36 @@ def handler500(request, *args, **kwargs):
 # filters #
 ###########
 
-TRUE_VALUES = ["True", "true", "1"]
-FALSE_VALUES = ["False", "false", "0"]
+class BetterBooleanFilterField(forms.CharField):
+    """
+    Converts valid input into boolean values to be used
+    w/ BetterBooleanFilter below.
+    """
+
+    TRUE_VALUES = ["true", "yes", "1"]
+    FALSE_VALUES = ["false", "no", "0"]
+
+    def clean(self, value):
+        value = self.to_python(value).casefold()
+        if value in EMPTY_VALUES:
+            value = None
+        elif value in self.TRUE_VALUES:
+            value = True
+        elif value in self.FALSE_VALUES:
+            value = False
+        else:
+            msg = f"'{value}' must be one of: {', '.join(self.TRUE_VALUES + self.FALSE_VALUES)}"
+            raise ValidationError(msg)
+        return value
 
 
 class BetterBooleanFilter(Filter):
-    def filter(self, qs, value):
-        """
-        Overrides the built-in boolean filter to accept more than just "True" and "False"
-        :param qs:
-        :param value:
-        :return:
-        """
-        if value is not None:
-            if value in TRUE_VALUES:
-                value = True
-            elif value in FALSE_VALUES:
-                value = False
-            else:
-                msg = f"{value} is an invalid search term for the boolean field {self.name}.  Valid terms include: {', '.join(TRUE_VALUES + FALSE_VALUES)}"
-                raise SyntaxError(msg)
-            return qs.filter(**{self.name: value})
+    """
+    A more user-friendly boolean filter to accept more than just "True" and "False".
+    It does this by using a CharField (BetterBooleanFilterField) instead of the default NullBooleanField.
+    """
+
+    field_class = BetterBooleanFilterField
 
 
 ###########
