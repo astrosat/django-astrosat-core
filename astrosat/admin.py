@@ -1,9 +1,28 @@
 from django.contrib import admin
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
-from django.urls import resolve
+from django.urls import resolve, reverse
+from django.utils.html import format_html
 
 from .models import AstrosatSettings
+
+
+############
+# util fns #
+############
+
+
+def get_clickable_m2m_list_display(model_class, queryset):
+    """
+    Prints a pretty (clickable) representation of a m2m field for an Admin's `list_display`.
+    Note that when using this it is recommended to call `prefetch_related` in the Admin's
+    `get_queryset` fn in order to avoid the "n+1" problem.
+    """
+    list_display = [
+        f"<a href='{reverse(f'admin:{model_class._meta.db_table}_change', args=[obj.id])}'>{str(obj)}</a>"
+        for obj in queryset
+    ]
+    return format_html(", ".join(list_display))
 
 
 ###############
