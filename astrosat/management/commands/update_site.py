@@ -58,7 +58,7 @@ class Command(BaseCommand):
             name = options["name"] if options["name"] is not None else domain
 
             Site.objects.update_or_create(
-                id=options["id"], defaults={"domain": domain, "name": name}
+                id=options["id"], defaults={"domain": domain[:100], "name": name[:50]}
             )
 
         except ImproperlyConfigured:
