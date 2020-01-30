@@ -5,6 +5,7 @@ from django.http.response import StreamingHttpResponse
 from django.urls import re_path
 from django.views import defaults as default_views
 
+from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.views import APIView
@@ -12,8 +13,9 @@ from rest_framework.views import APIView
 from django_filters import Filter
 from django_filters.constants import EMPTY_VALUES
 
-from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg.views import get_schema_view
 
 from .utils import DataClient
 
@@ -142,6 +144,14 @@ class ProxyS3View(APIView):
 
     permission_classes = [IsAuthenticated]
 
+    _key_parameter = openapi.Parameter(
+        "key",
+        openapi.IN_QUERY,
+        type=openapi.TYPE_STRING,
+        description="Pathname of the bucket object to retrieve.",
+    )
+
+    @swagger_auto_schema(manual_parameters=[_key_parameter], responses={status.HTTP_200_OK: "StreamingHttpResponse"})
     def get(self, request):
         key = request.query_params.get("key")
         client = DataClient()
