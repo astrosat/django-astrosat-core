@@ -8,6 +8,7 @@ from django.views import defaults as default_views
 from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, BasePermission
+from rest_framework.serializers import CurrentUserDefault,
 from rest_framework.views import APIView
 
 from django_filters import Filter
@@ -58,6 +59,16 @@ api_schema_views = [
         name="swagger-redoc",
     ),
 ]
+
+
+def swagger_current_user_default(serializer_field=None):
+    # despite https://github.com/axnsan12/drf-yasg/commit/f81795d7454d9b1eb88874014ffd70b26289f905,
+    # yasg still doesn't play nicely w/ CurrentUserDefault;
+    # it doesn't pass 'serializer_field' to default()
+    if serializer_field is not None:
+        return CurrentUserDefault(serializer_field)
+    return None
+
 
 ##################
 # error handling #
