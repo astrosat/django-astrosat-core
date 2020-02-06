@@ -61,13 +61,15 @@ api_schema_views = [
 ]
 
 
-def swagger_current_user_default(serializer_field=None):
+class SwaggerCurrentUserDefault(CurrentUserDefault):
     # despite https://github.com/axnsan12/drf-yasg/commit/f81795d7454d9b1eb88874014ffd70b26289f905,
     # yasg still doesn't play nicely w/ CurrentUserDefault;
     # it doesn't pass 'serializer_field' to default()
-    if serializer_field is not None:
-        return CurrentUserDefault(serializer_field)
-    return None
+
+    def __call__(self, serializer_field=None):
+        if serializer_field is not None:
+            return super().__call__(serializer_field)
+        return None
 
 
 ##################
