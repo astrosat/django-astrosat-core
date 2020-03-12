@@ -4,7 +4,7 @@ from django.contrib.admin.utils import flatten_fieldsets
 from django.urls import resolve, reverse
 from django.utils.html import format_html
 
-from .models import AstrosatSettings
+from .models import AstrosatSettings, DatabaseLogTag, DatabaseLogRecord
 
 
 ############
@@ -144,3 +144,26 @@ class DeleteOnlyModelAdminBase(
 @admin.register(AstrosatSettings)
 class AstrosatSettingsAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(DatabaseLogTag)
+class DatabaseLogTagAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(DatabaseLogRecord)
+class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
+    list_display = ("created", "level", "message", "get_tags_for_list_display")
+    list_filter = ("level", "logger_name", "created", "tags")
+    search_fields = ("message",)
+
+    def get_queryset(self, request):
+        # pre-fetching m2m fields that are used in list_displays
+        # to avoid the "n+1" problem
+        queryset = super().get_queryset(request)
+        return queryset.prefetch_related("tags")
+
+    def get_tags_for_list_display(self, obj):
+        return get_clickable_m2m_list_display(DatabaseLogTag, obj.tags.all())
+
+    get_tags_for_list_display.short_description = "tags"
