@@ -17,10 +17,26 @@ class AstrosatSettings(SingletonMixin, models.Model):
         return "Astrosat Settings"
 
 
+class DatabaseLogTag(models.Model):
+
+    class Meta:
+        verbose_name = "Log Tag"
+        verbose_name_plural = "Log Tags"
+
+    name = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.name
+
+
 class DatabaseLogRecord(models.Model):
 
     """
     model used by astrosat.utils.db_log_handler to log records to the db
+    usage is:
+    >>> import logging
+    >>> logger = logging.getLogger("db")
+    >>> logger.info("message", extra={"tags": ["tag1","tag2"]})
     """
 
     class Meta:
@@ -42,6 +58,7 @@ class DatabaseLogRecord(models.Model):
     level = models.PositiveIntegerField(choices=LevelChoices, default=logging.ERROR)
     message = models.TextField()
     trace = models.TextField(blank=True, null=True)
+    tags = models.ManyToManyField(DatabaseLogTag, related_name="records")
 
     def __str__(self):
         return self.message

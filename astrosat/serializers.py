@@ -84,8 +84,8 @@ class DatabaseLogRecordSerializer(serializers.ModelSerializer):
         model = DatabaseLogRecord
         fields = "__all__"
 
+    tags = serializers.SlugRelatedField(slug_field="name", many=True, read_only=True)
     level = serializers.SerializerMethodField()
 
     def get_level(self, obj):
-
         return logging.getLevelName(obj.level)

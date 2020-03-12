@@ -12,14 +12,14 @@ from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.serializers import CurrentUserDefault
 from rest_framework.views import APIView
 
-from django_filters import Filter
+from django_filters import Filter, rest_framework as filters
 from django_filters.constants import EMPTY_VALUES
 
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.views import get_schema_view
 
-from .models import DatabaseLogRecord
+from .models import DatabaseLogRecord, DatabaseLogTag
 from .serializers import DatabaseLogRecordSerializer
 from .utils import DataClient
 
@@ -189,9 +189,32 @@ class ProxyS3View(APIView):
 # logs #
 ########
 
+class CharInFilter(filters.BaseInFilter, filters.CharFilter):
+    """
+    Allows me to filter based on CharFields being in a list
+    """
+    pass
+
+
+class DatabaseLogRecordFilterSet(filters.FilterSet):
+    """
+    Allows me to filter results by tags
+    usage is:
+      <domain>/api/logs/?tags=a,b,c
+    """
+
+    class Meta:
+        model = DatabaseLogRecord
+        fields = ("tags",)
+
+    tags = CharInFilter(field_name="tags__name", distinct=True)
+
 
 class DatabaseLogRecordViewSet(viewsets.ReadOnlyModelViewSet):
+
 
     permission_classes = [IsAdminOrDebug]
     serializer_class = DatabaseLogRecordSerializer
     queryset = DatabaseLogRecord.objects.all()
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = DatabaseLogRecordFilterSet
