@@ -1,11 +1,12 @@
 from django import forms
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.http.response import StreamingHttpResponse
 from django.urls import re_path
 from django.views import defaults as default_views
 
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, BasePermission
 from rest_framework.serializers import CurrentUserDefault
@@ -18,6 +19,8 @@ from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg.views import get_schema_view
 
+from .models import DatabaseLogRecord
+from .serializers import DatabaseLogRecordSerializer
 from .utils import DataClient
 
 
@@ -37,7 +40,11 @@ class IsAdminOrDebug(BasePermission):
 API_SCHEMA_TILE = f"{getattr(settings, 'PROJECT_NAME', 'Django-Astrosat')} API"
 
 api_schema_view = get_schema_view(
-    openapi.Info(title=API_SCHEMA_TILE, default_version="v1"),
+    openapi.Info(
+        title=API_SCHEMA_TILE,
+        default_version="v1",
+        # url=Site.objects.get_current().domain,
+    ),
     public=True,
     permission_classes=(IsAdminOrDebug,),
 )
@@ -176,3 +183,15 @@ class ProxyS3View(APIView):
         else:
             msg = f"Unable to retrieve object at '{key}'"
             raise APIException(msg)
+
+
+########
+# logs #
+########
+
+
+class DatabaseLogRecordViewSet(viewsets.ReadOnlyModelViewSet):
+
+    permission_classes = [IsAdminOrDebug]
+    serializer_class = DatabaseLogRecordSerializer
+    queryset = DatabaseLogRecord.objects.all()

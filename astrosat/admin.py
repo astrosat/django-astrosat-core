@@ -4,7 +4,7 @@ from django.contrib.admin.utils import flatten_fieldsets
 from django.urls import resolve, reverse
 from django.utils.html import format_html
 
-from .models import AstrosatSettings
+from .models import AstrosatSettings, DatabaseLogRecord
 
 
 ############
@@ -144,3 +144,10 @@ class DeleteOnlyModelAdminBase(
 @admin.register(AstrosatSettings)
 class AstrosatSettingsAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(DatabaseLogRecord)
+class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
+    list_display = ("created", "level", "message")
+    list_filter = ("level", "logger_name", "created")
+    search_fields = ("message",)

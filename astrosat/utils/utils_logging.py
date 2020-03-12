@@ -24,3 +24,28 @@ class RestrictLogsByNameFilter(logging.Filter):
         if self.names_to_restrict.match(record.name):
             return record.levelno >= self.level_to_allow
         return True
+
+
+class DatabaseLogHandler(logging.Handler):
+
+    """
+    sends a logging record to the db
+    """
+
+    default_formatter = logging.Formatter()
+
+    def emit(self, record):
+
+        from astrosat.models import DatabaseLogRecord
+
+
+        trace = None
+        if record.exc_info:
+            trace = self.default_formatter.formatException(record.exc_info)
+
+        DatabaseLogRecord.objects.create(
+            logger_name=record.name,
+            level=record.levelno,
+            message=record.getMessage(),
+            trace=trace,
+        )

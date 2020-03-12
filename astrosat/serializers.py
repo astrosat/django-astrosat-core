@@ -1,4 +1,7 @@
+import logging
 from rest_framework import serializers
+
+from .models import DatabaseLogRecord
 
 
 class WritableNestedListSerializer(serializers.ListSerializer):
@@ -74,3 +77,15 @@ class WritableNestedListSerializer(serializers.ListSerializer):
                 model.delete()
 
         return models
+
+
+class DatabaseLogRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DatabaseLogRecord
+        fields = "__all__"
+
+    level = serializers.SerializerMethodField()
+
+    def get_level(self, obj):
+
+        return logging.getLevelName(obj.level)

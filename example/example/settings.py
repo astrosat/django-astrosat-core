@@ -168,6 +168,31 @@ SWAGGER_SETTINGS = {
     "DEFAULT_MODEL_RENDERING": "example",
 }
 
+# Logging
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+        'db': {
+            'class': 'astrosat.utils.DatabaseLogHandler',
+        }
+    },
+    'loggers': {
+        "django.utils.autoreload": {"level": "INFO"},
+        "environ.environ": {"level": "INFO"},
+        "faker": {"level": "INFO"},
+        "factory": {"level": "INFO"},
+        'db': {
+            'handlers': ['db'],
+            'level': 'DEBUG',
+        }
+    },
+}
+
 # Profiling
 
 if DEBUG:
