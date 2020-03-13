@@ -120,6 +120,7 @@ def handler500(request, *args, **kwargs):
 # filters #
 ###########
 
+
 class BetterBooleanFilterField(forms.CharField):
     """
     Converts valid input into boolean values to be used
@@ -171,7 +172,10 @@ class ProxyS3View(APIView):
         description="Pathname of the bucket object to retrieve.",
     )
 
-    @swagger_auto_schema(manual_parameters=[_key_parameter], responses={status.HTTP_200_OK: "StreamingHttpResponse"})
+    @swagger_auto_schema(
+        manual_parameters=[_key_parameter],
+        responses={status.HTTP_200_OK: "StreamingHttpResponse"},
+    )
     def get(self, request):
         key = request.query_params.get("key")
         client = DataClient()
@@ -189,10 +193,12 @@ class ProxyS3View(APIView):
 # logs #
 ########
 
+
 class CharInFilter(filters.BaseInFilter, filters.CharFilter):
     """
     Allows me to filter based on CharFields being in a list
     """
+
     pass
 
 
@@ -201,17 +207,37 @@ class DatabaseLogRecordFilterSet(filters.FilterSet):
     Allows me to filter results by tags
     usage is:
       <domain>/api/logs/?tags=a,b,c
+      <domain>/api/logs/?created=x
+      <domain>/api/logs/?created__gte=x
+      <domain>/api/logs/?created__lte=x
+      <domain>/api/logs/?created__range=x,y
+      <domain>/api/logs/?created__date=x
+      <domain>/api/logs/?created__date__gte=x
+      <domain>/api/logs/?created__date__lte=x
+      <domain>/api/logs/?created__date__range=x,y
     """
 
     class Meta:
         model = DatabaseLogRecord
-        fields = ("tags",)
+        fields = {
+            # using automatic filter generation for "created" here
+            "created": [
+                "exact",
+                "gte",
+                "lte",
+                "range",
+                "date",
+                "date__range",
+                "date__gte",
+                "date__lte",
+            ],
+            # but declarative filters for "tags" below
+        }
 
     tags = CharInFilter(field_name="tags__name", distinct=True)
 
 
 class DatabaseLogRecordViewSet(viewsets.ReadOnlyModelViewSet):
-
 
     permission_classes = [IsAdminOrDebug]
     serializer_class = DatabaseLogRecordSerializer
