@@ -14,15 +14,15 @@ version = __import__("astrosat").__version__
 
 install_requires = [
     # django, duh
-    "django~=2.2",
+    "django~=3.0",
     # api
-    "djangorestframework>=3.9",
+    "djangorestframework~=3.0",
     # easier json validation
     "jsonschema>=3.0",
     # S3 access
-    "boto3>=1.9",
+    "boto3>=1.12",
     # profiling
-    "pympler>=0.7",
+    "pympler>=0.8",
 ]
 
 
