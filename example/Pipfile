@@ -4,20 +4,20 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pytest = "*"
+django-debug-toolbar = "*"
+factory-boy = "*"
+pytest = "==5.3.5"
 pytest-django = "*"
 pytest-sugar = "*"
-factory-boy = "*"
-django-debug-toolbar = "*"
 
 [packages]
-django = "~=2.2"
+django = "~=3.0"
 django-environ = "*"
 django-filter = "*"
 djangorestframework = "*"
 drf-yasg = "*"
-django-astrosat-core = {editable = true,path = "./.."}
 psycopg2-binary = "*"
+django-astrosat-core = {editable = true,path = "./.."}
 
 [requires]
 python_version = "3.7"
