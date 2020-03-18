@@ -1,6 +1,8 @@
 import logging
 import re
 
+from astrosat.conf import app_settings as astrosat_settings
+
 
 class RestrictLogsByNameFilter(logging.Filter):
     """
@@ -36,24 +38,26 @@ class DatabaseLogHandler(logging.Handler):
 
     def emit(self, record):
 
-        from astrosat.models import DatabaseLogRecord, DatabaseLogTag
+        if astrosat_settings.ASTROSAT_ENABLE_DB_LOGGING:
 
-        trace = None
-        if record.exc_info:
-            trace = self.default_formatter.formatException(record.exc_info)
+            from astrosat.models import DatabaseLogRecord, DatabaseLogTag
 
-        tags = map(
-            lambda x: x[0],
-            [
-                DatabaseLogTag.objects.get_or_create(name=tag_name)
-                for tag_name in getattr(record, "tags", [])
-            ],
-        )
+            trace = None
+            if record.exc_info:
+                trace = self.default_formatter.formatException(record.exc_info)
 
-        db_record = DatabaseLogRecord.objects.create(
-            logger_name=record.name,
-            level=record.levelno,
-            message=record.getMessage(),
-            trace=trace,
-        )
-        db_record.tags.add(*tags)
+            tags = map(
+                lambda x: x[0],
+                [
+                    DatabaseLogTag.objects.get_or_create(name=tag_name)
+                    for tag_name in getattr(record, "tags", [])
+                ],
+            )
+
+            db_record = DatabaseLogRecord.objects.create(
+                logger_name=record.name,
+                level=record.levelno,
+                message=record.getMessage(),
+                trace=trace,
+            )
+            db_record.tags.add(*tags)
