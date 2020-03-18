@@ -11,7 +11,7 @@ class AstrosatSettings(SingletonMixin, models.Model):
         verbose_name = "Astrosat Settings"
         verbose_name_plural = "Astrosat Settings"
 
-    # my_test_setting = models.BooleanField(default=False)
+    enable_db_logging = models.BooleanField(default=False)
 
     def __str__(self):
         return "Astrosat Settings"

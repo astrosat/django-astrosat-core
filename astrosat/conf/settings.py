@@ -15,6 +15,15 @@ AWS_ACCESS_KEY_ID = getattr(settings, "AWS_ACCESS_KEY_ID", None)
 AWS_SECRET_ACCESS_KEY = getattr(settings, "AWS_SECRET_ACCESS_KEY", None)
 
 
+ASTROSAT_ENABLE_DB_LOGGING = getattr(
+    settings,
+    "ASTROSAT_ENABLE_DB_LOGGING",
+    DynamicSetting(
+        "astrosat.AstrosatSettings.enable_db_logging",
+        env("DJANGO_ASTROSAT_ENABLE_DB_LOGGING", default=False),
+    ),
+)
+
 # required third party settings...
 # (most of these are checked in checks.py)
 
