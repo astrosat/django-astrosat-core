@@ -1,6 +1,6 @@
 body {
-    margin: 0;
-  }
+  margin: 0;
+}
 
 #astrosat .container,
 #astrosat .box-container {
@@ -13,7 +13,7 @@ body {
 }
 
 #astrosat .box {
-  border: 2px solid black;
+  border: 2px solid #1c2a39;
   background-color: #fff;
 }
 
@@ -23,7 +23,7 @@ body {
 }
 
 #astrosat div.logo {
-  background: black;
+  background: #1c2a39;
   padding: 0.5rem;
 }
 

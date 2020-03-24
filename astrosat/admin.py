@@ -1,6 +1,9 @@
+import json
+
 from django.contrib import admin
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
+from django.forms import widgets
 from django.urls import resolve, reverse
 from django.utils.html import format_html
 
@@ -23,6 +26,20 @@ def get_clickable_m2m_list_display(model_class, queryset):
         for obj in queryset
     ]
     return format_html(", ".join(list_display))
+
+
+###############
+# admin forms #
+###############
+
+
+class JSONAdminWidget(widgets.Textarea):
+    def format_value(self, value):
+        try:
+            value = json.dumps(json.loads(value), indent=2)
+        except Exception:
+            pass
+        return value
 
 
 ###############
