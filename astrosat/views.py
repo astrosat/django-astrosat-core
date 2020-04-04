@@ -253,7 +253,7 @@ class DatabaseLogRecordViewSet(viewsets.ReadOnlyModelViewSet):
 #########
 
 
-def remove_url_patterns(url_patterns, url_patterns_to_remove):
+def remove_urlpatterns(urlpatterns, urlpatterns_to_remove):
     return list(
-        filterfalse(lambda x: x.pattern.name in url_patterns_to_remove, url_patterns)
+        filterfalse(lambda x: x.pattern.name in urlpatterns_to_remove, urlpatterns)
     )
