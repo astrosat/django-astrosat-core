@@ -1,3 +1,5 @@
+from itertools import filterfalse
+
 from django import forms
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -244,3 +246,14 @@ class DatabaseLogRecordViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = DatabaseLogRecord.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
     filterset_class = DatabaseLogRecordFilterSet
+
+
+#########
+# utils #
+#########
+
+
+def remove_url_patterns(url_patterns, url_patterns_to_remove):
+    return list(
+        filterfalse(lambda x: x.pattern.name in url_patterns_to_remove, url_patterns)
+    )
