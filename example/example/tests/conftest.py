@@ -4,6 +4,7 @@ import io
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 
+from astrosat.models import AstrosatSettings
 from astrosat.tests.factories import UserFactory
 
 
@@ -29,3 +30,9 @@ def create_env_file():
         return env_file
 
     return _create_env_file
+
+
+@pytest.fixture
+def astrosat_settings():
+    astrosat_settings = AstrosatSettings.load()
+    return astrosat_settings

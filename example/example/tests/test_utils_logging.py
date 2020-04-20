@@ -11,8 +11,11 @@ from .factories import *
 
 
 @pytest.mark.django_db
-def test_logging():
+def test_logging(astrosat_settings):
 
+    # make sure logging is enabled...
+    astrosat_settings.enable_db_logging = True
+    astrosat_settings.save()
     logger = logging.getLogger("db")
 
     assert DatabaseLogRecord.objects.count() == 0
@@ -27,7 +30,6 @@ def test_logging():
     assert log_record.level == logging.DEBUG
     assert log_record.message == "test1"
     assert len(tags) == 0
-
 
     # create a DatabaseLogRecord w/ 1 tag...
     logger.debug("test2", extra={"tags": ["tag1"]})

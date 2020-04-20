@@ -94,10 +94,12 @@ class DynamicAppSettings(LazyObject):
 
         if self._wrapped is empty:
             self._setup()
+
         attr = self._wrapped[name]
         if isinstance(attr, DynamicSetting):
             # if the setting is Dynamic, get its value from the db
             return attr.value
+
         return attr
 
     def __setattr__(self, name, value):
