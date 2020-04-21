@@ -1,7 +1,60 @@
 import logging
 from rest_framework import serializers
+from rest_framework.utils.serializer_helpers import ReturnDict
 
 from .models import DatabaseLogRecord
+
+
+#############################
+# serializer error handling #
+#############################
+
+
+class ConsolidatedErrorsSerializerMixin(object):
+    """
+    A little helper class to consolidate serializer errors into a single object.
+    Helps the client parse errors easily.
+    """
+
+    @property
+    def errors(self):
+        errors = super().errors
+        if errors:
+            return ReturnDict(self.consolidate_errors(errors), serializer=self)
+        return errors
+
+    def consolidate_errors(self, errors):
+        consolidated_errors = {}
+        for k, v in errors.items():
+            # extract all serializer/validation errors (but keep anything else)
+            if k == drf_settings.NON_FIELD_ERRORS_KEY or k in self.fields:
+                consolidated_errors[k] = errors.pop(k)
+        errors.update({"errors": consolidated_errors})
+        return errors
+
+
+###########
+# logging #
+###########
+
+
+class DatabaseLogRecordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DatabaseLogRecord
+        fields = "__all__"
+
+    tags = serializers.SlugRelatedField(slug_field="name", many=True, read_only=True)
+    level = serializers.SerializerMethodField()
+
+    def get_level(self, obj):
+        return logging.getLevelName(obj.level)
+
+
+################################
+# writeable nested serializers #
+################################
+
+# NOT CURRENTLY BEING USED
 
 
 class WritableNestedListSerializer(serializers.ListSerializer):
@@ -77,15 +130,3 @@ class WritableNestedListSerializer(serializers.ListSerializer):
                 model.delete()
 
         return models
-
-
-class DatabaseLogRecordSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = DatabaseLogRecord
-        fields = "__all__"
-
-    tags = serializers.SlugRelatedField(slug_field="name", many=True, read_only=True)
-    level = serializers.SerializerMethodField()
-
-    def get_level(self, obj):
-        return logging.getLevelName(obj.level)
