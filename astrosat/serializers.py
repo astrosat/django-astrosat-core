@@ -27,7 +27,7 @@ class ConsolidatedErrorsSerializerMixin(object):
 
     def consolidate_errors(self, errors):
         consolidated_errors = {}
-        for k, v in list(errors.keys()):
+        for k in list(errors.keys()):
             # extract all serializer/validation errors (but keep anything else)
             if k == drf_settings.NON_FIELD_ERRORS_KEY or k in self.fields:
                 consolidated_errors[k] = errors.pop(k)
