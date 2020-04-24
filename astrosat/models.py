@@ -12,6 +12,7 @@ class AstrosatSettings(SingletonMixin, models.Model):
         verbose_name_plural = "Astrosat Settings"
 
     enable_db_logging = models.BooleanField(default=False)
+    enable_debug_toolbar = models.BooleanField(default=False, help_text=_("Show the django-debug-toolbar"))
 
     def __str__(self):
         return "Astrosat Settings"

@@ -24,6 +24,17 @@ ASTROSAT_ENABLE_DB_LOGGING = getattr(
     ),
 )
 
+
+ASTROSAT_ENABLE_DEBUG_TOOLBAR = getattr(
+    settings,
+    "ASTROSAT_ENABLE_DEBUG_TOOLBAR",
+    DynamicSetting(
+        "astrosat.AstrosatSettings.enable_debug_toolbar",
+        env("DJANGO_ASTROSAT_ENABLE_DEBUG_TOOLBAR", default=False),
+    ),
+)
+
+
 # required third party settings...
 # (most of these are checked in checks.py)
 

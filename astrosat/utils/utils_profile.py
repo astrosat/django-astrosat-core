@@ -6,12 +6,32 @@ import pstats
 import sys
 
 from django.apps import apps
+from django.conf import settings
 from django.template import Context, Template
 
 from pympler.classtracker import ClassTracker
 from pympler.process import ProcessMemoryInfo
 from pympler.util.stringutils import pp
 
+from astrosat.conf import app_settings
+
+#################
+# debug_toolbar #
+#################
+
+
+def show_toolbar(request):
+    """
+    adds an extra check to the default SHOW_TOOLBAR_CALLBACK
+    to allow me to toggle django-debug-toolbar via a DynamicSetting
+    """
+    from debug_toolbar.middleware import show_toolbar as _show_toolbar
+    return _show_toolbar(request) and app_settings.ASTROSAT_ENABLE_DEBUG_TOOLBAR
+
+
+#############
+# profiling #
+#############
 
 def profile(n_calls=100, sort_key="cumulative", path=""):
     """A decorator that profiles a function
