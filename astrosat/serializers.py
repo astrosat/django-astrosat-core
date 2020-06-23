@@ -70,8 +70,8 @@ class WritableNestedListSerializer(serializers.ListSerializer):
     >>> class MyRelatedSerializer(serializers.ModelSerializer):
     >>>     class Meta:
     >>>         model = RelatedModel
-    >>>             fields = ("id", "some_other_field",)
-    >>>             list_serializer_class = WritableNestedListSerializer
+    >>>         fields = ("id", "some_other_field",)
+    >>>         list_serializer_class = WritableNestedListSerializer
 
     >>> class MySerializer(serializers.ModelSerializer):
     >>>      class Meta:
