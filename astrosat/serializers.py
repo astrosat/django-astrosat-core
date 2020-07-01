@@ -56,8 +56,6 @@ class DatabaseLogRecordSerializer(serializers.ModelSerializer):
 # writeable nested serializers #
 ################################
 
-# NOT CURRENTLY BEING USED
-
 
 class WritableNestedListSerializer(serializers.ListSerializer):
     """
@@ -120,13 +118,13 @@ class WritableNestedListSerializer(serializers.ListSerializer):
         # create every instance in data_mapping NOT in instance_mapping
         # update every instance in data_mapping AND in instance_mapping
         for model_id, model_data in data_mapping.items():
-            model = instance_mapping.get(model_id, None)
+            model = instance_mapping.pop(model_id, None)
             if model:
                 models.append(self.child.update(model, model_data))
             else:
                 models.append(self.child.create(model_data))
 
-        # delete every instance in instance_mapping and NOT in data_mapping
+        # delete every instance left in instance_mapping (and NOT in data_mapping)
         if delete_missing:
             for model_id, model in instance_mapping.items():
                 model.delete()
