@@ -124,7 +124,7 @@ class WritableNestedListSerializer(serializers.ListSerializer):
             else:
                 models.append(self.child.create(model_data))
 
-        # delete every instance left instance_mapping (and NOT in data_mapping)
+        # delete every instance left in instance_mapping (and NOT in data_mapping)
         if delete_missing:
             for model_id, model in instance_mapping.items():
                 model.delete()
