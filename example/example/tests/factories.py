@@ -18,21 +18,21 @@ FactoryFaker.add_provider(GeometryProvider)
 FactoryFaker.add_provider(ValidatedProvider)
 
 
-class ExampleHashableModelFactory(factory.DjangoModelFactory):
+class ExampleHashableModelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ExampleHashableModel
 
     name = FactoryFaker("name")
 
 
-class ExampleSingletonModelFactory(factory.DjangoModelFactory):
+class ExampleSingletonModelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ExampleSingletonModel
 
     name = FactoryFaker("name")
 
 
-# class ExampleGeoModelFactory(factory.DjangoModelFactory):
+# class ExampleGeoModelFactory(factory.django.DjangoModelFactory):
 #     class Meta:
 #         model = ExampleGeoModel
 
@@ -40,7 +40,7 @@ class ExampleSingletonModelFactory(factory.DjangoModelFactory):
 #     geometry = FactoryFaker("point")
 
 
-class ExampleBulkModelFactory(factory.DjangoModelFactory):
+class ExampleBulkModelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ExampleBulkModel
 
@@ -54,7 +54,7 @@ class ExampleBulkModelFactory(factory.DjangoModelFactory):
     something_non_unique = FactoryFaker("word")
 
 
-class ExampleEpochModelFactory(factory.DjangoModelFactory):
+class ExampleEpochModelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ExampleEpochModel
 

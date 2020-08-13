@@ -14,7 +14,7 @@ from astrosat.models import DatabaseLogTag, DatabaseLogRecord
 #########
 
 
-class UserFactory(factory.DjangoModelFactory):
+class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = get_user_model()
         django_get_or_create = ["username"]
@@ -40,14 +40,14 @@ class UserFactory(factory.DjangoModelFactory):
 ########
 
 
-class DatabaseLogTagFactory(factory.DjangoModelFactory):
+class DatabaseLogTagFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = DatabaseLogTag
 
     name = factory.LazyAttributeSequence(lambda o, n: f"tag-{n}")
 
 
-class DatabaseLogRecordFactory(factory.DjangoModelFactory):
+class DatabaseLogRecordFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = DatabaseLogRecord
 
