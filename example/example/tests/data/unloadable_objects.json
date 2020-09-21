@@ -1,0 +1,50 @@
+[
+{
+  "model": "example.exampleunloadableparentmodel",
+  "fields": {
+    "name": "one"
+  }
+},
+{
+  "model": "example.exampleunloadableparentmodel",
+  "fields": {
+    "name": "two"
+  }
+},
+{
+  "model": "example.exampleunloadablechildmodel",
+  "fields": {
+    "name": "one.one",
+    "parent": [
+      "one"
+    ]
+  }
+},
+{
+  "model": "example.exampleunloadablechildmodel",
+  "fields": {
+    "name": "one.two",
+    "parent": [
+      "one"
+    ]
+  }
+},
+{
+  "model": "example.exampleunloadablechildmodel",
+  "fields": {
+    "name": "two.one",
+    "parent": [
+      "two"
+    ]
+  }
+},
+{
+  "model": "example.exampleunloadablechildmodel",
+  "fields": {
+    "name": "two.two",
+    "parent": [
+      "two"
+    ]
+  }
+}
+]

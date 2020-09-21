@@ -5,7 +5,7 @@ from . import factories
 
 
 @pytest.mark.django_db
-class TestHashable():
+class TestHashable:
 
     def test_hash_created(self):
 
@@ -35,7 +35,7 @@ class TestHashable():
 
 
 @pytest.mark.django_db
-class TestSingleton():
+class TestSingleton:
 
     def test_singleton_cannot_create_multiple(self):
         singleton_1 = factories.ExampleSingletonModelFactory()
