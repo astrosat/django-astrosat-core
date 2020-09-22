@@ -1,11 +1,14 @@
 import pytest
 import environ
+import os
 
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.management import CommandError, call_command
 
 from astrosat.management.commands.update_site import SITE_ENVIRONMENT_VARIABLE
+
+from example.models import ExampleUnloadableParentModel, ExampleUnloadableChildModel
 
 
 @pytest.mark.django_db
@@ -78,3 +81,38 @@ class TestUpdateSite:
         site = Site.objects.get(id=settings.SITE_ID)
         assert site.domain == test_domain
         assert site.name == test_domain
+
+
+
+@pytest.mark.django_db
+class TestUnloadData:
+
+    command_name = "unloaddata"
+
+    test_fixture = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures/unloadable_objects.json")
+
+    def load_data(self):
+        call_command("loaddata", self.test_fixture)
+
+    def test_unload_data(self):
+        self.load_data()
+        assert ExampleUnloadableParentModel.objects.count() == 2
+        assert ExampleUnloadableChildModel.objects.count() == 4
+
+        call_command(self.command_name, self.test_fixture)
+
+        assert ExampleUnloadableParentModel.objects.count() == 0
+        assert ExampleUnloadableChildModel.objects.count() == 0
+
+    def test_unload_data_missing(self):
+
+        # trying to unload objects that don't exist raises an error...
+        with pytest.raises(AssertionError):
+            call_command(self.command_name, self.test_fixture)
+        assert ExampleUnloadableParentModel.objects.count() == 0
+        assert ExampleUnloadableChildModel.objects.count() == 0
+
+        # ...unless we pass "--ignorenonexistent"
+        call_command(self.command_name, self.test_fixture, "--ignorenonexistent")
+        assert ExampleUnloadableParentModel.objects.count() == 0
+        assert ExampleUnloadableChildModel.objects.count() == 0

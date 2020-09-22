@@ -11,6 +11,8 @@ from example.models import (
     ExampleEpochModel,
     ExampleHashableModel,
     ExampleSingletonModel,
+    ExampleUnloadableParentModel,
+    ExampleUnloadableChildModel,
 )
 
 
@@ -61,3 +63,18 @@ class ExampleEpochModelFactory(factory.django.DjangoModelFactory):
     name = FactoryFaker("name")
     date = FactoryFaker("date")
     tz_aware_date = FactoryFaker("date_time")
+
+
+class ExampleUnloadableParentModel(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ExampleUnloadableParentModel
+
+    name = factory.LazyAttributeSequence(lambda o, n: f"parent-{n}")
+
+
+class ExampleUnloadableChildModel(factory.django.DjangoModelFactory):
+    class Meta:
+        model = ExampleUnloadableChildModel
+
+    name = factory.LazyAttributeSequence(lambda o, n: f"child-{n}")
+    parent = factory.SubFactory(ExampleUnloadableParentModel)

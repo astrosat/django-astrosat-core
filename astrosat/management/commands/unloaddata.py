@@ -1,6 +1,5 @@
 import collections
 import gzip
-import itertools
 import os
 
 from django.core import serializers
@@ -35,6 +34,12 @@ class Command(DjangoLoadDataCommand):
     """
 
     help = "Deletes instances defined in the named fixture(s) from the database."
+
+    def loaddata(self, fixture_labels):
+        raise NotImplementedError()
+
+    def load_label(self, fixture_label):
+        raise NotImplementedError()
 
     def handle(self, *fixture_labels, **options):
         self.ignore = options["ignore"]
@@ -85,20 +90,14 @@ class Command(DjangoLoadDataCommand):
             self.unload_label(fixture_label)
 
         if self.verbosity >= 1:
-            if self.fixture_object_count == self.unloaded_object_count:
-                self.stdout.write(
-                    "Unloaded %d object(s) from %d fixture(s)"
-                    % (self.unloaded_object_count, self.fixture_count)
+            self.stdout.write(
+                "Unloaded %d object(s) (of %d) from %d fixture(s)"
+                % (
+                    self.unloaded_object_count,
+                    self.fixture_object_count,
+                    self.fixture_count,
                 )
-            else:
-                self.stdout.write(
-                    "Unloaded %d object(s) (of %d) from %d fixture(s)"
-                    % (
-                        self.unloaded_object_count,
-                        self.fixture_object_count,
-                        self.fixture_count,
-                    )
-                )
+            )
 
     def unload_label(self, fixture_label):
 
@@ -144,14 +143,15 @@ class Command(DjangoLoadDataCommand):
                             else:
                                 self.class_deletion_record[key] += val
                     except Exception as e:
-                        # various exceptions might ocurr; if it is b/c the object has already been deleted
+                        # various exceptions might ocurr; if it is b/c obj already doesn't exist
                         # then that's okay, just make a note of it and move on
                         if obj.object.pk is None:
                             if obj_class_label in self.class_deletion_record and self.class_deletion_record[obj_class_label] > 0:
                                 self.class_deletion_record[obj_class_label] -= 1
-                            pass
-                        else:
-                            raise
+                                continue  # obj has been deleted in a prior loop
+                            elif self.ignore:
+                                continue  # obj wasn't in the db in the 1st place
+                        raise
 
                     if show_progress:
                         self.stdout.write(
