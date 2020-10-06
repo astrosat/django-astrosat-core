@@ -1,12 +1,14 @@
 import factory
-from factory.faker import (
-    Faker as FactoryFaker,
-)  # note I use FactoryBoy's wrapper of Faker
+from factory.faker import Faker as FactoryFaker
+from faker import Faker
 from typing import Any, Sequence
 
 from django.contrib.auth import get_user_model
 
 from astrosat.models import DatabaseLogTag, DatabaseLogRecord
+
+
+fake = Faker()
 
 
 #########
@@ -24,14 +26,15 @@ class UserFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def password(self, create: bool, extracted: Sequence[Any], **kwargs):
-        password = FactoryFaker(
-            "password",
-            length=42,
-            special_chars=True,
-            digits=True,
-            upper_case=True,
-            lower_case=True,
-        ).generate(extra_kwargs={})
+
+        password_kwargs = {
+            "length": 42,
+            "special_chars": True,
+            "digits": True,
+            "upper_case": True,
+            "lower_case": True,
+        }
+        password = fake.password(**password_kwargs)
         self.set_password(password)
 
 
