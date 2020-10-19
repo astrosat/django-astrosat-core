@@ -25,7 +25,6 @@ from .models import DatabaseLogRecord, DatabaseLogTag
 from .serializers import DatabaseLogRecordSerializer
 from .utils import DataClient
 
-
 ###########
 # swagger #
 ###########

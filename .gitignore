@@ -103,9 +103,6 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# vscode
-.vscode/
-
 ### in-progress files
 *.bak
 *.orig
