@@ -9,13 +9,13 @@ watch = "pipenv run ptw"
 
 [dev-packages]
 django-debug-toolbar = "*"
-factory-boy = "*"
+factory-boy = "==3.0.1"
+pylint = "*"
 pytest = "*"
 pytest-django = "*"
 pytest-sugar = "*"
-pylint = "*"
-yapf = "*"
 pytest-watch = "*"
+yapf = "*"
 
 [packages]
 django = "~=3.0"
@@ -27,4 +27,4 @@ psycopg2-binary = "*"
 django-astrosat-core = {editable = true,path = "./.."}
 
 [requires]
-python_version = "3.7"
+python_version = "3.7.7"

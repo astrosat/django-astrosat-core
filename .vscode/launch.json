@@ -2,17 +2,26 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Run PTVSD Debug Server",
+      "name": "Python: Launch Django",
       "type": "python",
-      "request": "attach",
-      "pathMappings": [
-        {
-          "localRoot": "${workspaceFolder}/example",
-          "remoteRoot": "/home/app/example"
-        }
-      ],
-      "port": 9000,
-      "host": "127.0.0.1"
+      "request": "launch",
+      "program": "${workspaceRoot}/example/manage.py",
+      "args": ["runserver"],
+      "django": true
+    },
+    {
+      "name": "PyTest",
+      "type": "python",
+      "request": "launch",
+      "stopOnEntry": false,
+      "pythonPath": "${workspaceRoot}/example/.venv/bin/python",
+      "module": "pytest",
+      "args": ["-sv"],
+      "cwd": "${workspaceRoot}/example",
+      "env": {
+        "DJANGO_SETTINGS_MODULE": "example.settings"
+      },
+      "envFile": "${workspaceRoot}/example/.venv"
     }
   ]
 }

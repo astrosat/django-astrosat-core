@@ -58,7 +58,7 @@ def check_third_party_settings(app_configs, **kwargs):
         app_settings.SWAGGER_SETTINGS,
     ]
 
-    for key, value in chain(*map(lambda  x: x.items(), third_party_settings)):
+    for key, value in chain(*map(lambda x: x.items(), third_party_settings)):
         setting = getattr(settings, key, None)
         if setting != value:
             errors.append(
