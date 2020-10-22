@@ -6,7 +6,6 @@ from urllib.parse import urlparse, parse_qs
 
 from astrosat.tests.utils import mock_data_client
 
-
 TEST_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 TEST_DATA_PATHS = [
     (os.path.join(TEST_DATA_DIR, file_name), file_name)  # path  # key

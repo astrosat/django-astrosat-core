@@ -5,7 +5,6 @@ from django.db import models
 
 
 class HashableMixin(models.Model):
-
     class Meta:
         abstract = True
 
@@ -37,7 +36,6 @@ class HashableMixin(models.Model):
 
 
 class SingletonMixin(models.Model):
-
     class Meta:
         abstract = True
 

@@ -9,7 +9,6 @@ from django.utils.html import format_html
 
 from .models import AstrosatSettings, DatabaseLogTag, DatabaseLogRecord
 
-
 ############
 # util fns #
 ############
@@ -59,17 +58,14 @@ class JSONAdminWidget(widgets.Textarea):
 
 
 class CannotAddModelAdminBase(BaseModelAdmin):
-
     """
     Prevents adding new models via the admin
     """
-
     def has_add_permission(self, request, obj=None):
         return False
 
 
 class CannotDeleteModelAdminBase(BaseModelAdmin):
-
     """
     Prevents deleting models via the admin
     """
@@ -90,12 +86,12 @@ class CannotDeleteModelAdminBase(BaseModelAdmin):
 
 
 class CannotUpdateModelAdminBase(BaseModelAdmin):
-
     """
     Prevents updating existing models via the admin
     """
-
-    def changeform_view(self, request, object_id=None, form_url="", extra_context=None):
+    def changeform_view(
+        self, request, object_id=None, form_url="", extra_context=None
+    ):
 
         extra_context = extra_context or {}
         extra_context["show_save"] = False
@@ -117,11 +113,9 @@ class CannotUpdateModelAdminBase(BaseModelAdmin):
 
 
 class CannotEditModelAdminBase(BaseModelAdmin):
-
     """
     Prevents editing existing model fields via the admin
     """
-
     def get_readonly_fields(self, request, obj=None):
 
         # TODO: DOES THIS WORK FOR FIELDSETS?
@@ -132,8 +126,8 @@ class CannotEditModelAdminBase(BaseModelAdmin):
         local_fields = list(
             set(
                 # using 'local_fields' to exclude reverse relationships
-                [f.name for f in self.opts.local_fields]
-                + [f.name for f in self.opts.local_many_to_many]
+                [f.name for f in self.opts.local_fields] +
+                [f.name for f in self.opts.local_many_to_many]
             )
         )
         return local_fields
@@ -145,7 +139,6 @@ class ReadOnlyModelAdminBase(
     CannotUpdateModelAdminBase,
     CannotEditModelAdminBase,
 ):
-
     """"
     Prevents doing anything to a model
     """
@@ -154,9 +147,9 @@ class ReadOnlyModelAdminBase(
 
 
 class DeleteOnlyModelAdminBase(
-    CannotAddModelAdminBase, CannotUpdateModelAdminBase, CannotEditModelAdminBase
+    CannotAddModelAdminBase, CannotUpdateModelAdminBase,
+    CannotEditModelAdminBase
 ):
-
     """"
     Prevents doing anything to a model, except for deletion
     """
@@ -183,7 +176,7 @@ class DatabaseLogTagAdmin(admin.ModelAdmin):
 class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
     list_display = ("created", "level", "message", "get_tags_for_list_display")
     list_filter = ("level", "logger_name", "created", "tags")
-    search_fields = ("message",)
+    search_fields = ("message", )
 
     def get_queryset(self, request):
         # pre-fetching m2m fields that are used in list_displays

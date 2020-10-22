@@ -29,7 +29,6 @@ class RestrictLogsByNameFilter(logging.Filter):
 
 
 class DatabaseLogHandler(logging.Handler):
-
     """
     sends a logging record to the db
     """

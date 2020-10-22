@@ -11,7 +11,6 @@ from django.core.management.commands.loaddata import (
 from django.core.management.utils import parse_apps_and_model_labels
 from django.db import connections, transaction
 
-
 try:
     import bz2
     has_bz2 = True
@@ -46,7 +45,9 @@ class Command(DjangoLoadDataCommand):
         self.using = options["database"]
         self.app_label = options["app_label"]
         self.verbosity = options["verbosity"]
-        self.excluded_models, self.excluded_apps = parse_apps_and_model_labels(options["exclude"])
+        self.excluded_models, self.excluded_apps = parse_apps_and_model_labels(
+            options["exclude"]
+        )
         self.format = options["format"]
 
         with transaction.atomic(using=self.using):
@@ -91,8 +92,7 @@ class Command(DjangoLoadDataCommand):
 
         if self.verbosity >= 1:
             self.stdout.write(
-                "Unloaded %d object(s) (of %d) from %d fixture(s)"
-                % (
+                "Unloaded %d object(s) (of %d) from %d fixture(s)" % (
                     self.unloaded_object_count,
                     self.fixture_object_count,
                     self.fixture_count,
@@ -102,8 +102,12 @@ class Command(DjangoLoadDataCommand):
     def unload_label(self, fixture_label):
 
         show_progress = self.verbosity >= 3
-        for fixture_file, fixture_dir, fixture_name in self.find_fixtures(fixture_label):
-            _, ser_fmt, cmp_fmt = self.parse_name(os.path.basename(fixture_file))
+        for fixture_file, fixture_dir, fixture_name in self.find_fixtures(
+            fixture_label
+        ):
+            _, ser_fmt, cmp_fmt = self.parse_name(
+                os.path.basename(fixture_file)
+            )
             open_method, mode = self.compression_formats[cmp_fmt]
             fixture = open_method(fixture_file, mode)
             try:
@@ -112,8 +116,8 @@ class Command(DjangoLoadDataCommand):
                 unloaded_objects_in_fixture = 0
                 if self.verbosity >= 2:
                     self.stdout.write(
-                        "Installing %s fixture '%s' from %s."
-                        % (ser_fmt, fixture_name, humanize(fixture_dir))
+                        "Installing %s fixture '%s' from %s." %
+                        (ser_fmt, fixture_name, humanize(fixture_dir))
                     )
 
                 objects = serializers.deserialize(
@@ -127,15 +131,17 @@ class Command(DjangoLoadDataCommand):
                 for obj in objects:
                     objects_in_fixture += 1
                     if (
-                        obj.object._meta.app_config in self.excluded_apps
-                        or type(obj.object) in self.excluded_models
+                        obj.object._meta.app_config in self.excluded_apps or
+                        type(obj.object) in self.excluded_models
                     ):
                         continue
 
                     # here is the different bit...
                     obj_class_label = obj.object._meta.label
                     try:
-                        n_deleted, deleted_classes = obj.object.delete(using=self.using)
+                        n_deleted, deleted_classes = obj.object.delete(
+                            using=self.using
+                        )
                         unloaded_objects_in_fixture += n_deleted
                         for key, val in deleted_classes.items():
                             if key == obj_class_label:
@@ -146,7 +152,8 @@ class Command(DjangoLoadDataCommand):
                         # various exceptions might ocurr; if it is b/c obj already doesn't exist
                         # then that's okay, just make a note of it and move on
                         if obj.object.pk is None:
-                            if obj_class_label in self.class_deletion_record and self.class_deletion_record[obj_class_label] > 0:
+                            if obj_class_label in self.class_deletion_record and self.class_deletion_record[
+                                obj_class_label] > 0:
                                 self.class_deletion_record[obj_class_label] -= 1
                                 continue  # obj has been deleted in a prior loop
                             elif self.ignore:
@@ -155,19 +162,24 @@ class Command(DjangoLoadDataCommand):
 
                     if show_progress:
                         self.stdout.write(
-                            "\rProcessed %i object(s)." % unloaded_objects_in_fixture,
+                            "\rProcessed %i object(s)." %
+                            unloaded_objects_in_fixture,
                             ending="",
                         )
 
                 if objects and show_progress:
-                    self.stdout.write()  # Add a newline after progress indicator.
+                    self.stdout.write(
+                    )  # Add a newline after progress indicator.
 
                 self.unloaded_object_count += unloaded_objects_in_fixture
                 self.fixture_object_count += objects_in_fixture
 
             except Exception as e:
                 if not isinstance(e, CommandError):
-                    e.args = ("Problem unloading fixture '%s': %s" % (fixture_file, e),)
+                    e.args = (
+                        "Problem unloading fixture '%s': %s" %
+                        (fixture_file, e),
+                    )
                 raise
             finally:
                 fixture.close()

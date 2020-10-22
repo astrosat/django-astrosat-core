@@ -5,7 +5,6 @@ from django.core.management.commands.loaddata import Command as DjangoLoadDataCo
 from django.db.models.fields.files import FileField, ImageField
 from django.db.models.signals import pre_save
 
-
 MEDIA_FIELDS = [FileField, ImageField]
 
 
@@ -14,7 +13,9 @@ def is_media_field(field):
 
 
 def get_models_with_media_fields():
-    for ModelClass in apps.get_models(include_auto_created=True, include_swapped=True):
+    for ModelClass in apps.get_models(
+        include_auto_created=True, include_swapped=True
+    ):
         if any(is_media_field(field) for field in ModelClass._meta.fields):
             yield ModelClass
 
@@ -25,7 +26,6 @@ class Command(DjangoLoadDataCommand):
     to move any media files from "app/fixures/media/<upload_to path>"
     to the appropriate media storage location.
     """
-
     def load_media(self, sender, *args, **kwargs):
 
         instance = kwargs["instance"]

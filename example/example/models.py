@@ -4,8 +4,6 @@ from django.db import models
 
 from astrosat.fields import EpochField, LazyCharArrayField
 from astrosat.mixins import HashableMixin, SingletonMixin
-
-
 """
 A bunch of models that are just used for testing
 """
@@ -48,7 +46,9 @@ class ExampleEpochModel(models.Model):
 
     name = models.CharField(max_length=255)
     date = EpochField(format="%Y-%m-%d", null=True, blank=True)
-    tz_aware_date = EpochField(format="%Y-%m-%d %H:%M:%S", null=True, blank=True)
+    tz_aware_date = EpochField(
+        format="%Y-%m-%d %H:%M:%S", null=True, blank=True
+    )
 
 
 # class ExampleLazyCharArrayModel(models.Model):
@@ -75,7 +75,7 @@ class ExampleUnloadableParentModel(models.Model):
         return self.name
 
     def natural_key(self):
-        return (self.name,)
+        return (self.name, )
 
 
 class ExampleUnloadableChildModel(models.Model):
@@ -83,10 +83,14 @@ class ExampleUnloadableChildModel(models.Model):
     objects = ExampleUnloadableModelManager()
 
     name = models.CharField(unique=True, max_length=255)
-    parent = models.ForeignKey(ExampleUnloadableParentModel, on_delete=models.CASCADE, related_name="children")
+    parent = models.ForeignKey(
+        ExampleUnloadableParentModel,
+        on_delete=models.CASCADE,
+        related_name="children"
+    )
 
     def __str__(self):
         return self.name
 
     def natural_key(self):
-        return (self.name,)
+        return (self.name, )

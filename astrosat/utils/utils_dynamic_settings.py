@@ -12,7 +12,6 @@ class DynamicSetting(object):
     Therefore, it can be used before any apps have been loaded.
     Note that this is a standard Python Class, rather than a Django Model.
     """
-
     def __init__(self, source, default_value):
         """
         Defines a settings variable as dynamic.  Usage is:
@@ -50,7 +49,6 @@ class DynamicSetting(object):
         see if the attr is an instance of a DynamicSetting; if so, it returns
         the current value from the db.
         """
-
         def _new_getattr(instance, name):
             if instance._wrapped is empty:
                 instance._setup(name)
@@ -116,8 +114,7 @@ class DynamicAppSettings(LazyObject):
         app_settings_module = importlib.import_module(self._module)
         self._wrapped = {
             app_setting: getattr(app_settings_module, app_setting)
-            for app_setting in dir(app_settings_module)
-            if app_setting.isupper()
+            for app_setting in dir(app_settings_module) if app_setting.isupper()
         }
 
 

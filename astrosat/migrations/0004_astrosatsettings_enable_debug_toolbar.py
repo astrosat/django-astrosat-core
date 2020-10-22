@@ -13,6 +13,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='astrosatsettings',
             name='enable_debug_toolbar',
-            field=models.BooleanField(default=False, help_text='Show the django-debug-toolbar'),
+            field=models.BooleanField(
+                default=False, help_text='Show the django-debug-toolbar'
+            ),
         ),
     ]

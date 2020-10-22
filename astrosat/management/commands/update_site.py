@@ -6,9 +6,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.management.base import BaseCommand, CommandError
 from django.db.utils import IntegrityError
 
-
 env = environ.Env()
-
 
 SITE_ENVIRONMENT_VARIABLE = "DJANGO_SITE_DOMAIN"
 
@@ -27,7 +25,8 @@ class Command(BaseCommand):
             dest="id",
             default=settings.SITE_ID,
             required=False,
-            help="id of Site to update (if unprovied will use the default SITE_ID specified in settings).",
+            help=
+            "id of Site to update (if unprovied will use the default SITE_ID specified in settings).",
         )
 
         parser.add_argument(
@@ -35,7 +34,8 @@ class Command(BaseCommand):
             dest="domain",
             required=False,
             default=None,
-            help=f"Domain to update the Site with (if unprovided will use the {SITE_ENVIRONMENT_VARIABLE} environment variable).",
+            help=
+            f"Domain to update the Site with (if unprovided will use the {SITE_ENVIRONMENT_VARIABLE} environment variable).",
         )
 
         parser.add_argument(
@@ -43,7 +43,8 @@ class Command(BaseCommand):
             dest="name",
             required=False,
             default=None,
-            help="Name to update the Site with (if unprovided will just use the domain).",
+            help=
+            "Name to update the Site with (if unprovided will just use the domain).",
         )
 
     def handle(self, *args, **options):
@@ -51,14 +52,17 @@ class Command(BaseCommand):
         try:
 
             domain = (
-                options["domain"]
-                if options["domain"] is not None
-                else env(SITE_ENVIRONMENT_VARIABLE)
+                options["domain"] if options["domain"] is not None else
+                env(SITE_ENVIRONMENT_VARIABLE)
             )
             name = options["name"] if options["name"] is not None else domain
 
             Site.objects.update_or_create(
-                id=options["id"], defaults={"domain": domain[:100], "name": name[:50]}
+                id=options["id"],
+                defaults={
+                    "domain": domain[:100],
+                    "name": name[:50]
+                }
             )
 
         except ImproperlyConfigured:

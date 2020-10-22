@@ -12,14 +12,15 @@ class AstrosatSettings(SingletonMixin, models.Model):
         verbose_name_plural = "Astrosat Settings"
 
     enable_db_logging = models.BooleanField(default=False)
-    enable_debug_toolbar = models.BooleanField(default=False, help_text=_("Show the django-debug-toolbar"))
+    enable_debug_toolbar = models.BooleanField(
+        default=False, help_text=_("Show the django-debug-toolbar")
+    )
 
     def __str__(self):
         return "Astrosat Settings"
 
 
 class DatabaseLogTag(models.Model):
-
     class Meta:
         verbose_name = "Log Tag"
         verbose_name_plural = "Log Tags"
@@ -31,7 +32,6 @@ class DatabaseLogTag(models.Model):
 
 
 class DatabaseLogRecord(models.Model):
-
     """
     model used by astrosat.utils.db_log_handler to log records to the db
     usage is:
@@ -39,11 +39,10 @@ class DatabaseLogRecord(models.Model):
     >>> logger = logging.getLogger("db")
     >>> logger.info("message", extra={"tags": ["tag1","tag2"]})
     """
-
     class Meta:
         verbose_name = "Log Record"
         verbose_name_plural = "Log Records"
-        ordering = ("-created",)
+        ordering = ("-created", )
 
     LevelChoices = (
         (logging.NOTSET, _('NotSet')),
@@ -56,7 +55,9 @@ class DatabaseLogRecord(models.Model):
 
     created = models.DateTimeField(auto_now_add=True)
     logger_name = models.CharField(max_length=128)
-    level = models.PositiveIntegerField(choices=LevelChoices, default=logging.ERROR)
+    level = models.PositiveIntegerField(
+        choices=LevelChoices, default=logging.ERROR
+    )
     message = models.TextField()
     trace = models.TextField(blank=True, null=True)
     tags = models.ManyToManyField(DatabaseLogTag, related_name="records")

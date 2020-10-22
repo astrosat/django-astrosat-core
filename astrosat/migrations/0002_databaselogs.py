@@ -13,7 +13,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='DatabaseLogTag',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID'
+                    )
+                ),
                 ('name', models.CharField(max_length=64)),
             ],
             options={
@@ -24,18 +32,40 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='DatabaseLogRecord',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID'
+                    )
+                ),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('logger_name', models.CharField(max_length=128)),
-                ('level', models.PositiveIntegerField(choices=[(0, 'NotSet'), (20, 'Info'), (30, 'Warning'), (10, 'Debug'), (40, 'Error'), (50, 'Fatal')], default=40)),
+                (
+                    'level',
+                    models.PositiveIntegerField(
+                        choices=[
+                            (0, 'NotSet'), (20, 'Info'), (30, 'Warning'),
+                            (10, 'Debug'), (40, 'Error'), (50, 'Fatal')
+                        ],
+                        default=40
+                    )
+                ),
                 ('message', models.TextField()),
                 ('trace', models.TextField(blank=True, null=True)),
-                ('tags', models.ManyToManyField(related_name='records', to='astrosat.DatabaseLogTag')),
+                (
+                    'tags',
+                    models.ManyToManyField(
+                        related_name='records', to='astrosat.DatabaseLogTag'
+                    )
+                ),
             ],
             options={
                 'verbose_name': 'Log Record',
                 'verbose_name_plural': 'Log Records',
-                'ordering': ('-created',),
+                'ordering': ('-created', ),
             },
         ),
     ]

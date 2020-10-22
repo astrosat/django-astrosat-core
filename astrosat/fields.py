@@ -10,7 +10,6 @@ class EpochField(BigIntegerField):
     Stores a date as an integer representing the epoch time.
     The corresponding date object can be retrieved using the `.<field_name>_as_datetime()` fn
     """
-
     def __init__(self, format="%Y-%m-%d", *args, **kwargs):
         self.format = format
         super().__init__(*args, **kwargs)

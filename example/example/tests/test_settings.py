@@ -48,8 +48,14 @@ class TestSettings:
         env_key_3 = "KEY3"
 
         env_files = [
-            create_env_file(**{env_key_1: "one", env_key_2: "one"}),
-            create_env_file(**{env_key_2: "two", env_key_3: "two"}),
+            create_env_file(**{
+                env_key_1: "one",
+                env_key_2: "one"
+            }),
+            create_env_file(**{
+                env_key_2: "two",
+                env_key_3: "two"
+            }),
         ]
 
         for env_file in reversed(env_files):
@@ -82,7 +88,9 @@ class TestDynamicSettings:
     @pytest.mark.django_db
     def test_dynamic_settings(self, settings):
 
-        settings.TEST_FLAG = DynamicSetting("example.ExampleSingletonModel.flag", False)
+        settings.TEST_FLAG = DynamicSetting(
+            "example.ExampleSingletonModel.flag", False
+        )
 
         assert ExampleSingletonModel.objects.count() == 0
 

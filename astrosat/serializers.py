@@ -6,7 +6,6 @@ from rest_framework.utils.serializer_helpers import ReturnDict
 
 from .models import DatabaseLogRecord
 
-
 #############################
 # serializer error handling #
 #############################
@@ -17,7 +16,6 @@ class ConsolidatedErrorsSerializerMixin(object):
     A little helper class to consolidate serializer errors into a single object.
     Helps the client parse errors easily.
     """
-
     @property
     def errors(self):
         errors = super().errors
@@ -71,7 +69,9 @@ class DatabaseLogRecordSerializer(serializers.ModelSerializer):
         model = DatabaseLogRecord
         fields = "__all__"
 
-    tags = serializers.SlugRelatedField(slug_field="name", many=True, read_only=True)
+    tags = serializers.SlugRelatedField(
+        slug_field="name", many=True, read_only=True
+    )
     level = serializers.SerializerMethodField()
 
     def get_level(self, obj):
@@ -116,7 +116,6 @@ class WritableNestedListSerializer(serializers.ListSerializer):
     >>>           updated_instance.related_data.add(*related_models)
     >>>           return updated_instance
     """
-
     def __init__(self, *args, **kwargs):
         """
         ensures that an id_field was provided for use w/ crud below
@@ -133,12 +132,14 @@ class WritableNestedListSerializer(serializers.ListSerializer):
 
         # map of existing instances...
         instance_mapping = {
-            getattr(instance, self.id_field): instance for instance in instances
+            getattr(instance, self.id_field): instance
+            for instance in instances
         }
 
         # map of instances specified in data...
         data_mapping = {
-            data.get(self.id_field, id(data)): data for data in validated_data
+            data.get(self.id_field, id(data)): data
+            for data in validated_data
         }
 
         # create every instance in data_mapping NOT in instance_mapping

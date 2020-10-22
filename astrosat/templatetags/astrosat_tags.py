@@ -3,7 +3,6 @@ from django.utils.html import mark_safe
 
 import astrosat
 
-
 register = template.Library()
 
 ##################

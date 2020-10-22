@@ -25,7 +25,6 @@ install_requires = [
     "pympler>=0.8",
 ]
 
-
 setup(
     name=title,
     version=version,

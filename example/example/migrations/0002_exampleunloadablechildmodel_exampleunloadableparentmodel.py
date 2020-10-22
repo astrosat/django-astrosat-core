@@ -14,16 +14,39 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ExampleUnloadableParentModel',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID'
+                    )
+                ),
                 ('name', models.CharField(max_length=255, unique=True)),
             ],
         ),
         migrations.CreateModel(
             name='ExampleUnloadableChildModel',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    'id',
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name='ID'
+                    )
+                ),
                 ('name', models.CharField(max_length=255, unique=True)),
-                ('parent', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='children', to='example.exampleunloadableparentmodel')),
+                (
+                    'parent',
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name='children',
+                        to='example.exampleunloadableparentmodel'
+                    )
+                ),
             ],
         ),
     ]
