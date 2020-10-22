@@ -17,9 +17,9 @@ from rest_framework.views import APIView
 from django_filters import Filter, rest_framework as filters
 from django_filters.constants import EMPTY_VALUES
 
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
-from drf_yasg.views import get_schema_view
+from drf_yasg2 import openapi
+from drf_yasg2.utils import swagger_auto_schema
+from drf_yasg2.views import get_schema_view
 
 from .models import DatabaseLogRecord, DatabaseLogTag
 from .serializers import DatabaseLogRecordSerializer
