@@ -6,7 +6,7 @@ verify_ssl = true
 [dev-packages]
 django-debug-toolbar = "*"
 factory-boy = "*"
-pytest = "==5.3.5"
+pytest = "*"
 pytest-django = "*"
 pytest-sugar = "*"
 
@@ -15,7 +15,7 @@ django = "~=3.0"
 django-environ = "*"
 django-filter = "*"
 djangorestframework = "*"
-drf-yasg = "*"
+drf-yasg2 = "*"
 psycopg2-binary = "*"
 django-astrosat-core = {editable = true,path = "./.."}
 

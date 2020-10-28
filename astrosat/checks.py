@@ -10,7 +10,7 @@ from .conf import app_settings
 APP_DEPENDENCIES = [
     "rest_framework",
     "django_filters",
-    "drf_yasg",
+    "drf_yasg2",
 ]
 
 
