@@ -13,7 +13,7 @@ import os
 
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.text import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from astrosat.utils import DynamicSetting
 
