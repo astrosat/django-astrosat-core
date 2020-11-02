@@ -14,7 +14,6 @@ class PrettyLoremProvider(BaseProvider):
     Provides fakes for text to include "pretty" features,
     like removing trailing periods, or capitalizing things
     """
-
     def pretty_words(self, nb=3, ext_word_list=None):
         """
         returns a list of pretty words
@@ -34,7 +33,6 @@ class GeometryProvider(BaseProvider):
     """
     Provides fakes for GeoDjango classes.
     """
-
     def point(self):
         coords = list(map(float, [fake.longitude(), fake.latitude()]))
         point = Point(coords, srid=SRID)
@@ -70,7 +68,6 @@ class ValidatedProvider(BaseProvider):
     """
     Provides fakes that exclude invalid values.
     """
-
     def _generate_valid_value(self, faker, validators=[], max_attempts=1000):
 
         attempt = 0

@@ -13,7 +13,6 @@ _________
         \/                   \/
 """
 
-
 APP_NAME = "astrosat"
 
 VERSION = (1, 1, 0)

@@ -7,9 +7,7 @@ from django.contrib.auth import get_user_model
 
 from astrosat.models import DatabaseLogTag, DatabaseLogRecord
 
-
 fake = Faker()
-
 
 #########
 # users #
@@ -56,7 +54,8 @@ class DatabaseLogRecordFactory(factory.django.DjangoModelFactory):
 
     logger_name = "db"
     level = FactoryFaker(
-        "random_element", elements=[x[0] for x in DatabaseLogRecord.LevelChoices]
+        "random_element",
+        elements=[x[0] for x in DatabaseLogRecord.LevelChoices]
     )
     message = FactoryFaker("sentence", nb_words=10)
 

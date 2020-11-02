@@ -23,7 +23,10 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("something_unique", models.CharField(max_length=255, unique=True)),
+                (
+                    "something_unique",
+                    models.CharField(max_length=255, unique=True)
+                ),
                 ("something_non_unique", models.CharField(max_length=255)),
             ],
         ),

@@ -4,7 +4,6 @@ from django.shortcuts import redirect
 
 
 def conditional_redirect(conditional, redirect_name):
-
     """
     A decorator for a view that redirects to "redirect_name" if "conditional" is true
     Parameters
@@ -14,7 +13,6 @@ def conditional_redirect(conditional, redirect_name):
     redirect_name: str
         the view name to redirect to
     """
-
     def _decorator(view_fn):
         @functools.wraps(view_fn)
         def _wrapper(*args, **kwargs):

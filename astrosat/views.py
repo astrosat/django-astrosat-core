@@ -25,7 +25,6 @@ from .models import DatabaseLogRecord, DatabaseLogTag
 from .serializers import DatabaseLogRecordSerializer
 from .utils import DataClient
 
-
 ###########
 # swagger #
 ###########
@@ -48,7 +47,7 @@ api_schema_view = get_schema_view(
         # url=Site.objects.get_current().domain,
     ),
     public=True,
-    permission_classes=(IsAdminOrDebug,),
+    permission_classes=(IsAdminOrDebug, ),
 )
 
 api_schema_views = [
@@ -84,7 +83,6 @@ class SwaggerCurrentUserDefault(CurrentUserDefault):
 ##################
 # error handling #
 ##################
-
 """
 To use these in a project simply add the following code to ROOT_URLCONF:
 >handler400 = "astrosat.views.handler400"
@@ -218,21 +216,21 @@ class DatabaseLogRecordFilterSet(filters.FilterSet):
       <domain>/api/logs/?created__date__lte=x
       <domain>/api/logs/?created__date__range=x,y
     """
-
     class Meta:
         model = DatabaseLogRecord
         fields = {
             # using automatic filter generation for "created" here
-            "created": [
-                "exact",
-                "gte",
-                "lte",
-                "range",
-                "date",
-                "date__range",
-                "date__gte",
-                "date__lte",
-            ],
+            "created":
+                [
+                    "exact",
+                    "gte",
+                    "lte",
+                    "range",
+                    "date",
+                    "date__range",
+                    "date__gte",
+                    "date__lte",
+                ],
             # but declarative filters for "tags" below
         }
 
@@ -244,7 +242,7 @@ class DatabaseLogRecordViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAdminOrDebug]
     serializer_class = DatabaseLogRecordSerializer
     queryset = DatabaseLogRecord.objects.all()
-    filter_backends = (filters.DjangoFilterBackend,)
+    filter_backends = (filters.DjangoFilterBackend, )
     filterset_class = DatabaseLogRecordFilterSet
 
 
@@ -255,5 +253,7 @@ class DatabaseLogRecordViewSet(viewsets.ReadOnlyModelViewSet):
 
 def remove_urlpatterns(urlpatterns, urlpatterns_to_remove):
     return list(
-        filterfalse(lambda x: x.pattern.name in urlpatterns_to_remove, urlpatterns)
+        filterfalse(
+            lambda x: x.pattern.name in urlpatterns_to_remove, urlpatterns
+        )
     )

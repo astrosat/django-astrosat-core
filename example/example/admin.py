@@ -9,7 +9,6 @@ from .models import (
     ExampleUnloadableChildModel,
 )
 
-
 admin.site.register(ExampleHashableModel)
 admin.site.register(ExampleSingletonModel)
 admin.site.register(ExampleBulkModel)

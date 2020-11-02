@@ -39,7 +39,6 @@ def fake_bulk_model_data():
     """
     Generate a list of serialized ExampleBulkModels
     """
-
     def _fake_bulk_model_data(n_models):
 
         max_attempts = 1000
@@ -56,8 +55,7 @@ def fake_bulk_model_data():
             )
             if next(
                 (
-                    x
-                    for x in data
+                    x for x in data
                     if x["something_unique"] == data_record["something_unique"]
                 ),
                 None,
@@ -82,20 +80,26 @@ class TestBulkUpdateOrCreate:
         3
     )  # should never do more than 3 queries: 1 to check exisiting objects, 1 to update, 1 to create
 
-    def test_create_objects(self, fake_bulk_model_data, django_assert_max_num_queries):
+    def test_create_objects(
+        self, fake_bulk_model_data, django_assert_max_num_queries
+    ):
 
         test_data = fake_bulk_model_data(10)
 
         assert ExampleBulkModel.objects.count() == 0
 
         with django_assert_max_num_queries(self.N_QUERIES):
-            created, updated = bulk_update_or_create(ExampleBulkModel, test_data)
+            created, updated = bulk_update_or_create(
+                ExampleBulkModel, test_data
+            )
             assert len(created) == 10
             assert len(updated) == 0
 
         assert ExampleBulkModel.objects.count() == 10
 
-    def test_update_objects(self, fake_bulk_model_data, django_assert_max_num_queries):
+    def test_update_objects(
+        self, fake_bulk_model_data, django_assert_max_num_queries
+    ):
 
         test_data = fake_bulk_model_data(10)
 
@@ -106,14 +110,16 @@ class TestBulkUpdateOrCreate:
             data["something_non_unique"] = "updated"
 
         with django_assert_max_num_queries(self.N_QUERIES):
-            created, updated = bulk_update_or_create(ExampleBulkModel, test_data)
+            created, updated = bulk_update_or_create(
+                ExampleBulkModel, test_data
+            )
             assert len(created) == 0
             assert len(updated) == 10
 
         assert ExampleBulkModel.objects.count() == 10
         assert (
-            ExampleBulkModel.objects.filter(something_non_unique="updated").count()
-            == 10
+            ExampleBulkModel.objects.filter(something_non_unique="updated"
+                                           ).count() == 10
         )
 
     def test_update_and_create_objects(
@@ -129,14 +135,16 @@ class TestBulkUpdateOrCreate:
             data["something_non_unique"] = "updated"
 
         with django_assert_max_num_queries(self.N_QUERIES):
-            created, updated = bulk_update_or_create(ExampleBulkModel, test_data)
+            created, updated = bulk_update_or_create(
+                ExampleBulkModel, test_data
+            )
             assert len(created) == 5
             assert len(updated) == 5
 
         assert ExampleBulkModel.objects.count() == 10
         assert (
-            ExampleBulkModel.objects.filter(something_non_unique="updated").count()
-            == 10
+            ExampleBulkModel.objects.filter(something_non_unique="updated"
+                                           ).count() == 10
         )
 
     def test_comparator_fn(self, fake_bulk_model_data):
@@ -149,8 +157,8 @@ class TestBulkUpdateOrCreate:
         test_data[1]["something_non_unique"] = "fails"
 
         comparator_fn = (
-            lambda matching_object, data_record: data_record["something_non_unique"]
-            == "passes"
+            lambda matching_object, data_record: data_record[
+                "something_non_unique"] == "passes"
         )
 
         # should only update 1 instance b/c the comparator_fn will fail w/ test_data[1]
@@ -163,8 +171,7 @@ class TestBulkUpdateOrCreate:
         assert (
             ExampleBulkModel.objects.get(
                 something_unique=test_data[0]["something_unique"]
-            ).something_non_unique
-            != "passes"
+            ).something_non_unique != "passes"
         )
 
     def test_invalid_data(self):

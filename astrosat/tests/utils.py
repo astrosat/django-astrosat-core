@@ -13,7 +13,6 @@ from rest_framework.test import APIClient
 from astrosat.utils import DataClient
 from .factories import UserFactory
 
-
 ##############
 # useful fns #
 ##############
@@ -73,7 +72,6 @@ def get_list_combinations(lst):
 # fixtures  & mocks #
 #####################
 
-
 MockDataClientPathInfo = namedtuple(
     # the mocker uses this structure to associate
     # the local path with the (pretend) remote key
@@ -92,10 +90,11 @@ def mock_data_client(monkeypatch):
 
     Takes a list of information about the local paths to use.
     """
-
     def _mock_data_client(data_paths):
 
-        data_paths = [MockDataClientPathInfo(*data_path) for data_path in data_paths]
+        data_paths = [
+            MockDataClientPathInfo(*data_path) for data_path in data_paths
+        ]
 
         def list_objects_v2(*args, **kwargs):
             objs = [{"Key": data_path.key} for data_path in data_paths]

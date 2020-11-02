@@ -15,7 +15,6 @@ from example.models import (
     ExampleUnloadableChildModel,
 )
 
-
 FactoryFaker.add_provider(GeometryProvider)
 FactoryFaker.add_provider(ValidatedProvider)
 
@@ -49,9 +48,9 @@ class ExampleBulkModelFactory(factory.django.DjangoModelFactory):
     something_unique = FactoryFaker(
         "validated_word",
         validators=[
-            lambda x: not ExampleBulkModel.objects.filter(something_unique=x).exists()
-        ]
-        + ExampleBulkModel._meta.get_field("something_unique").validators,
+            lambda x: not ExampleBulkModel.objects.filter(something_unique=x).
+            exists()
+        ] + ExampleBulkModel._meta.get_field("something_unique").validators,
     )
     something_non_unique = FactoryFaker("word")
 

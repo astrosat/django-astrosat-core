@@ -7,7 +7,7 @@ from django.http import HttpResponse
 class JSONDebugToolbarMiddleware:
     """
     The Django Debug Toolbar usually only works for views that return HTML.
-    This middleware wraps any JSON response in HTML if the request 
+    This middleware wraps any JSON response in HTML if the request
     has a 'debug-toolbar' query parameter (e.g. http://localhost/foo?debug-toolbar)
     """
 
@@ -24,10 +24,12 @@ class JSONDebugToolbarMiddleware:
 
         response = self.get_response(request)
         if (
-            self.QUERY_PARAMETER in request.GET
-            and self.JSON_CONTENT_TYPE == response["Content-Type"]
+            self.QUERY_PARAMETER in request.GET and
+            self.JSON_CONTENT_TYPE == response["Content-Type"]
         ):
             content = json.dumps(json.loads(response.content))
-            response = HttpResponse(f"<html><body><pre>{content}</pre></body></html>")
+            response = HttpResponse(
+                f"<html><body><pre>{content}</pre></body></html>"
+            )
 
         return response

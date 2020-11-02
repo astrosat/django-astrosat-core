@@ -33,6 +33,7 @@ def show_toolbar(request):
 # profiling #
 #############
 
+
 def profile(n_calls=100, sort_key="cumulative", path=""):
     """A decorator that profiles a function
     Parameters
@@ -63,7 +64,8 @@ def profile(n_calls=100, sort_key="cumulative", path=""):
                 return result
             finally:
                 stream = io.StringIO()
-                stats = pstats.Stats(profiler, stream=stream).sort_stats(sort_key)
+                stats = pstats.Stats(profiler,
+                                     stream=stream).sort_stats(sort_key)
                 stats.print_stats(n_calls)
                 stats_value = stream.getvalue()
 
@@ -88,7 +90,6 @@ def track_memory(path=""):
     path : str
         A filename to output memory tracking statistics to (default is to print to stdout)
     """
-
     def track_memory_decorator(fn):
         @functools.wraps(fn)
         def track_memory_wrapper(*args, **kwargs):
@@ -125,17 +126,25 @@ def track_memory(path=""):
                 snapshot = memory_info["stats"].snapshots[-1]
                 for class_name in memory_info["stats"].tracked_classes:
                     # history is a list of tuples that is updated on every creation/deletions: (timestamp, n_instances)
-                    history = [n for _, n in memory_info["stats"].history[class_name]]
+                    history = [
+                        n for _, n in memory_info["stats"].history[class_name]
+                    ]
                     if history:
                         classes_stats.append(
                             {
-                                "name": class_name,
-                                "n_instances": len(history),
-                                "min_instances": min(history),
-                                "max_instances": max(history),
-                                "size": pp(
-                                    snapshot.classes.get(class_name, {}).get("sum", 0)
-                                ),
+                                "name":
+                                    class_name,
+                                "n_instances":
+                                    len(history),
+                                "min_instances":
+                                    min(history),
+                                "max_instances":
+                                    max(history),
+                                "size":
+                                    pp(
+                                        snapshot.classes.get(class_name,
+                                                             {}).get("sum", 0)
+                                    ),
                             }
                         )
 
@@ -150,9 +159,8 @@ def track_memory(path=""):
                 print("\nCLASSES", file=stream)
                 for class_stats in classes_stats:
                     print(
-                        "{name}: created/deleted {n_instances} times for a min/max of {min_instances}/{max_instances} instances: {size:>10}".format(
-                            **class_stats
-                        ),
+                        "{name}: created/deleted {n_instances} times for a min/max of {min_instances}/{max_instances} instances: {size:>10}"
+                        .format(**class_stats),
                         file=stream,
                     )
 

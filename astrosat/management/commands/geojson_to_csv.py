@@ -33,7 +33,8 @@ class Command(BaseCommand):
             "--index",
             dest="index",
             action="store_true",
-            help="whether or not to include the index in the output (default is False).",
+            help=
+            "whether or not to include the index in the output (default is False).",
         )
         self.parser = parser  # save the parser to use w/ error messages below
 

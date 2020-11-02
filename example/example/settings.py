@@ -17,7 +17,6 @@ from django.utils.translation import gettext_lazy as _
 
 from astrosat.utils import DynamicSetting
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -74,31 +73,34 @@ ROOT_URLCONF = "example.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [
-            # I override some built-in templates (rest_framework, allauth, & rest_auth)
-            # in order for this to work, I need to make sure that the following directories are checked
-            # before their default locations (see the comment in "loaders" for more info)
-            os.path.join(BASE_DIR, "example/templates/")
-        ],
+        "DIRS":
+            [
+                # I override some built-in templates (rest_framework, allauth, & rest_auth)
+                # in order for this to work, I need to make sure that the following directories are checked
+                # before their default locations (see the comment in "loaders" for more info)
+                os.path.join(BASE_DIR, "example/templates/")
+            ],
         # 'APP_DIRS': True,
-        "OPTIONS": {
-            "loaders": [
-                # first look at files in DIR, then look in the standard place for each INSTALLED_APP
-                "django.template.loaders.filesystem.Loader",
-                "django.template.loaders.app_directories.Loader",
-            ],
-            "context_processors": [
-                "django.template.context_processors.debug",
-                "django.template.context_processors.request",
-                "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-            ],
-        },
+        "OPTIONS":
+            {
+                "loaders":
+                    [
+                        # first look at files in DIR, then look in the standard place for each INSTALLED_APP
+                        "django.template.loaders.filesystem.Loader",
+                        "django.template.loaders.app_directories.Loader",
+                    ],
+                "context_processors":
+                    [
+                        "django.template.context_processors.debug",
+                        "django.template.context_processors.request",
+                        "django.contrib.auth.context_processors.auth",
+                        "django.contrib.messages.context_processors.messages",
+                    ],
+            },
     }
 ]
 
 WSGI_APPLICATION = "example.wsgi.application"
-
 
 # Migrations
 # hard coded migration to set sites table
@@ -109,23 +111,32 @@ SITE_ID = 1
 # Database
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-    }
+    "default":
+        {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
 }
 
 # Password validation
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+        "NAME":
+            "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"
+    },
+    {
+        "NAME":
+            "django.contrib.auth.password_validation.CommonPasswordValidator"
+    },
+    {
+        "NAME":
+            "django.contrib.auth.password_validation.NumericPasswordValidator"
+    },
 ]
-
 
 # Emailing
 
@@ -157,9 +168,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 
 # API
 
-REST_FRAMEWORK = {
-
-}
+REST_FRAMEWORK = {}
 
 SWAGGER_SETTINGS = {
     "DOC_EXPANSION": "none",
@@ -173,24 +182,34 @@ SWAGGER_SETTINGS = {
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
+    'handlers':
+        {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+            'db': {
+                'class': 'astrosat.utils.DatabaseLogHandler',
+            }
         },
-        'db': {
-            'class': 'astrosat.utils.DatabaseLogHandler',
-        }
-    },
-    'loggers': {
-        "django.utils.autoreload": {"level": "INFO"},
-        "environ.environ": {"level": "INFO"},
-        "faker": {"level": "INFO"},
-        "factory": {"level": "INFO"},
-        'db': {
-            'handlers': ['db'],
-            'level': 'DEBUG',
-        }
-    },
+    'loggers':
+        {
+            "django.utils.autoreload": {
+                "level": "INFO"
+            },
+            "environ.environ": {
+                "level": "INFO"
+            },
+            "faker": {
+                "level": "INFO"
+            },
+            "factory": {
+                "level": "INFO"
+            },
+            'db': {
+                'handlers': ['db'],
+                'level': 'DEBUG',
+            }
+        },
 }
 
 # Profiling
@@ -239,7 +258,9 @@ if DEBUG:
 # astrosat-specific stuff...
 
 AWS_BUCKET_NAME = env("DJANGO_AWS_BUCKET_NAME", default="default-bucket")
-AWS_ACCESS_KEY_ID = env("DJANGO_AWS_ACCESS_KEY_ID", default="default-access-key-id")
+AWS_ACCESS_KEY_ID = env(
+    "DJANGO_AWS_ACCESS_KEY_ID", default="default-access-key-id"
+)
 AWS_SECRET_ACCESS_KEY = env(
     "DJANGO_AWS_SECRET_ACCESS_KEY", default="default-secret-access-key"
 )

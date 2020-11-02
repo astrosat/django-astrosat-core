@@ -9,7 +9,6 @@ from django.core.exceptions import ImproperlyConfigured
 
 from astrosat.conf import app_settings
 
-
 BucketObjectTuple = namedtuple("BucketObjectTuple", ["stream", "metadata"])
 
 
@@ -35,9 +34,9 @@ class DataClient:
         set_boto3_logging_level(level=logging_level)
 
         if (
-            not app_settings.AWS_BUCKET_NAME
-            and app_settings.AWS_ACCESS_KEY_ID
-            and app_settings.AWS_SECRET_ACCESS_KEY
+            not app_settings.AWS_BUCKET_NAME and
+            app_settings.AWS_ACCESS_KEY_ID and
+            app_settings.AWS_SECRET_ACCESS_KEY
         ):
             raise ImproperlyConfigured("AWS ACCESS KEYS are not set")
 
@@ -63,8 +62,7 @@ class DataClient:
                 if pattern.match(key):
                     matching_obj = (
                         self.client.get_object(Bucket=self.bucket, Key=key)
-                        if not metadata_only
-                        else None
+                        if not metadata_only else None
                     )
                     yield BucketObjectTuple(
                         matching_obj.get("Body") if not metadata_only else None,
@@ -81,7 +79,9 @@ class DataClient:
         """
         try:
             return next(
-                self.get_all_matching_objects(pattern, metadata_only=metadata_only)
+                self.get_all_matching_objects(
+                    pattern, metadata_only=metadata_only
+                )
             )
         except StopIteration:
             return None
@@ -111,7 +111,9 @@ class DataClient:
         """
         if key is not None:
             try:
-                response = self.client.list_objects_v2(Bucket=self.bucket, Prefix=key)
+                response = self.client.list_objects_v2(
+                    Bucket=self.bucket, Prefix=key
+                )
                 if response["KeyCount"]:
                     objs = []
                     for obj in response["Contents"]:
@@ -119,7 +121,8 @@ class DataClient:
                             obj_key = obj["Key"]
                             obj_tags = {
                                 obj_tagset["Key"]: obj_tagset["Value"]
-                                for obj_tagset in self.client.get_object_tagging(
+                                for obj_tagset in
+                                self.client.get_object_tagging(
                                     Bucket=self.bucket, Key=obj_key
                                 )[
                                     "TagSet"
@@ -133,9 +136,7 @@ class DataClient:
                                 BucketObjectTuple(
                                     self.client.get_object(
                                         Bucket=self.bucket, Key=obj_key
-                                    )["Body"]
-                                    if not metadata_only
-                                    else None,
+                                    )["Body"] if not metadata_only else None,
                                     obj_tags,
                                 )
                             )
@@ -170,6 +171,9 @@ class DataClient:
             url = self.client.generate_presigned_url(
                 ClientMethod=method,
                 ExpiresIn=expiry,
-                Params={"Bucket": self.bucket, "Key": obj.metadata["Key"]},
+                Params={
+                    "Bucket": self.bucket,
+                    "Key": obj.metadata["Key"]
+                },
             )
             return url

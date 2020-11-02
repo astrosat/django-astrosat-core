@@ -47,7 +47,9 @@ class TestUpdateSite:
         test_name = "test_name"
         test_id = settings.SITE_ID + 1
 
-        call_command(self.command_name, domain=test_domain, name=test_name, id=test_id)
+        call_command(
+            self.command_name, domain=test_domain, name=test_name, id=test_id
+        )
         assert Site.objects.count() == 2
 
         # make sure the new site has the correct values
@@ -83,13 +85,15 @@ class TestUpdateSite:
         assert site.name == test_domain
 
 
-
 @pytest.mark.django_db
 class TestUnloadData:
 
     command_name = "unloaddata"
 
-    test_fixture = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures/unloadable_objects.json")
+    test_fixture = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        "fixtures/unloadable_objects.json"
+    )
 
     def load_data(self):
         call_command("loaddata", self.test_fixture)
@@ -113,6 +117,8 @@ class TestUnloadData:
         assert ExampleUnloadableChildModel.objects.count() == 0
 
         # ...unless we pass "--ignorenonexistent"
-        call_command(self.command_name, self.test_fixture, "--ignorenonexistent")
+        call_command(
+            self.command_name, self.test_fixture, "--ignorenonexistent"
+        )
         assert ExampleUnloadableParentModel.objects.count() == 0
         assert ExampleUnloadableChildModel.objects.count() == 0
