@@ -1,4 +1,7 @@
+import logging
+import json
 from itertools import filterfalse
+from datetime import datetime
 
 from django import forms
 from django.conf import settings
@@ -9,8 +12,10 @@ from django.urls import re_path
 from django.views import defaults as default_views
 
 from rest_framework import status, viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, BasePermission
+from rest_framework.response import Response
 from rest_framework.serializers import CurrentUserDefault
 from rest_framework.views import APIView
 
@@ -24,6 +29,8 @@ from drf_yasg2.views import get_schema_view
 from .models import DatabaseLogRecord, DatabaseLogTag
 from .serializers import DatabaseLogRecordSerializer
 from .utils import DataClient
+
+logger = logging.getLogger("db")
 
 ###########
 # swagger #
@@ -244,6 +251,21 @@ class DatabaseLogRecordViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = DatabaseLogRecord.objects.all()
     filter_backends = (filters.DjangoFilterBackend, )
     filterset_class = DatabaseLogRecordFilterSet
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def feature_tracking(request):
+    """
+    Track Feature usage, so that when a request is received, the code iterates
+    through the list of JSON objects and logs each to the Database Logger.
+    """
+    for record in request.data:
+        logger.info(
+            json.dumps(record['content']), extra={"tags": record['tags']}
+        )
+
+    return Response(status=status.HTTP_201_CREATED)
 
 
 #########
