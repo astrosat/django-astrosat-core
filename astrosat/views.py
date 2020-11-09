@@ -1,7 +1,6 @@
 import logging
 import json
 from itertools import filterfalse
-from datetime import datetime
 
 from django import forms
 from django.conf import settings
@@ -255,17 +254,29 @@ class DatabaseLogRecordViewSet(viewsets.ReadOnlyModelViewSet):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
-def feature_tracking(request):
+def create_log_records(request):
     """
     Track Feature usage, so that when a request is received, the code iterates
     through the list of JSON objects and logs each to the Database Logger.
     """
-    for record in request.data:
-        logger.info(
-            json.dumps(record['content']), extra={"tags": record['tags']}
-        )
+    if isinstance(request.data, list):
+        for record in request.data:
+            if "content" not in record:
+                return Response(
+                    "Log Record must contain key 'content' of JSON to be logged",
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-    return Response(status=status.HTTP_201_CREATED)
+            logger.info(
+                json.dumps(record['content']), extra={"tags": record['tags']}
+            )
+
+        return Response(status=status.HTTP_201_CREATED)
+    else:
+        return Response(
+            "Must supply an array of JSON objects in request",
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 #########
