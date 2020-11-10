@@ -1,5 +1,5 @@
 import logging
-
+import uuid
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -58,6 +58,7 @@ class DatabaseLogRecord(models.Model):
     level = models.PositiveIntegerField(
         choices=LevelChoices, default=logging.ERROR
     )
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
     message = models.TextField()
     trace = models.TextField(blank=True, null=True)
     tags = models.ManyToManyField(DatabaseLogTag, related_name="records")

@@ -34,7 +34,6 @@ class DatabaseLogHandler(logging.Handler):
     """
 
     default_formatter = logging.Formatter()
-    db_log_records = []
 
     def emit(self, record):
         if astrosat_settings.ASTROSAT_ENABLE_DB_LOGGING:
@@ -53,17 +52,21 @@ class DatabaseLogHandler(logging.Handler):
                 ],
             )
 
-            db_record = DatabaseLogRecord.objects.create(
-                logger_name=record.name,
-                level=record.levelno,
-                message=record.getMessage(),
-                trace=trace,
-            )
-            db_record.tags.add(*tags)
-            self.db_log_records.append(db_record)
+            try:
+                uuid = getattr(record, 'uuid')
 
-    @classmethod
-    def get_handers_from_logger(cls, logger):
-        return [
-            handler for handler in logger.handlers if isinstance(handler, cls)
-        ]
+                db_record = DatabaseLogRecord.objects.create(
+                    logger_name=record.name,
+                    level=record.levelno,
+                    message=record.getMessage(),
+                    uuid=uuid,
+                    trace=trace,
+                )
+            except AttributeError:
+                db_record = DatabaseLogRecord.objects.create(
+                    logger_name=record.name,
+                    level=record.levelno,
+                    message=record.getMessage(),
+                    trace=trace,
+                )
+            db_record.tags.add(*tags)

@@ -13,9 +13,6 @@ from .factories import *
 @pytest.mark.django_db
 def test_logging(astrosat_settings):
 
-    # make sure logging is enabled...
-    astrosat_settings.enable_db_logging = True
-    astrosat_settings.save()
     logger = logging.getLogger("db")
 
     assert DatabaseLogRecord.objects.count() == 0
