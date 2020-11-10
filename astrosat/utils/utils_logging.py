@@ -34,9 +34,9 @@ class DatabaseLogHandler(logging.Handler):
     """
 
     default_formatter = logging.Formatter()
+    db_log_records = []
 
     def emit(self, record):
-
         if astrosat_settings.ASTROSAT_ENABLE_DB_LOGGING:
 
             from astrosat.models import DatabaseLogRecord, DatabaseLogTag
@@ -60,3 +60,10 @@ class DatabaseLogHandler(logging.Handler):
                 trace=trace,
             )
             db_record.tags.add(*tags)
+            self.db_log_records.append(db_record)
+
+    @classmethod
+    def get_handers_from_logger(cls, logger):
+        return [
+            handler for handler in logger.handlers if isinstance(handler, cls)
+        ]

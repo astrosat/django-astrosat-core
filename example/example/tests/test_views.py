@@ -124,4 +124,6 @@ class TestUserTracking:
         assert status.is_success(response.status_code)
         assert DatabaseLogRecord.objects.count() == 2
         assert DatabaseLogTag.objects.count() == 1
-        assert content == {"detail": "Log Created"}
+
+        for input_data, output_data in zip(log_data, content):
+            assert json.dumps(input_data['content']) == output_data['message']

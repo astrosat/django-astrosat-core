@@ -1,6 +1,8 @@
+from astrosat.utils.utils_logging import DatabaseLogHandler
 import logging
 import json
 from itertools import filterfalse
+from functools import reduce
 
 from django import forms
 from django.conf import settings
@@ -274,7 +276,15 @@ def create_log_records(request):
     except Exception as ex:
         return Response({"error": str(ex)}, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({"detail": "Log Created"}, status=status.HTTP_201_CREATED)
+    db_log_records = reduce(
+        lambda x, y: x + y,
+        map(
+            lambda x: x.db_log_records,
+            DatabaseLogHandler.get_handers_from_logger((logger))
+        )
+    )
+    response_data = DatabaseLogRecordSerializer(db_log_records, many=True).data
+    return Response(response_data, status=status.HTTP_201_CREATED)
 
 
 #########
