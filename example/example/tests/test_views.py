@@ -45,6 +45,21 @@ def test_proxy_s3_view(api_client, mock_data_client):
 
 @pytest.mark.django_db
 class TestUserTracking:
+    def test_submitting_invalid_json(self, api_client):
+        """
+        Ensure data posted to view is an array/list.
+        """
+        log_data = "content"
+
+        url = reverse("log-tracking")
+
+        response = api_client.post(url, log_data, format="json")
+
+        assert not status.is_success(response.status_code)
+        assert response.data == {
+            "error": "Must supply an array of JSON objects in request"
+        }
+
     def test_submitting_non_list(self, api_client):
         """
         Ensure data posted to view is an array/list.
@@ -56,7 +71,9 @@ class TestUserTracking:
         response = api_client.post(url, log_data, format="json")
 
         assert not status.is_success(response.status_code)
-        assert response.data == "Must supply an array of JSON objects in request"
+        assert response.data == {
+            "error": "Must supply an array of JSON objects in request"
+        }
 
     def test_tracking_missing_content(self, api_client):
         """
@@ -69,7 +86,10 @@ class TestUserTracking:
         response = api_client.post(url, log_data, format="json")
 
         assert not status.is_success(response.status_code)
-        assert response.data == "Log Record must contain key 'content' of JSON to be logged"
+        assert response.data == {
+            "error":
+                "Log Record must contain key 'content' of JSON to be logged"
+        }
 
     def test_tracking_features(self, api_client, astrosat_settings):
         """
@@ -99,7 +119,9 @@ class TestUserTracking:
         assert DatabaseLogTag.objects.count() == 0
 
         response = api_client.post(url, log_data, format="json")
+        content = response.json()
 
         assert status.is_success(response.status_code)
         assert DatabaseLogRecord.objects.count() == 2
         assert DatabaseLogTag.objects.count() == 1
+        assert content == {"detail": "Log Created"}

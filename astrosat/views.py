@@ -259,24 +259,22 @@ def create_log_records(request):
     Track Feature usage, so that when a request is received, the code iterates
     through the list of JSON objects and logs each to the Database Logger.
     """
-    if isinstance(request.data, list):
+    try:
+        assert isinstance(
+            request.data, list
+        ), "Must supply an array of JSON objects in request"
+
         for record in request.data:
-            if "content" not in record:
-                return Response(
-                    "Log Record must contain key 'content' of JSON to be logged",
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+            assert "content" in record, "Log Record must contain key 'content' of JSON to be logged"
 
             logger.info(
-                json.dumps(record['content']), extra={"tags": record['tags']}
+                json.dumps(record['content']),
+                extra={"tags": record.get('tags')}
             )
+    except Exception as ex:
+        return Response({"error": str(ex)}, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(status=status.HTTP_201_CREATED)
-    else:
-        return Response(
-            "Must supply an array of JSON objects in request",
-            status=status.HTTP_400_BAD_REQUEST
-        )
+    return Response({"detail": "Log Created"}, status=status.HTTP_201_CREATED)
 
 
 #########
