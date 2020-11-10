@@ -9,7 +9,7 @@ from rest_framework import status
 
 from astrosat.tests.utils import mock_data_client
 
-from astrosat.models import DatabaseLogRecord
+from astrosat.models import DatabaseLogRecord, DatabaseLogTag
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 TEST_DATA_PATHS = [
@@ -96,8 +96,10 @@ class TestUserTracking:
         url = reverse("log-tracking")
 
         assert DatabaseLogRecord.objects.count() == 0
+        assert DatabaseLogTag.objects.count() == 0
 
         response = api_client.post(url, log_data, format="json")
 
         assert status.is_success(response.status_code)
         assert DatabaseLogRecord.objects.count() == 2
+        assert DatabaseLogTag.objects.count() == 1
