@@ -1,3 +1,5 @@
+import logging
+import json
 from itertools import filterfalse
 
 from django import forms
@@ -9,8 +11,10 @@ from django.urls import re_path
 from django.views import defaults as default_views
 
 from rest_framework import status, viewsets
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import APIException
 from rest_framework.permissions import IsAuthenticated, BasePermission
+from rest_framework.response import Response
 from rest_framework.serializers import CurrentUserDefault
 from rest_framework.views import APIView
 
@@ -24,6 +28,8 @@ from drf_yasg2.views import get_schema_view
 from .models import DatabaseLogRecord, DatabaseLogTag
 from .serializers import DatabaseLogRecordSerializer
 from .utils import DataClient
+
+logger = logging.getLogger("db")
 
 ###########
 # swagger #
@@ -244,6 +250,31 @@ class DatabaseLogRecordViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = DatabaseLogRecord.objects.all()
     filter_backends = (filters.DjangoFilterBackend, )
     filterset_class = DatabaseLogRecordFilterSet
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_log_records(request):
+    """
+    Track Feature usage, so that when a request is received, the code iterates
+    through the list of JSON objects and logs each to the Database Logger.
+    """
+    try:
+        assert isinstance(
+            request.data, list
+        ), "Must supply an array of JSON objects in request"
+
+        for record in request.data:
+            assert "content" in record, "Log Record must contain key 'content' of JSON to be logged"
+
+            logger.info(
+                json.dumps(record['content']),
+                extra={"tags": record.get('tags')}
+            )
+    except Exception as ex:
+        return Response({"error": str(ex)}, status=status.HTTP_400_BAD_REQUEST)
+
+    return Response({"detail": "Log Created"}, status=status.HTTP_201_CREATED)
 
 
 #########
