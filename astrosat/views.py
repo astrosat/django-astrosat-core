@@ -76,13 +76,15 @@ api_schema_views = [
 
 
 class SwaggerCurrentUserDefault(CurrentUserDefault):
-    # despite https://github.com/axnsan12/drf-yasg/commit/f81795d7454d9b1eb88874014ffd70b26289f905,
-    # yasg still doesn't play nicely w/ CurrentUserDefault;
-    # it doesn't pass 'serializer_field' to default()
+    # drf-yasg2 doesn't play nicely w/ CurrentUserDefault:
+    # firstly, it doesn't pass 'serializer_field' to default()
+    # secondly, it might fail if using a 'slug_field' that doesn't exist on AnonymousUser
 
     def __call__(self, serializer_field=None):
         if serializer_field is not None:
-            return super().__call__(serializer_field)
+            view = serializer_field.context.get("view")
+            if not getattr(view, "swagger_fake_view", False):
+                return super().__call__(serializer_field)
         return None
 
 
