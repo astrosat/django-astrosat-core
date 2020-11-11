@@ -35,7 +35,4 @@ def create_env_file():
 @pytest.fixture
 def astrosat_settings():
     astrosat_settings = AstrosatSettings.load()
-    # make sure logging is enabled...
-    astrosat_settings.enable_db_logging = True
-    astrosat_settings.save()
     return astrosat_settings

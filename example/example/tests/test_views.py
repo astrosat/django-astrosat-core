@@ -95,6 +95,9 @@ class TestUserTracking:
         """
         Ensure correct data posted is handled.
         """
+        # make sure logging is enabled...
+        astrosat_settings.enable_db_logging = True
+        astrosat_settings.save()
         log_data = [
             {
                 "content": {
