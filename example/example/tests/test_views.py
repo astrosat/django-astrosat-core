@@ -124,5 +124,6 @@ class TestUserTracking:
         assert DatabaseLogRecord.objects.count() == 2
         assert DatabaseLogTag.objects.count() == 1
 
+        content.reverse()
         for input_data, output_data in zip(log_data, content):
             assert json.dumps(input_data['content']) == output_data['message']

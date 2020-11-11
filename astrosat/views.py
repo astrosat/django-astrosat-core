@@ -282,7 +282,7 @@ def create_log_records(request):
     except Exception as ex:
         return Response({"error": str(ex)}, status=status.HTTP_400_BAD_REQUEST)
 
-    db_log_records = DatabaseLogRecord.objects.filter(uuid__in=uuids).reverse()
+    db_log_records = DatabaseLogRecord.objects.filter(uuid__in=uuids)
     response_data = DatabaseLogRecordSerializer(db_log_records, many=True).data
 
     return Response(response_data, status=status.HTTP_201_CREATED)
