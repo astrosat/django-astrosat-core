@@ -1,5 +1,6 @@
 import logging
 import re
+import uuid
 
 from astrosat.conf import app_settings as astrosat_settings
 
@@ -52,21 +53,12 @@ class DatabaseLogHandler(logging.Handler):
                 ],
             )
 
-            try:
-                uuid = getattr(record, 'uuid')
-
-                db_record = DatabaseLogRecord.objects.create(
-                    logger_name=record.name,
-                    level=record.levelno,
-                    message=record.getMessage(),
-                    uuid=uuid,
-                    trace=trace,
-                )
-            except AttributeError:
-                db_record = DatabaseLogRecord.objects.create(
-                    logger_name=record.name,
-                    level=record.levelno,
-                    message=record.getMessage(),
-                    trace=trace,
-                )
+            id = getattr(record, 'uuid', uuid.uuid4())
+            db_record = DatabaseLogRecord.objects.create(
+                logger_name=record.name,
+                level=record.levelno,
+                message=record.getMessage(),
+                uuid=id,
+                trace=trace,
+            )
             db_record.tags.add(*tags)
