@@ -4,7 +4,7 @@ import io
 from django.contrib.auth import get_user_model
 from rest_framework.test import APIClient
 
-from astrosat.models import AstrosatSettings, DatabaseLogRecord
+from astrosat.models import AstrosatSettings
 from astrosat.tests.factories import UserFactory
 
 
