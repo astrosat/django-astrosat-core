@@ -1,5 +1,6 @@
 import logging
 import re
+import uuid
 
 from astrosat.conf import app_settings as astrosat_settings
 
@@ -36,7 +37,6 @@ class DatabaseLogHandler(logging.Handler):
     default_formatter = logging.Formatter()
 
     def emit(self, record):
-
         if astrosat_settings.ASTROSAT_ENABLE_DB_LOGGING:
 
             from astrosat.models import DatabaseLogRecord, DatabaseLogTag
@@ -53,10 +53,12 @@ class DatabaseLogHandler(logging.Handler):
                 ],
             )
 
+            id = getattr(record, 'uuid', uuid.uuid4())
             db_record = DatabaseLogRecord.objects.create(
                 logger_name=record.name,
                 level=record.levelno,
                 message=record.getMessage(),
+                uuid=id,
                 trace=trace,
             )
             db_record.tags.add(*tags)

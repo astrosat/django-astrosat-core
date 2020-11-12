@@ -1,6 +1,9 @@
+from astrosat.utils.utils_logging import DatabaseLogHandler
 import logging
 import json
+import uuid
 from itertools import filterfalse
+from functools import reduce
 
 from django import forms
 from django.conf import settings
@@ -266,17 +269,25 @@ def create_log_records(request):
             request.data, list
         ), "Must supply an array of JSON objects in request"
 
-        for record in request.data:
+        uuids = [uuid.uuid4() for _ in range(len(request.data))]
+
+        for i, record in enumerate(request.data):
             assert "content" in record, "Log Record must contain key 'content' of JSON to be logged"
 
             logger.info(
                 json.dumps(record['content']),
-                extra={"tags": record.get('tags')}
+                extra={
+                    "tags": record.get('tags'),
+                    "uuid": uuids[i]
+                }
             )
     except Exception as ex:
         return Response({"error": str(ex)}, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({"detail": "Log Created"}, status=status.HTTP_201_CREATED)
+    db_log_records = DatabaseLogRecord.objects.filter(uuid__in=uuids)
+    response_data = DatabaseLogRecordSerializer(db_log_records, many=True).data
+
+    return Response(response_data, status=status.HTTP_201_CREATED)
 
 
 #########
