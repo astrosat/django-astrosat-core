@@ -51,7 +51,6 @@ def swagger_fake(fake_retval=None):
     this is intended to be applied to "get_queryset" and/or "get_object"
     """
     def _decorator(view_fn):
-
         @functools.wraps(view_fn)
         def _wrapper(*args, **kwargs):
             if not args:
