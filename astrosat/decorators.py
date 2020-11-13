@@ -59,7 +59,7 @@ def swagger_fake(fake_retval=None):
                 # I have to introspect it to get the view it was called w/
                 _self = view_fn.func.__self__
             else:
-                # if this decorator is applied directly to a fn then,
+                # if this decorator is applied directly to a fn,
                 # then the 1st argument will be the view it was called w/
                 _self = args[0]
 
