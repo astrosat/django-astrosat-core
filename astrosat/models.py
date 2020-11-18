@@ -25,7 +25,7 @@ class DatabaseLogTag(models.Model):
         verbose_name = "Log Tag"
         verbose_name_plural = "Log Tags"
 
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, unique=True)
 
     def __str__(self):
         return self.name
@@ -58,7 +58,7 @@ class DatabaseLogRecord(models.Model):
     level = models.PositiveIntegerField(
         choices=LevelChoices, default=logging.ERROR
     )
-    uuid = models.UUIDField(default=uuid.uuid4, editable=False)
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     message = models.TextField()
     trace = models.TextField(blank=True, null=True)
     tags = models.ManyToManyField(DatabaseLogTag, related_name="records")
