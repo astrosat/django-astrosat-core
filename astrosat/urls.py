@@ -1,13 +1,13 @@
 from django.urls import include, path
-from rest_framework.routers import SimpleRouter
 
+from .routers import SlashlessSimpleRouter
 from .views import DatabaseLogRecordViewSet, create_log_records, ProxyS3View
 
 ##############
 # API routes #
 ##############
 
-api_router = SimpleRouter()
+api_router = SlashlessSimpleRouter()
 api_router.register(r"logs", DatabaseLogRecordViewSet)
 api_urlpatterns = [
     path("", include(api_router.urls)),
