@@ -71,7 +71,7 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
         _lookup_val = params.get(self.lookup_kwarg) or []
         _lookup_val_isnull = params.get(self.lookup_kwarg_isnull)
         self.lookup_val = _lookup_val.split(",") if _lookup_val else []
-        self.lookup_val_isnull = _lookup_val_isnull == "True"
+        self.lookup_val_isnull = _lookup_val_isnull == str(True)
         self._model_admin = model_admin
 
     def lookups(self, request, model_admin):
@@ -113,7 +113,7 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
         if self.include_empty_choice:
             yield {
                 'selected': bool(self.lookup_val_isnull),
-                'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: 'True'}, [self.lookup_kwarg]),
+                'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: True}, [self.lookup_kwarg]),
                 'display': self._model_admin.get_empty_value_display(),
             }
 
