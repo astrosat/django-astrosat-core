@@ -44,6 +44,18 @@ def get_clickable_fk_list_display(obj):
 
 
 class JSONAdminWidget(widgets.Textarea):
+
+    def __init__(self, attrs=None):
+        default_attrs = {
+            # make things a bit bigger
+            "cols": "80",
+            "rows": "20",
+            "class": "vLargeTextField",
+        }
+        if attrs:
+            default_attrs.update(attrs)
+        super().__init__(default_attrs)
+
     def format_value(self, value):
         try:
             value = json.dumps(json.loads(value), indent=2)
