@@ -1,17 +1,22 @@
+import csv
 import json
 
 from django.contrib import admin
 from django.contrib.admin.options import BaseModelAdmin
 from django.contrib.admin.utils import flatten_fieldsets
 from django.forms import widgets
+from django.http import HttpResponse
 from django.urls import resolve, reverse
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
 from .models import AstrosatSettings, DatabaseLogTag, DatabaseLogRecord
+from .serializers import DatabaseLogRecordSerializer
 
-############
-# util fns #
-############
+
+###########
+# helpers #
+###########
 
 
 def get_clickable_m2m_list_display(model_class, queryset):
@@ -38,11 +43,6 @@ def get_clickable_fk_list_display(obj):
     return format_html(list_display)
 
 
-###############
-# admin forms #
-###############
-
-
 class JSONAdminWidget(widgets.Textarea):
     def format_value(self, value):
         try:
@@ -50,6 +50,72 @@ class JSONAdminWidget(widgets.Textarea):
         except Exception:
             pass
         return value
+
+
+class IncludeExcludeListFilter(admin.SimpleListFilter):
+    """
+    Lets me filter the listview on multiple values at once
+    """
+
+    # basic idea came from: https://github.com/ctxis/django-admin-multiple-choice-list-filter
+
+    include_empty_choice = True
+    parameter_name = None
+    template = 'astrosat/admin/include_exclude_filter.html'
+    title = None
+
+    def __init__(self, request, params, model, model_admin):
+        super().__init__(request, params, model, model_admin)
+        self.lookup_kwarg = f"{self.parameter_name}__in"
+        self.lookup_kwarg_isnull = f"{self.parameter_name}__isnull"
+        _lookup_val = params.get(self.lookup_kwarg) or []
+        _lookup_val_isnull = params.get(self.lookup_kwarg_isnull)
+        self.lookup_val = _lookup_val.split(",") if _lookup_val else []
+        self.lookup_val_isnull = _lookup_val_isnull == "True"
+        self._model_admin = model_admin
+
+    def lookups(self, request, model_admin):
+        raise NotImplementedError()
+
+    def queryset(self, request, queryset):
+        if self.lookup_val:
+            queryset = queryset.filter(**{self.lookup_kwarg: self.lookup_val})
+        if self.lookup_val_isnull:
+            queryset = queryset.filter(**{self.lookup_kwarg_isnull: self.lookup_val_isnull})
+        return queryset
+
+    def choices(self, changelist):
+
+        def _get_query_string(include=None, exclude=None):
+            selections = self.lookup_val
+            if include and include not in selections:
+                selections.append(include)
+            if exclude and exclude in selections:
+                selections.remove(exclude)
+            if selections:
+                return changelist.get_query_string({self.lookup_kwarg: ",".join(selections)})
+            else:
+                return changelist.get_query_string(remove=[self.lookup_kwarg])
+
+        yield {
+            'selected': self.lookup_val is None and not self.lookup_val_isnull,
+            'query_string': changelist.get_query_string(remove=[self.lookup_kwarg, self.lookup_kwarg_isnull]),
+            'display': _('Any'),
+        }
+        for lookup, val in self.lookup_choices:
+            yield {
+                'selected': str(lookup) in self.lookup_val,
+                'query_string': changelist.get_query_string({self.lookup_kwarg: lookup}, [self.lookup_kwarg_isnull]),
+                'include_query_string': _get_query_string(include=str(lookup)),
+                'exclude_query_string': _get_query_string(exclude=str(lookup)),
+                'display': val,
+            }
+        if self.include_empty_choice:
+            yield {
+                'selected': bool(self.lookup_val_isnull),
+                'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: 'True'}, [self.lookup_kwarg]),
+                'display': self._model_admin.get_empty_value_display(),
+            }
 
 
 ###############
@@ -162,6 +228,19 @@ class DeleteOnlyModelAdminBase(
 #################
 
 
+class TagListFilter(IncludeExcludeListFilter):
+
+    include_empty_choice = True
+    parameter_name = "tags"
+    title = "tags"
+
+    def lookups(self, request, model_admin):
+        queryset = model_admin.get_queryset(request)
+        return (
+            (tag.pk, tag.name)
+            for tag in DatabaseLogTag.objects.filter(pk__in=queryset.values("tags__pk"))
+        )
+
 @admin.register(AstrosatSettings)
 class AstrosatSettingsAdmin(admin.ModelAdmin):
     pass
@@ -174,9 +253,11 @@ class DatabaseLogTagAdmin(admin.ModelAdmin):
 
 @admin.register(DatabaseLogRecord)
 class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
+    actions = ["export_as_csv"]
+    date_hierarchy = "created"
     list_display = ("created", "level", "message", "get_tags_for_list_display")
-    list_filter = ("level", "logger_name", "created", "tags")
-    search_fields = ("message", )
+    # TODO: ADD A DateRange FILTER (can use an actual form in the template)
+    list_filter = ("level", TagListFilter)
 
     def get_queryset(self, request):
         # pre-fetching m2m fields that are used in list_displays
@@ -188,3 +269,20 @@ class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
         return get_clickable_m2m_list_display(DatabaseLogTag, obj.tags.all())
 
     get_tags_for_list_display.short_description = "tags"
+
+    def export_as_csv(self, request, queryset):
+
+        fields_to_export = ["id", "uuid", "level", "created", "message", "tags"]
+
+        csv_response = HttpResponse(content_type="text/csv")
+        csv_response["Content-Disposition"] = f"attachment; filename=log_records.csv"
+
+        writer = csv.writer(csv_response)
+        writer.writerow(fields_to_export)
+        for data in DatabaseLogRecordSerializer(queryset, many=True).data:
+            row = [data[field] for field in fields_to_export]  # doing this manually to preserve order
+            writer.writerow(row)
+
+        return csv_response
+
+    export_as_csv.short_description = "Export selected Log Records as CSV"
