@@ -84,7 +84,7 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
         _lookup_val_isnull = params.get(self.lookup_kwarg_isnull)
         self.lookup_val = _lookup_val.split(",") if _lookup_val else []
         self.lookup_val_isnull = _lookup_val_isnull == str(True)
-        self._model_admin = model_admin
+        self.empty_value_display = model_admin.get_empty_value_display()
 
     def lookups(self, request, model_admin):
         raise NotImplementedError()
@@ -99,7 +99,8 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
     def choices(self, changelist):
 
         def _get_query_string(include=None, exclude=None):
-            selections = self.lookup_val
+            # need to work on a copy so I don't change it for other lookup_choices in the generator below
+            selections = self.lookup_val.copy()
             if include and include not in selections:
                 selections.append(include)
             if exclude and exclude in selections:
@@ -126,7 +127,7 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
             yield {
                 'selected': bool(self.lookup_val_isnull),
                 'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: True}, [self.lookup_kwarg]),
-                'display': self._model_admin.get_empty_value_display(),
+                'display': self.empty_value_display,
             }
 
 
