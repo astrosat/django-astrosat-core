@@ -284,13 +284,16 @@ class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
 
     def export_as_csv(self, request, queryset):
 
-        headers = ["id", "level", "created", "tags", "message"]
+        fields_to_export = ["id", "level", "created", "tags", "message"]
+        headers = [f"record.{field}" for field in fields_to_export]
         extra_headers = set()
         data = []
 
         for record in DatabaseLogRecordSerializer(queryset, many=True).data:
+            for header, field in zip(headers, fields_to_export):
+                record[header] = record.pop(field)
             try:
-                json_message = json.loads(record["message"])
+                json_message = json.loads(record["record.message"])
                 extra_headers.update(json_message.keys())
                 record.update(json_message)
             except json.JSONDecodeError:
