@@ -284,16 +284,29 @@ class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
 
     def export_as_csv(self, request, queryset):
 
-        fields_to_export = ["id", "uuid", "level", "created", "message", "tags"]
+        headers = ["id", "level", "created", "tags", "message"]
+        extra_headers = set()
+        data = []
+
+        for record in DatabaseLogRecordSerializer(queryset, many=True).data:
+            try:
+                json_message = json.loads(record["message"])
+                extra_headers.update(json_message.keys())
+                record.update(json_message)
+            except json.JSONDecodeError:
+                pass
+            data.append(record)
+
+        headers = headers + sorted(extra_headers)
 
         csv_response = HttpResponse(content_type="text/csv")
         csv_response["Content-Disposition"] = f"attachment; filename=log_records.csv"
-
         writer = csv.writer(csv_response)
-        writer.writerow(fields_to_export)
-        for data in DatabaseLogRecordSerializer(queryset, many=True).data:
-            row = [data[field] for field in fields_to_export]  # doing this manually to preserve order
-            writer.writerow(row)
+        writer.writerow(headers)
+        writer.writerows(
+            # add the row to the CSV; if a column doesn't exist just add None
+            map(lambda row: [row.get(column, None) for column in headers], data)
+        )
 
         return csv_response
 
