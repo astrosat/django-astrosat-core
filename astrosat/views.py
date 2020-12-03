@@ -284,7 +284,7 @@ def create_log_records(request):
             fn(
                 json.dumps(record['content']),
                 extra={
-                    "tags": record.get('tags', []),
+                    "tags": record.get('tags'),
                     "uuid": uuids[i]
                 }
             )
