@@ -49,7 +49,7 @@ class DatabaseLogHandler(logging.Handler):
                 lambda x: x[0],
                 [
                     DatabaseLogTag.objects.get_or_create(name=tag_name)
-                    for tag_name in getattr(record, "tags", [])
+                    for tag_name in getattr(record, "tags", []) or []
                 ],
             )
 

@@ -274,10 +274,17 @@ def create_log_records(request):
         for i, record in enumerate(request.data):
             assert "content" in record, "Log Record must contain key 'content' of JSON to be logged"
 
-            logger.info(
+            log_level = record.get("level", "info")
+            if log_level in ["error", "fatal"]:
+                fn = logger.error
+            elif log_level in ["warning"]:
+                fn = logger.warning
+            else:
+                fn = logger.info
+            fn(
                 json.dumps(record['content']),
                 extra={
-                    "tags": record.get('tags'),
+                    "tags": record.get('tags', []),
                     "uuid": uuids[i]
                 }
             )
