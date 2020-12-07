@@ -145,6 +145,7 @@ def mock_storage(monkeypatch):
     def _mock_exists(instance, name):
         return getattr(instance, f"mock_{clean_name(name)}_exists", False)
 
+    # TODO: APPLY MOCK TO DefaultStorage AS WELL
     storage_class = get_storage_class()
 
     monkeypatch.setattr(storage_class, "_save", _mock_save)
