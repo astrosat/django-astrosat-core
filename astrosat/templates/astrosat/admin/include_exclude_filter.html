@@ -6,8 +6,41 @@
     {% blocktranslate with filter_title=title %} By {{ filter_title }} {% endblocktranslate %}
 </h3>
 <ul>
+    <table>
+        <tr><th>name</th><th>include</th><th>exclude</th></tr>
     {% for choice in choices %}
-        <li {% if choice.selected %} class="selected" {% endif %}>
+        <tr>
+            <td>
+                {% if not choice.include_query_string and not choice.exclude_query_string %}
+                    <a href="{{ choice.query_string|iriencode }}">
+                        {{ choice.display}}
+                    </a>
+                {% else %}
+                    {{ choice.display}}
+                {% endif %}
+            </td>
+            <td>
+                {% if choice.include_query_string %}
+                    <input
+                        type="radio"
+                        name="include_exclude_group_{{ forloop.counter }}"
+                        {% if choice.selected_in %} checked {% endif %}
+                        onclick="window.location.href='{{choice.include_query_string|iriencode}}';"
+                    >
+                {% endif %}
+            </td>
+            <td>
+                {% if choice.exclude_query_string %}
+                    <input
+                        type="radio"
+                        name="include_exclude_group_{{ forloop.counter }}"
+                        {% if choice.selected_out %} checked {% endif %}
+                        onclick="window.location.href='{{choice.exclude_query_string|iriencode}}';"
+                    >
+                {% endif %}
+            </td>
+        </tr>
+        <!-- <li {% if choice.selected %} class="selected" {% endif %}>
             {% if not choice.include_query_string and not choice.exclude_query_string %}
                 <a href="{{ choice.query_string|iriencode }}">{{ choice.display }}</a>
             {% elif choice.include_query_string and not choice.selected %}
@@ -15,6 +48,7 @@
             {% elif choice.exclude_query_string and choice.selected %}
                 <a href="{{ choice.exclude_query_string|iriencode }}" title="exclude {{choice.display}}">{{ choice.display }}</a>
             {% endif %}
-        </li>
+        </li>-->
     {% endfor %}
+    </table>
 </ul>

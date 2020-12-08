@@ -1,4 +1,5 @@
 import json
+from itertools import filterfalse
 
 from django.contrib import admin
 from django.forms import widgets
@@ -32,7 +33,6 @@ def get_clickable_fk_list_display(obj):
 
 
 class JSONAdminWidget(widgets.Textarea):
-
     def __init__(self, attrs=None):
         default_attrs = {
             # make things a bit bigger
@@ -59,61 +59,103 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
 
     # basic idea came from: https://github.com/ctxis/django-admin-multiple-choice-list-filter
 
-    include_empty_choice = True
+    # include_empty_choice = True
     parameter_name = None
     template = 'astrosat/admin/include_exclude_filter.html'
     title = None
 
     def __init__(self, request, params, model, model_admin):
         super().__init__(request, params, model, model_admin)
-        self.lookup_kwarg = f"{self.parameter_name}__in"
-        self.lookup_kwarg_isnull = f"{self.parameter_name}__isnull"
-        _lookup_val = params.get(self.lookup_kwarg) or []
-        _lookup_val_isnull = params.get(self.lookup_kwarg_isnull)
-        self.lookup_val = _lookup_val.split(",") if _lookup_val else []
-        self.lookup_val_isnull = _lookup_val_isnull == str(True)
-        self.empty_value_display = model_admin.get_empty_value_display()
+        self.lookup_expr_in = f"{self.parameter_name}__in"
+        self.lookup_expr_out = f"{self.parameter_name}__out"
+        self.lookup_expr_eq = f"{self.parameter_name}__eq"
+        # notice that I use `pop` instead of `get` - this ensures
+        # that non-registered lookup_expr (like "__out" or "__eq") don't
+        # get passed onto any parent methods
+        _lookup_val_in = params.get(self.lookup_expr_in, [])
+        _lookup_val_out = params.pop(self.lookup_expr_out, [])
+        _lookup_val_eq = params.pop(self.lookup_expr_eq, None)
+        self.lookup_val_in = _lookup_val_in.split(",") if _lookup_val_in else []
+        self.lookup_val_out = _lookup_val_out.split(","
+                                                   ) if _lookup_val_out else []
+        self.lookup_val_eq = _lookup_val_eq
 
     def lookups(self, request, model_admin):
         raise NotImplementedError()
 
     def queryset(self, request, queryset):
-        if self.lookup_val:
-            queryset = queryset.filter(**{self.lookup_kwarg: self.lookup_val})
-        if self.lookup_val_isnull:
-            queryset = queryset.filter(**{self.lookup_kwarg_isnull: self.lookup_val_isnull})
+        if self.lookup_val_in:
+            queryset = queryset.filter(
+                **{self.lookup_expr_in: self.lookup_val_in}
+            )
+        if self.lookup_val_out:
+            queryset = queryset.exclude(
+                **{self.lookup_expr_in: self.lookup_val_out}
+            )
         return queryset
 
     def choices(self, changelist):
 
+        lookup_val_eq = self.lookup_val_eq
+I AM HERE; THIS NEARLY WORKS
         def _get_query_string(include=None, exclude=None):
             # need to work on a copy so I don't change it for other lookup_choices in the generator below
-            selections = self.lookup_val.copy()
-            if include and include not in selections:
-                selections.append(include)
-            if exclude and exclude in selections:
-                selections.remove(exclude)
-            if selections:
-                return changelist.get_query_string({self.lookup_kwarg: ",".join(selections)})
+            selections_in = self.lookup_val_in.copy()
+            selections_out = self.lookup_val_out.copy()
+            if include and include not in selections_in:
+                selections_in.append(include)
+            if exclude and exclude not in selections_out:
+                selections_out.append(exclude)
+            if lookup_val_eq == "in":
+                selections_out = filterfalse(
+                    lambda x: x in selections_in, selections_out
+                )
+            elif lookup_val_eq == "out":
+                selections_in = filterfalse(
+                    lambda x: x in selections_out, selections_in
+                )
+
+            query_args = {}
+            query_remove = []
+            if selections_in:
+                query_args[self.lookup_expr_in] = ",".join(selections_in)
             else:
-                return changelist.get_query_string(remove=[self.lookup_kwarg])
+                query_remove.append(self.lookup_expr_in)
+            if selections_out:
+                query_args[self.lookup_expr_out] = ",".join(selections_out)
+            else:
+                query_remove.append(self.lookup_expr_out)
+
+            if include is not None:
+                query_args[self.lookup_expr_eq] = "in"
+            elif exclude is not None:
+                query_args[self.lookup_expr_eq] = "out"
+
+            return changelist.get_query_string(query_args, remove=query_remove)
 
         yield {
-            'selected': self.lookup_val is None and not self.lookup_val_isnull,
-            'query_string': changelist.get_query_string(remove=[self.lookup_kwarg, self.lookup_kwarg_isnull]),
-            'display': _('Any'),
+            'selected':
+                not self.lookup_val_in and not self.lookup_val_out,
+            'query_string':
+                changelist.get_query_string(
+                    remove=[self.lookup_expr_in, self.lookup_expr_out]
+                ),
+            'display':
+                _('Any'),
         }
+
         for lookup, val in self.lookup_choices:
             yield {
-                'selected': str(lookup) in self.lookup_val,
-                'query_string': changelist.get_query_string({self.lookup_kwarg: lookup}, [self.lookup_kwarg_isnull]),
-                'include_query_string': _get_query_string(include=str(lookup)),
-                'exclude_query_string': _get_query_string(exclude=str(lookup)),
-                'display': val,
+                "selected_in": str(lookup) in self.lookup_val_in,
+                "selected_out": str(lookup) in self.lookup_val_out,
+                # 'query_string': changelist.get_query_string({self.lookup_kwarg: lookup}, [self.lookup_kwarg_isnull]),
+                "include_query_string": _get_query_string(include=str(lookup)),
+                "exclude_query_string": _get_query_string(exclude=str(lookup)),
+                "display": val,
             }
-        if self.include_empty_choice:
-            yield {
-                'selected': bool(self.lookup_val_isnull),
-                'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: True}, [self.lookup_kwarg]),
-                'display': self.empty_value_display,
-            }
+        # if self.include_empty_choice:
+        #     yield {
+        #         'selected': bool(self.lookup_val_isnull),
+        #         'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: True}, [self.lookup_kwarg]),
+        #         'display': self.empty_value_display,
+        #     }
