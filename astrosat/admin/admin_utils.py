@@ -1,8 +1,10 @@
+import datetime
 import json
 
 from collections import OrderedDict
 
 from django import forms
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.admin import widgets as admin_widgets
 from django.core.exceptions import ValidationError
@@ -12,7 +14,13 @@ from django.templatetags.static import StaticNode
 from django.urls import resolve, reverse
 from django.utils.html import format_html
 from django.utils.text import slugify
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
+
+
+####################
+# list display fns #
+####################
 
 
 def get_clickable_m2m_list_display(model_class, queryset):
@@ -39,7 +47,13 @@ def get_clickable_fk_list_display(obj):
     return format_html(list_display)
 
 
+#################
+# admin widgets #
+#################
+
+
 class JSONAdminWidget(widgets.Textarea):
+
     def __init__(self, attrs=None):
         default_attrs = {
             # make things a bit bigger
@@ -59,6 +73,11 @@ class JSONAdminWidget(widgets.Textarea):
         return value
 
 
+###########
+# filters #
+###########
+
+
 class DateRangeListFilter(admin.FieldListFilter):
     """
     Lets me filter a DateField based on a range of dates.
@@ -67,6 +86,8 @@ class DateRangeListFilter(admin.FieldListFilter):
 
     # basic idea came from: https://github.com/silentsokolov/django-admin-rangefilter/
 
+    earliest_time = datetime.time(0, 0, 0, 0)
+    latest_time = datetime.time(23, 59, 59, 999999)
     template = 'astrosat/admin/date_range_filter.html'
 
     def __init__(self, field, request, params, model, model_admin, field_path):
@@ -80,10 +101,9 @@ class DateRangeListFilter(admin.FieldListFilter):
 
         super().__init__(field, request, params, model, model_admin, field_path)
 
-        self.request = request
-        self.model_admin = model_admin
         self.form = self.form_class(self.used_parameters or None)
         self.id = slugify(self.title)
+        self.model_admin = model_admin
 
     def expected_parameters(self):
         return [self.lookup_kwarg_gte, self.lookup_kwarg_lte]
@@ -92,14 +112,10 @@ class DateRangeListFilter(admin.FieldListFilter):
         if self.form.is_valid():
             lookup_val_gte = self.form.cleaned_data[self.lookup_kwarg_gte]
             if lookup_val_gte:
-                queryset = queryset.filter(
-                    **{self.lookup_kwarg_gte: lookup_val_gte}
-                )
+                queryset = queryset.filter(**{self.lookup_kwarg_gte: lookup_val_gte})
             lookup_val_lte = self.form.cleaned_data[self.lookup_kwarg_lte]
             if lookup_val_lte:
-                queryset = queryset.filter(
-                    **{self.lookup_kwarg_lte: lookup_val_lte}
-                )
+                queryset = queryset.filter(**{self.lookup_kwarg_lte: lookup_val_lte})
 
         return queryset
 
@@ -109,8 +125,7 @@ class DateRangeListFilter(admin.FieldListFilter):
         yield {
             "reset_query_string":
                 changelist.get_query_string(
-                    remove=[self.lookup_kwarg_gte, self.lookup_kwarg_lte]
-                )
+                    remove=[self.lookup_kwarg_gte, self.lookup_kwarg_lte])
         }
 
     @property
@@ -136,21 +151,28 @@ class DateRangeListFilter(admin.FieldListFilter):
             )
         )
 
-        FormClass = type(
-            "DateRangeForm", (forms.BaseForm, ), {
-                "base_fields": fields,
-            }
-        )
+        FormClass = type("DateRangeForm", (forms.BaseForm,), {"base_fields": fields})
 
         def _clean(obj):
             cleaned_data = super(FormClass, obj).clean()
             lookup_val_gte = cleaned_data.get(self.lookup_kwarg_gte)
             lookup_val_lte = cleaned_data.get(self.lookup_kwarg_lte)
+            
+            if settings.USE_TZ:
+                if lookup_val_gte is not None:
+                    cleaned_data[self.lookup_kwarg_gte] = make_aware(
+                        datetime.datetime.combine(lookup_val_gte, self.earliest_time)
+                    )
+                if lookup_val_lte is not None:
+                    cleaned_data[self.lookup_kwarg_lte] = make_aware(
+                        datetime.datetime.combine(lookup_val_lte, self.latest_time)
+                    )
             if lookup_val_gte is not None and lookup_val_lte is not None:
                 if lookup_val_gte > lookup_val_lte:
                     raise ValidationError(
                         "From date must be greater than To date"
                     )
+
             return cleaned_data
 
         setattr(FormClass, "clean", _clean)
@@ -198,6 +220,7 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
         return queryset
 
     def choices(self, changelist):
+
         def _get_query_string(include=None, exclude=None):
             # need to work on a copy so I don't change it for other lookup_choices in the generator below
             selections = self.lookup_val.copy()
@@ -226,6 +249,6 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
         if self.include_empty_choice:
             yield {
                 'selected': bool(self.lookup_val_isnull),
-                'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: True}, [self.lookup_kwarg]),
+                'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: True}, [self.lookup_kwarg]), 
                 'display': self.empty_value_display,
             }
