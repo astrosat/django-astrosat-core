@@ -8,7 +8,7 @@ from astrosat.models import DatabaseLogTag, DatabaseLogRecord
 from astrosat.serializers import DatabaseLogRecordSerializer
 
 from .admin_base import DeleteOnlyModelAdminBase
-from .admin_utils import IncludeExcludeListFilter, get_clickable_m2m_list_display
+from .admin_utils import DateRangeListFilter, IncludeExcludeListFilter, get_clickable_m2m_list_display
 
 
 class TagListFilter(IncludeExcludeListFilter):
@@ -25,7 +25,6 @@ class TagListFilter(IncludeExcludeListFilter):
         )
 
 
-
 @admin.register(DatabaseLogTag)
 class DatabaseLogTagAdmin(admin.ModelAdmin):
     pass
@@ -36,8 +35,7 @@ class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
     actions = ["export_as_csv"]
     date_hierarchy = "created"
     list_display = ("created", "level", "message", "get_tags_for_list_display")
-    # TODO: ADD A DateRange FILTER (can use an actual form in the template)
-    list_filter = ("level", TagListFilter)
+    list_filter = ("level", ("created", DateRangeListFilter), TagListFilter)
 
     def get_queryset(self, request):
         # pre-fetching m2m fields that are used in list_displays
@@ -76,7 +74,9 @@ class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
         writer.writerow(headers)
         writer.writerows(
             # add the row to the CSV; if a column doesn't exist just add None
-            map(lambda row: [row.get(column, None) for column in headers], data)
+            map(
+                lambda row: [row.get(column, None) for column in headers], data
+            )
         )
 
         return csv_response

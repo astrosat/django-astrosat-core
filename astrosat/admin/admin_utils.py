@@ -1,10 +1,26 @@
+import datetime
 import json
 
+from collections import OrderedDict
+
+from django import forms
+from django.conf import settings
 from django.contrib import admin
+from django.contrib.admin import widgets as admin_widgets
+from django.core.exceptions import ValidationError
+from django.db.models import fields
 from django.forms import widgets
+from django.templatetags.static import StaticNode
 from django.urls import resolve, reverse
 from django.utils.html import format_html
+from django.utils.text import slugify
+from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
+
+
+####################
+# list display fns #
+####################
 
 
 def get_clickable_m2m_list_display(model_class, queryset):
@@ -31,6 +47,11 @@ def get_clickable_fk_list_display(obj):
     return format_html(list_display)
 
 
+#################
+# admin widgets #
+#################
+
+
 class JSONAdminWidget(widgets.Textarea):
 
     def __init__(self, attrs=None):
@@ -50,6 +71,120 @@ class JSONAdminWidget(widgets.Textarea):
         except Exception:
             pass
         return value
+
+
+###########
+# filters #
+###########
+
+
+class DateRangeListFilter(admin.FieldListFilter):
+    """
+    Lets me filter a DateField based on a range of dates.
+    Uses a standard Django Form in the Admin Template to do this.
+    """
+
+    # basic idea came from: https://github.com/silentsokolov/django-admin-rangefilter/
+
+    earliest_time = datetime.time(0, 0, 0, 0)
+    latest_time = datetime.time(23, 59, 59, 999999)
+    template = 'astrosat/admin/date_range_filter.html'
+
+    def __init__(self, field, request, params, model, model_admin, field_path):
+
+        assert isinstance(
+            field, fields.DateField
+        ), f"'{field_path}' must be an instance of DateField in order to use DateRangeListFilter"
+
+        self.lookup_kwarg_gte = f"{field_path}__gte"
+        self.lookup_kwarg_lte = f"{field_path}__lte"
+
+        super().__init__(field, request, params, model, model_admin, field_path)
+
+        self.form = self.form_class(self.used_parameters or None)
+        self.id = slugify(self.title)
+        self.model_admin = model_admin
+
+    def expected_parameters(self):
+        return [self.lookup_kwarg_gte, self.lookup_kwarg_lte]
+
+    def queryset(self, request, queryset):
+        if self.form.is_valid():
+            lookup_val_gte = self.form.cleaned_data[self.lookup_kwarg_gte]
+            if lookup_val_gte:
+                queryset = queryset.filter(**{self.lookup_kwarg_gte: lookup_val_gte})
+            lookup_val_lte = self.form.cleaned_data[self.lookup_kwarg_lte]
+            if lookup_val_lte:
+                queryset = queryset.filter(**{self.lookup_kwarg_lte: lookup_val_lte})
+
+        return queryset
+
+    def choices(self, changelist):
+        # I actually use the form itself to render choices; I use this (required)
+        # fn just to provide a value for the JS code w/in the template to reference
+        yield {
+            "reset_query_string":
+                changelist.get_query_string(
+                    remove=[self.lookup_kwarg_gte, self.lookup_kwarg_lte])
+        }
+
+    @property
+    def form_class(self):
+
+        fields = OrderedDict(
+            (
+                (
+                    field_name,
+                    forms.DateField(
+                        initial=None,
+                        label="",
+                        localize=True,
+                        required=False,
+                        widget=admin_widgets.AdminDateWidget(
+                            attrs={"placeholder": field_placeholder}
+                        )
+                    )
+                ) for field_name, field_placeholder in zip(
+                    [self.lookup_kwarg_gte, self.lookup_kwarg_lte],
+                    [_("From date"), _("To date")]
+                )
+            )
+        )
+
+        FormClass = type("DateRangeForm", (forms.BaseForm,), {"base_fields": fields})
+
+        def _clean(obj):
+            cleaned_data = super(FormClass, obj).clean()
+            lookup_val_gte = cleaned_data.get(self.lookup_kwarg_gte)
+            lookup_val_lte = cleaned_data.get(self.lookup_kwarg_lte)
+            
+            if settings.USE_TZ:
+                if lookup_val_gte is not None:
+                    cleaned_data[self.lookup_kwarg_gte] = make_aware(
+                        datetime.datetime.combine(lookup_val_gte, self.earliest_time)
+                    )
+                if lookup_val_lte is not None:
+                    cleaned_data[self.lookup_kwarg_lte] = make_aware(
+                        datetime.datetime.combine(lookup_val_lte, self.latest_time)
+                    )
+            if lookup_val_gte is not None and lookup_val_lte is not None:
+                if lookup_val_gte > lookup_val_lte:
+                    raise ValidationError(
+                        "From date must be greater than To date"
+                    )
+
+            return cleaned_data
+
+        setattr(FormClass, "clean", _clean)
+
+        FormClass.scripts = [
+            # pre-computing the paths to the scripts required for the AdminDateWidget
+            # b/c I load them dynamically in the template (so that they're not duplicated)
+            StaticNode.handle_simple("admin/js/calendar.js"),
+            StaticNode.handle_simple("admin/js/admin/DateTimeShortcuts.js")
+        ]
+
+        return FormClass
 
 
 class IncludeExcludeListFilter(admin.SimpleListFilter):
@@ -114,6 +249,6 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
         if self.include_empty_choice:
             yield {
                 'selected': bool(self.lookup_val_isnull),
-                'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: True}, [self.lookup_kwarg]),
+                'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: True}, [self.lookup_kwarg]), 
                 'display': self.empty_value_display,
             }
