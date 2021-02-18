@@ -8,4 +8,5 @@ from .utils_gis import adapt_geojson_to_django
 from .utils_iterators import grouper, partition
 from .utils_logging import RestrictLogsByNameFilter, DatabaseLogHandler
 from .utils_profile import show_toolbar, profile, track_memory
+from .utils_serializers import ExcludableJSONSerializer
 from .utils_validators import validate_no_spaces, validate_reserved_words, validate_no_tags, validate_schema
