@@ -6,6 +6,7 @@ from django.http import HttpResponse
 
 from astrosat.models import DatabaseLogTag, DatabaseLogRecord
 from astrosat.serializers import DatabaseLogRecordSerializer
+from astrosat.utils import flatten_dictionary
 
 from .admin_base import DeleteOnlyModelAdminBase
 from .admin_utils import DateRangeListFilter, IncludeExcludeListFilter, get_clickable_m2m_list_display
@@ -60,8 +61,9 @@ class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
                 record[header] = record.pop(field)
             try:
                 json_message = json.loads(record["record.message"])
-                extra_headers.update(json_message.keys())
-                record.update(json_message)
+                flattened_json_message = flatten_dictionary(json_message, separator=" | ")
+                extra_headers.update(flattened_json_message.keys())
+                record.update(flattened_json_message)
             except json.JSONDecodeError:
                 pass
             data.append(record)
