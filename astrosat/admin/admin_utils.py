@@ -78,11 +78,11 @@ class JSONAdminWidget(widgets.Textarea):
 
 class CharListFilter(admin.FieldListFilter):
     """
-    Lets me filter a CharField.  This is useful if I want to have search some fields
-    separately from those specified in the built-in `search_fields` argument.
+    Lets me filter a CharField.  This is useful if I want to search some fields
+    separately from those specified by the ModelAdmin's `search_fields` argument.
     """
 
-    template = 'core/admin/char_filter.html'
+    template = 'astrosat/admin/char_filter.html'
 
     def __init__(self, field, request, params, model, model_admin, field_path):
 
@@ -99,7 +99,7 @@ class CharListFilter(admin.FieldListFilter):
         return self.used_parameters.get(self.lookup_kwarg)
 
     def choices(self, changelist):
-        # don't actually have multiple choices, but ListFilter breaks if this isn't an iterable
+        # this filter doesn't actually have multiple choices, but Django expects this fn to be an iterable
         yield {
             'selected': self.value() is not None,
             'lookup_kwarg': self.lookup_kwarg,
