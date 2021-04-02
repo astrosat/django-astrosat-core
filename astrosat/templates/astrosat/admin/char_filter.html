@@ -22,11 +22,10 @@
 
         </form>
 
-
     </li>
 
     <!-- the "all_query_string" resets this filter -->
-    <li {% if not choice_info.selected %} class="selected" {% endif %}>
+    <li {% if choice_info.selected %} class="selected" {% endif %}>
         <a href="{{ choice_info.all_query_string|iriencode }}">
             {% trans 'clear search' %}
         </a>
