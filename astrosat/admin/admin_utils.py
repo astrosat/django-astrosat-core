@@ -17,7 +17,6 @@ from django.utils.text import slugify
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _
 
-
 ####################
 # list display fns #
 ####################
@@ -53,7 +52,6 @@ def get_clickable_fk_list_display(obj):
 
 
 class JSONAdminWidget(widgets.Textarea):
-
     def __init__(self, attrs=None):
         default_attrs = {
             # make things a bit bigger
@@ -76,6 +74,43 @@ class JSONAdminWidget(widgets.Textarea):
 ###########
 # filters #
 ###########
+
+
+class CharListFilter(admin.FieldListFilter):
+    """
+    Lets me filter a CharField.  This is useful if I want to search some fields
+    separately from those specified by the ModelAdmin's `search_fields` argument.
+    """
+
+    template = 'astrosat/admin/char_filter.html'
+
+    def __init__(self, field, request, params, model, model_admin, field_path):
+
+        self.lookup_kwarg = f"{field_path}__icontains"
+        self.parameter_name = field_path
+
+        # the super() method will popuplate self.used_parameters...
+        super().__init__(field, request, params, model, model_admin, field_path)
+
+    def expected_parameters(self):
+        return [self.lookup_kwarg]
+
+    def value(self):
+        return self.used_parameters.get(self.lookup_kwarg)
+
+    def choices(self, changelist):
+        # this filter doesn't actually have multiple choices, but Django expects this fn to be an iterable
+        yield {
+            'selected': self.value() is not None,
+            'lookup_kwarg': self.lookup_kwarg,
+            'lookup_value': self.value(),
+            'all_query_string': changelist.get_query_string(remove=self.expected_parameters()),
+            'other_params': {
+                k: v
+                for (k, v) in changelist.params.items()
+                if k != self.lookup_kwarg
+            },
+        }  # yapf: disable
 
 
 class DateRangeListFilter(admin.FieldListFilter):
@@ -112,10 +147,14 @@ class DateRangeListFilter(admin.FieldListFilter):
         if self.form.is_valid():
             lookup_val_gte = self.form.cleaned_data[self.lookup_kwarg_gte]
             if lookup_val_gte:
-                queryset = queryset.filter(**{self.lookup_kwarg_gte: lookup_val_gte})
+                queryset = queryset.filter(
+                    **{self.lookup_kwarg_gte: lookup_val_gte}
+                )
             lookup_val_lte = self.form.cleaned_data[self.lookup_kwarg_lte]
             if lookup_val_lte:
-                queryset = queryset.filter(**{self.lookup_kwarg_lte: lookup_val_lte})
+                queryset = queryset.filter(
+                    **{self.lookup_kwarg_lte: lookup_val_lte}
+                )
 
         return queryset
 
@@ -125,47 +164,52 @@ class DateRangeListFilter(admin.FieldListFilter):
         yield {
             "reset_query_string":
                 changelist.get_query_string(
-                    remove=[self.lookup_kwarg_gte, self.lookup_kwarg_lte])
+                    remove=[self.lookup_kwarg_gte, self.lookup_kwarg_lte]
+                )
         }
 
     @property
     def form_class(self):
 
         fields = OrderedDict(
-            (
-                (
-                    field_name,
-                    forms.DateField(
-                        initial=None,
-                        label="",
-                        localize=True,
-                        required=False,
-                        widget=admin_widgets.AdminDateWidget(
-                            attrs={"placeholder": field_placeholder}
-                        )
+            ((
+                field_name,
+                forms.DateField(
+                    initial=None,
+                    label="",
+                    localize=True,
+                    required=False,
+                    widget=admin_widgets.AdminDateWidget(
+                        attrs={"placeholder": field_placeholder}
                     )
-                ) for field_name, field_placeholder in zip(
-                    [self.lookup_kwarg_gte, self.lookup_kwarg_lte],
-                    [_("From date"), _("To date")]
                 )
-            )
+            ) for field_name,
+             field_placeholder in
+             zip([self.lookup_kwarg_gte, self.lookup_kwarg_lte],
+                 [_("From date"), _("To date")]))
         )
 
-        FormClass = type("DateRangeForm", (forms.BaseForm,), {"base_fields": fields})
+        FormClass = type(
+            "DateRangeForm", (forms.BaseForm, ), {"base_fields": fields}
+        )
 
         def _clean(obj):
             cleaned_data = super(FormClass, obj).clean()
             lookup_val_gte = cleaned_data.get(self.lookup_kwarg_gte)
             lookup_val_lte = cleaned_data.get(self.lookup_kwarg_lte)
-            
+
             if settings.USE_TZ:
                 if lookup_val_gte is not None:
                     cleaned_data[self.lookup_kwarg_gte] = make_aware(
-                        datetime.datetime.combine(lookup_val_gte, self.earliest_time)
+                        datetime.datetime.combine(
+                            lookup_val_gte, self.earliest_time
+                        )
                     )
                 if lookup_val_lte is not None:
                     cleaned_data[self.lookup_kwarg_lte] = make_aware(
-                        datetime.datetime.combine(lookup_val_lte, self.latest_time)
+                        datetime.datetime.combine(
+                            lookup_val_lte, self.latest_time
+                        )
                     )
             if lookup_val_gte is not None and lookup_val_lte is not None:
                 if lookup_val_gte > lookup_val_lte:
@@ -216,11 +260,12 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
         if self.lookup_val:
             queryset = queryset.filter(**{self.lookup_kwarg: self.lookup_val})
         if self.lookup_val_isnull:
-            queryset = queryset.filter(**{self.lookup_kwarg_isnull: self.lookup_val_isnull})
+            queryset = queryset.filter(
+                **{self.lookup_kwarg_isnull: self.lookup_val_isnull}
+            )
         return queryset
 
     def choices(self, changelist):
-
         def _get_query_string(include=None, exclude=None):
             # need to work on a copy so I don't change it for other lookup_choices in the generator below
             selections = self.lookup_val.copy()
@@ -229,7 +274,9 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
             if exclude and exclude in selections:
                 selections.remove(exclude)
             if selections:
-                return changelist.get_query_string({self.lookup_kwarg: ",".join(selections)})
+                return changelist.get_query_string({
+                    self.lookup_kwarg: ",".join(selections)
+                })
             else:
                 return changelist.get_query_string(remove=[self.lookup_kwarg])
 
@@ -237,7 +284,7 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
             'selected': self.lookup_val is None and not self.lookup_val_isnull,
             'query_string': changelist.get_query_string(remove=[self.lookup_kwarg, self.lookup_kwarg_isnull]),
             'display': _('Any'),
-        }
+        }  # yapf: disable
         for lookup, val in self.lookup_choices:
             yield {
                 'selected': str(lookup) in self.lookup_val,
@@ -245,10 +292,10 @@ class IncludeExcludeListFilter(admin.SimpleListFilter):
                 'include_query_string': _get_query_string(include=str(lookup)),
                 'exclude_query_string': _get_query_string(exclude=str(lookup)),
                 'display': val,
-            }
+            }  # yapf: disable
         if self.include_empty_choice:
             yield {
                 'selected': bool(self.lookup_val_isnull),
-                'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: True}, [self.lookup_kwarg]), 
+                'query_string': changelist.get_query_string({self.lookup_kwarg_isnull: True}, [self.lookup_kwarg]),
                 'display': self.empty_value_display,
-            }
+            }  # yapf: disable
