@@ -8,16 +8,6 @@ start = "pipenv run ./manage.py runserver"
 test = "pipenv run pytest"
 watch = "pipenv run ptw"
 
-[dev-packages]
-django-debug-toolbar = "*"
-factory-boy = "==3.0.1"
-pylint = "*"
-pytest = "*"
-pytest-django = "*"
-pytest-sugar = "*"
-pytest-watch = "*"
-yapf = "*"
-
 [packages]
 django = "~=3.0"
 django-environ = "*"
@@ -26,6 +16,17 @@ djangorestframework = "*"
 drf-yasg2 = "*"
 psycopg2-binary = "*"
 django-astrosat-core = {editable = true,path = "./.."}
+
+[dev-packages]
+django-debug-toolbar = "*"
+factory-boy = "==3.0.1"
+pylint = "*"
+pytest = "*"
+pytest-django = "*"
+pytest-html = "*"
+pytest-sugar = "*"
+pytest-watch = "*"
+yapf = "*"
 
 [requires]
 python_version = "3.7.7"
