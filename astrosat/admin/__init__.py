@@ -7,6 +7,7 @@ from .admin_base import (
     DeleteOnlyModelAdminBase
 )
 from .admin_utils import (
+    CharListFilter,
     IncludeExcludeListFilter,
     JSONAdminWidget,
     get_clickable_m2m_list_display,
