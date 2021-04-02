@@ -15,6 +15,7 @@ django-filter = "*"
 djangorestframework = "*"
 drf-yasg2 = "*"
 psycopg2-binary = "*"
+python-logstash = "~=0.4"
 django-astrosat-core = {editable = true,path = "./.."}
 
 [dev-packages]
@@ -29,4 +30,4 @@ pytest-watch = "*"
 yapf = "*"
 
 [requires]
-python_version = "3.7.7"
+python_version = "3.6"
