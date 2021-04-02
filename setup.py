@@ -21,6 +21,8 @@ install_requires = [
     "jsonschema>=3.0",
     # S3 access
     "boto3>=1.12",
+    # provides logging handler for logstash (analytics)
+    "python-logstash~=0.4.6",
     # profiling
     "pympler>=0.8",
 ]
