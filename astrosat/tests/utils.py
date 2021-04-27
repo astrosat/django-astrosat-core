@@ -8,6 +8,7 @@ from random import shuffle
 
 from django.contrib.auth import get_user_model
 from django.core.files.storage import get_storage_class
+from django.core.files.uploadedfile import SimpleUploadedFile
 from rest_framework.test import APIClient
 
 from astrosat.utils import DataClient
@@ -134,6 +135,9 @@ def mock_storage(monkeypatch):
 
     clean_name = lambda name: os.path.splitext(os.path.basename(name))[0]
 
+    def _mock_open(instance, name, mode="rb"):
+        return SimpleUploadedFile(name=name, content=b"mock")
+
     def _mock_save(instance, name, content):
         setattr(instance, f"mock_{clean_name(name)}_exists", True)
         return str(name).replace("\\", "/")
@@ -148,6 +152,7 @@ def mock_storage(monkeypatch):
     # TODO: APPLY MOCK TO DefaultStorage AS WELL
     storage_class = get_storage_class()
 
+    monkeypatch.setattr(storage_class, "_open", _mock_open)
     monkeypatch.setattr(storage_class, "_save", _mock_save)
     monkeypatch.setattr(storage_class, "delete", _mock_delete)
     monkeypatch.setattr(storage_class, "exists", _mock_exists)
