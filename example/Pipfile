@@ -20,7 +20,7 @@ django-astrosat-core = {editable = true,path = "./.."}
 
 [dev-packages]
 django-debug-toolbar = "*"
-factory-boy = "==3.0.1"
+factory-boy = "*"
 pylint = "*"
 pytest = "*"
 pytest-django = "*"

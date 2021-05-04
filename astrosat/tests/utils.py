@@ -3,6 +3,8 @@ import factory
 import io
 import os
 from collections import namedtuple
+from faker import Faker
+from functools import partial
 from itertools import combinations
 from random import shuffle
 
@@ -13,6 +15,8 @@ from rest_framework.test import APIClient
 
 from astrosat.utils import DataClient
 from .factories import UserFactory
+
+fake = Faker()
 
 ##############
 # useful fns #
@@ -40,9 +44,11 @@ def optional_declaration(declaration, chance=50, default=None):
     "declaration" some of the time, otherwise sets it to "default".
     Useful for optional fields.
     """
-
+    decider = factory.LazyFunction(
+        partial(fake.boolean, chance_of_getting_true=chance)
+    )
     return factory.Maybe(
-        factory.Faker("boolean", chance_of_getting_true=chance),
+        decider,
         yes_declaration=declaration,
         no_declaration=default,
     )
