@@ -5,7 +5,9 @@ from .utils import DynamicSetting
 
 
 class AstrosatConfig(AppConfig):
+
     name = APP_NAME
+    default_auto_field = "django.db.models.BigAutoField"
 
     def ready(self):
 
