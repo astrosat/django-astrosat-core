@@ -13,6 +13,7 @@ from example.models import (
     ExampleSingletonModel,
     ExampleUnloadableParentModel,
     ExampleUnloadableChildModel,
+    ExampleConditionallyDeletedThing,
 )
 
 FactoryFaker.add_provider(GeometryProvider)
@@ -64,16 +65,26 @@ class ExampleEpochModelFactory(factory.django.DjangoModelFactory):
     tz_aware_date = FactoryFaker("date_time")
 
 
-class ExampleUnloadableParentModel(factory.django.DjangoModelFactory):
+class ExampleUnloadableParentModelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ExampleUnloadableParentModel
 
     name = factory.LazyAttributeSequence(lambda o, n: f"parent-{n}")
 
 
-class ExampleUnloadableChildModel(factory.django.DjangoModelFactory):
+class ExampleUnloadableChildModelFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ExampleUnloadableChildModel
 
     name = factory.LazyAttributeSequence(lambda o, n: f"child-{n}")
     parent = factory.SubFactory(ExampleUnloadableParentModel)
+
+
+class ExampleConditionallyDeletedThingFactory(
+    factory.django.DjangoModelFactory
+):
+    class Meta:
+        model = ExampleConditionallyDeletedThing
+
+    name = factory.LazyAttributeSequence(lambda o, n: f"thing-{n}")
+    should_delete = FactoryFaker("boolean")

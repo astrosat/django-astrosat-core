@@ -7,6 +7,7 @@ from .models import (
     ExampleEpochModel,
     ExampleUnloadableParentModel,
     ExampleUnloadableChildModel,
+    ExampleConditionallyDeletedThing
 )
 
 admin.site.register(ExampleHashableModel)
@@ -15,3 +16,4 @@ admin.site.register(ExampleBulkModel)
 admin.site.register(ExampleEpochModel)
 admin.site.register(ExampleUnloadableParentModel)
 admin.site.register(ExampleUnloadableChildModel)
+admin.site.register(ExampleConditionallyDeletedThing)

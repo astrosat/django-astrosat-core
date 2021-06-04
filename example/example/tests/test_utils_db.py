@@ -1,21 +1,48 @@
+from astrosat.tests.factories import UserFactory
 import factory
 import pytest
 from time import time
 from django.db import models
 
 from astrosat.utils import bulk_update_or_create
-from example.models import ExampleBulkModel
+from example.models import ExampleBulkModel, ExampleConditionallyDeletedThing
 
 from . import factories
+
+
+@pytest.mark.django_db
+class TestConditionallyCascade:
+    def test_only_delete_some_objects(self):
+
+        user = UserFactory()
+
+        thing_to_cascade = factories.ExampleConditionallyDeletedThingFactory(
+            should_delete=True,
+            user=user,
+        )
+        thing_to_set_null = factories.ExampleConditionallyDeletedThingFactory(
+            should_delete=False,
+            user=user,
+        )
+
+        assert ExampleConditionallyDeletedThing.objects.count() == 2
+        assert thing_to_cascade.user == user
+        assert thing_to_set_null.user == user
+
+        user.delete()
+        thing_to_set_null.refresh_from_db()
+
+        assert ExampleConditionallyDeletedThing.objects.count() == 1
+        assert thing_to_set_null.user == None
 
 
 def old_update_or_create(model_data):
     """
     This fn is an example of the standard Django way of updating or creating a batch of items.
-    Because this project often deals w/ huge datasets, I wrote the fn bulk_update_or_create.
+    Because astrosat projects often deal w/ huge datasets, I wrote the fn bulk_update_or_create.
     This achieves the same thing faster and w/ less db hits.
 
-    The tests in this module just make sure that bulk_update_or_create remains more efficient.
+    The tests below just make sure that bulk_update_or_create remains more efficient.
     """
 
     created = []
@@ -157,8 +184,8 @@ class TestBulkUpdateOrCreate:
         test_data[1]["something_non_unique"] = "fails"
 
         comparator_fn = (
-            lambda matching_object, data_record: data_record[
-                "something_non_unique"] == "passes"
+            lambda matching_object,
+            data_record: data_record["something_non_unique"] == "passes"
         )
 
         # should only update 1 instance b/c the comparator_fn will fail w/ test_data[1]
