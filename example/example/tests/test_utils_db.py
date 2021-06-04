@@ -1,10 +1,10 @@
-from astrosat.tests.factories import UserFactory
 import factory
 import pytest
 from time import time
-from django.db import models
 
+from astrosat.tests.factories import UserFactory
 from astrosat.utils import bulk_update_or_create
+
 from example.models import ExampleBulkModel, ExampleConditionallyDeletedThing
 
 from . import factories
