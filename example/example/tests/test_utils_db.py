@@ -20,20 +20,20 @@ class TestConditionallyCascade:
             should_delete=True,
             user=user,
         )
-        thing_to_set_null = factories.ExampleConditionallyDeletedThingFactory(
+        thing_to_set = factories.ExampleConditionallyDeletedThingFactory(
             should_delete=False,
             user=user,
         )
 
         assert ExampleConditionallyDeletedThing.objects.count() == 2
         assert thing_to_cascade.user == user
-        assert thing_to_set_null.user == user
+        assert thing_to_set.user == user
 
         user.delete()
-        thing_to_set_null.refresh_from_db()
+        thing_to_set.refresh_from_db()
 
         assert ExampleConditionallyDeletedThing.objects.count() == 1
-        assert thing_to_set_null.user == None
+        assert thing_to_set.user == None
 
 
 def old_update_or_create(model_data):

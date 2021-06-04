@@ -24,10 +24,10 @@ def CONDITIONAL_CASCADE(collector, field, sub_objs, using, **kwargs):
     default_value = kwargs.get("default_value", None)
 
     sub_objs_to_cascade = sub_objs.filter(**condition)
-    sub_objs_to_set_null = sub_objs.exclude(**condition)
+    sub_objs_to_set = sub_objs.exclude(**condition)
 
     CASCADE(collector, field, sub_objs_to_cascade, using)
-    collector.add_field_update(field, default_value, sub_objs_to_set_null)
+    collector.add_field_update(field, default_value, sub_objs_to_set)
 
 
 def bulk_update_or_create(model_class, model_data, comparator_fn=None):
