@@ -1,9 +1,13 @@
+from functools import partial
+
+from django.conf import settings
 from django.db import models
 
 # from django.contrib.gis.db import models as gis_models
 
 from astrosat.fields import EpochField, LazyCharArrayField
 from astrosat.mixins import HashableMixin, SingletonMixin
+from astrosat.utils import CONDITIONAL_CASCADE
 """
 A bunch of models that are just used for testing
 """
@@ -14,7 +18,7 @@ class ExampleHashableModel(HashableMixin, models.Model):
     name = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     @property
     def hash_source(self):
@@ -27,7 +31,7 @@ class ExampleSingletonModel(SingletonMixin, models.Model):
     flag = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
 
 # class ExampleGeoModel(gis_models.Model):
@@ -72,7 +76,7 @@ class ExampleUnloadableParentModel(models.Model):
     name = models.CharField(unique=True, max_length=255)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     def natural_key(self):
         return (self.name, )
@@ -90,7 +94,28 @@ class ExampleUnloadableChildModel(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return f"{self.name}"
 
     def natural_key(self):
         return (self.name, )
+
+
+class ExampleConditionallyDeletedThing(models.Model):
+
+    name = models.CharField(unique=True, max_length=255)
+    should_delete = models.BooleanField(default=False)
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        blank=True,
+        null=True,
+        on_delete=partial(
+            CONDITIONAL_CASCADE,
+            condition={"should_delete": True},
+            default_value=None
+        ),
+        related_name="things",
+    )
+
+    def __str__(self):
+        return f"{self.name}"

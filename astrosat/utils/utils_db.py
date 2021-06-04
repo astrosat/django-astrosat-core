@@ -1,3 +1,35 @@
+from django.db.models import CASCADE
+
+
+def CONDITIONAL_CASCADE(collector, field, sub_objs, using, **kwargs):
+    """
+    Django deletion constraint that is a combination of CASCADE and SET.
+    If condition (which is a dict of lookup arguemnts) is True then CASCADE
+    is used, otherwise SET(default_value) is used.
+
+    "condition" & "default_value" can be provided via `functools.partial` like this:
+    ```
+    my_field = models.ForeignKey(
+      my_thing,
+      on_delete=functools.partial(
+          CONDITIONAL_CASCADE,
+          condition={"some_lookup_arg": "some_value"},
+          default_value=None,
+      )
+    )
+    ```
+    """
+
+    condition = kwargs["condition"]
+    default_value = kwargs.get("default_value", None)
+
+    sub_objs_to_cascade = sub_objs.filter(**condition)
+    sub_objs_to_set = sub_objs.exclude(**condition)
+
+    CASCADE(collector, field, sub_objs_to_cascade, using)
+    collector.add_field_update(field, default_value, sub_objs_to_set)
+
+
 def bulk_update_or_create(model_class, model_data, comparator_fn=None):
     """
     Performs update_or_create in bulk (w/ only 3 db hits)
@@ -47,12 +79,10 @@ def bulk_update_or_create(model_class, model_data, comparator_fn=None):
 
         matching_object = next(
             (
-                obj for obj in existing_objects if all(
-                    [
-                        getattr(obj, k) == v
-                        for k, v in unique_data_record_fields.items()
-                    ]
-                )
+                obj for obj in existing_objects if all([
+                    getattr(obj, k) == v for k,
+                    v in unique_data_record_fields.items()
+                ])
             ),
             None,
         )
