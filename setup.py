@@ -14,16 +14,11 @@ version = __import__("astrosat").__version__
 
 install_requires = [
     # django, duh
-    "django~=3.0",
-    # api
-    "djangorestframework~=3.0",
-    # easier json validation
-    "jsonschema>=3.0",
-    # S3 access
-    "boto3>=1.12",
-    # provides logging handler for logstash (analytics)
-    "python-logstash~=0.4.6",
-    # profiling
+    "django~=3.0",  # api
+    "djangorestframework~=3.0",  # easier json validation
+    "jsonschema>=3.0",  # S3 access
+    "boto3>=1.12",  # provides logging handler for logstash (analytics)
+    "python-logstash~=0.4.6",  # profiling
     "pympler>=0.8",
 ]
 

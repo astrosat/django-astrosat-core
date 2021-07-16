@@ -13,7 +13,6 @@ class ExcludableJSONSerializer(JSONSerializer):
 
     To use, update settings.py as per https://docs.djangoproject.com/en/3.0/ref/settings/#serialization-modules
     """
-
     def serialize(self, queryset, *args, **kwargs):
         self.excluded_fields = defaultdict(list)
         for field in kwargs.pop("excludes", []):
@@ -28,11 +27,15 @@ class ExcludableJSONSerializer(JSONSerializer):
     def is_field_excluded(self, obj, field):
         model_name = obj._meta.model_name
         field_name = field.attname
-        if (model_name in self.excluded_fields and
-                field_name in self.excluded_fields[model_name]):
+        if (
+            model_name in self.excluded_fields and
+            field_name in self.excluded_fields[model_name]
+        ):
             return True
-        elif (None in self.excluded_fields and
-              field_name in self.excluded_fields[None]):
+        elif (
+            None in self.excluded_fields and
+            field_name in self.excluded_fields[None]
+        ):
             return True
         return False
 

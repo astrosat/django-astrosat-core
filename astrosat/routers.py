@@ -1,6 +1,5 @@
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
-
 # Most clients append a slash to their requests.
 # Some older ones (edge) do not, or do this inconsistently.
 # DRF can handle this via the `trailing_slash` kwarg
@@ -11,14 +10,12 @@ from rest_framework.routers import DefaultRouter, SimpleRouter
 
 
 class SlashlessDefaultRouter(DefaultRouter):
-
     def __init__(self, *args, **kwargs):
         self.trailing_slash = '/?'
         super().__init__(*args, **kwargs)
 
 
 class SlashlessSimpleRouter(SimpleRouter):
-
     def __init__(self, *args, **kwargs):
         self.trailing_slash = '/?'
         super().__init__(*args, **kwargs)

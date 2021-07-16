@@ -27,7 +27,8 @@ class CannotDeleteModelAdminBase(BaseModelAdmin):
         actions = super().get_actions(request)
         return {
             action_name: action_function
-            for action_name, action_function in actions.items()
+            for action_name,
+            action_function in actions.items()
             if action_name not in self.invalid_actions
         }
 
@@ -94,7 +95,8 @@ class ReadOnlyModelAdminBase(
 
 
 class DeleteOnlyModelAdminBase(
-    CannotAddModelAdminBase, CannotUpdateModelAdminBase,
+    CannotAddModelAdminBase,
+    CannotUpdateModelAdminBase,
     CannotEditModelAdminBase
 ):
     """"

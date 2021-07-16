@@ -130,23 +130,21 @@ def track_memory(path=""):
                         n for _, n in memory_info["stats"].history[class_name]
                     ]
                     if history:
-                        classes_stats.append(
-                            {
-                                "name":
-                                    class_name,
-                                "n_instances":
-                                    len(history),
-                                "min_instances":
-                                    min(history),
-                                "max_instances":
-                                    max(history),
-                                "size":
-                                    pp(
-                                        snapshot.classes.get(class_name,
-                                                             {}).get("sum", 0)
-                                    ),
-                            }
-                        )
+                        classes_stats.append({
+                            "name":
+                                class_name,
+                            "n_instances":
+                                len(history),
+                            "min_instances":
+                                min(history),
+                            "max_instances":
+                                max(history),
+                            "size":
+                                pp(
+                                    snapshot.classes.get(class_name,
+                                                         {}).get("sum", 0)
+                                ),
+                        })
 
                 if not path:
                     stream = sys.stdout

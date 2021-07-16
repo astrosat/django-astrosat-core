@@ -60,8 +60,7 @@ class Command(BaseCommand):
             Site.objects.update_or_create(
                 id=options["id"],
                 defaults={
-                    "domain": domain[:100],
-                    "name": name[:50]
+                    "domain": domain[:100], "name": name[:50]
                 }
             )
 

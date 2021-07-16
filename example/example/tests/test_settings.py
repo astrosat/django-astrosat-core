@@ -49,12 +49,10 @@ class TestSettings:
 
         env_files = [
             create_env_file(**{
-                env_key_1: "one",
-                env_key_2: "one"
+                env_key_1: "one", env_key_2: "one"
             }),
             create_env_file(**{
-                env_key_2: "two",
-                env_key_3: "two"
+                env_key_2: "two", env_key_3: "two"
             }),
         ]
 
