@@ -46,13 +46,16 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "django.contrib.sites",  # api...
+    "django.contrib.sites",
+    # api...
     "rest_framework",
     "django_filters",
-    "drf_yasg2",  # astrosat...
-    "astrosat",  # this app...
+    "drf_yasg2",
+    # astrosat...
+    "astrosat",
+    # this app...
     "example",
-]
+] # yapf: disable
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
