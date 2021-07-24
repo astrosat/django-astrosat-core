@@ -1,8 +1,7 @@
-from astrosat.utils.utils_logging import DatabaseLogHandler
 import logging
 import json
 import uuid
-from itertools import filterfalse
+from itertools import chain, filterfalse, groupby
 from functools import reduce
 
 from django import forms
@@ -11,6 +10,7 @@ from django.contrib.sites.models import Site
 from django.core.exceptions import ValidationError
 from django.http.response import StreamingHttpResponse
 from django.urls import re_path
+from django.urls.resolvers import URLPattern, URLResolver
 from django.views import defaults as default_views
 
 from rest_framework import status, viewsets
@@ -302,9 +302,28 @@ def create_log_records(request):
 #########
 
 
-def remove_urlpatterns(urlpatterns, urlpatterns_to_remove):
-    return list(
-        filterfalse(
-            lambda x: x.pattern.name in urlpatterns_to_remove, urlpatterns
-        )
+def remove_urlpatterns(urlpatterns, pattern_names_to_remove):
+    """
+    takes a standard list of URLPatterns (or URLResolvers)
+    and removes those patterns (or resolvers) listed in "pattern_names_to_remove"
+    """
+    # yapf: disable
+
+    urls_to_check = {
+        # split urlpatterns into patterns & resolvers
+        k: list(g)
+        for k, g in groupby(urlpatterns, key=type)
+    }
+
+    resolvers_to_keep = filterfalse(
+        # note the double-looping to check patterns _w/in_ a resolver
+        lambda resolver: any(pattern.name in pattern_names_to_remove for pattern in resolver.url_patterns),
+        urls_to_check.get(URLResolver, [])
     )
+
+    patterns_to_keep = filterfalse(
+        lambda pattern: pattern.name in pattern_names_to_remove,
+        urls_to_check.get(URLPattern, [])
+    )
+
+    return list(chain(resolvers_to_keep, patterns_to_keep))
