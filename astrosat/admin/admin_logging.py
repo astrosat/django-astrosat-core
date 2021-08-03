@@ -20,10 +20,9 @@ class TagListFilter(IncludeExcludeListFilter):
 
     def lookups(self, request, model_admin):
         queryset = model_admin.get_queryset(request)
-        return (
-            (tag.pk, tag.name)
-            for tag in DatabaseLogTag.objects.filter(pk__in=queryset.values("tags__pk"))
-        )
+        return ((tag.pk, tag.name) for tag in DatabaseLogTag.objects.filter(
+            pk__in=queryset.values("tags__pk")
+        ))
 
 
 @admin.register(DatabaseLogTag)
@@ -61,7 +60,9 @@ class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
                 record[header] = record.pop(field)
             try:
                 json_message = json.loads(record["record.message"])
-                flattened_json_message = flatten_dictionary(json_message, separator=" | ")
+                flattened_json_message = flatten_dictionary(
+                    json_message, separator=" | "
+                )
                 extra_headers.update(flattened_json_message.keys())
                 record.update(flattened_json_message)
             except json.JSONDecodeError:
@@ -71,7 +72,8 @@ class DatabaseLogRecordAdmin(DeleteOnlyModelAdminBase, admin.ModelAdmin):
         headers = headers + sorted(extra_headers)
 
         csv_response = HttpResponse(content_type="text/csv")
-        csv_response["Content-Disposition"] = f"attachment; filename=log_records.csv"
+        csv_response["Content-Disposition"
+                    ] = f"attachment; filename=log_records.csv"
         writer = csv.writer(csv_response)
         writer.writerow(headers)
         writer.writerows(

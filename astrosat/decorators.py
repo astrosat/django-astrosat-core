@@ -53,6 +53,7 @@ def swagger_fake(fake_retval=None):
     def _decorator(view_fn):
         @functools.wraps(view_fn)
         def _wrapper(*args, **kwargs):
+
             if not args:
                 # if this decorator is applied to a CBV using "method_decorator",
                 # then view_fn will actually be an instance of functools.partial;

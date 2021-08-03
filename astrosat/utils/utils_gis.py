@@ -10,10 +10,7 @@ def adapt_geojson_to_django(geojson, geometry_field_name="geometry"):
     """
     for feature in geojson["features"]:
         fields = feature["properties"]
-        fields.update(
-            {
-                geometry_field_name:
-                    GEOSGeometry(json.dumps(feature["geometry"]))
-            }
-        )
+        fields.update({
+            geometry_field_name: GEOSGeometry(json.dumps(feature["geometry"]))
+        })
         yield fields

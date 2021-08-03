@@ -172,8 +172,7 @@ class DataClient:
                 ClientMethod=method,
                 ExpiresIn=expiry,
                 Params={
-                    "Bucket": self.bucket,
-                    "Key": obj.metadata["Key"]
+                    "Bucket": self.bucket, "Key": obj.metadata["Key"]
                 },
             )
             return url

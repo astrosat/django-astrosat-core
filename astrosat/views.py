@@ -52,8 +52,7 @@ API_SCHEMA_TILE = f"{getattr(settings, 'PROJECT_NAME', 'Django-Astrosat')} API"
 api_schema_view = get_schema_view(
     openapi.Info(
         title=API_SCHEMA_TILE,
-        default_version="v1",
-        # url=Site.objects.get_current().domain,
+        default_version="v1",  # url=Site.objects.get_current().domain,
     ),
     public=True,
     permission_classes=(IsAdminOrDebug, ),
@@ -231,18 +230,16 @@ class DatabaseLogRecordFilterSet(filters.FilterSet):
         model = DatabaseLogRecord
         fields = {
             # using automatic filter generation for "created" here
-            "created":
-                [
-                    "exact",
-                    "gte",
-                    "lte",
-                    "range",
-                    "date",
-                    "date__range",
-                    "date__gte",
-                    "date__lte",
-                ],
-            # but declarative filters for "tags" below
+            "created": [
+                "exact",
+                "gte",
+                "lte",
+                "range",
+                "date",
+                "date__range",
+                "date__gte",
+                "date__lte",
+            ],  # but declarative filters for "tags" below
         }
 
     tags = CharInFilter(field_name="tags__name", distinct=True)
@@ -284,8 +281,7 @@ def create_log_records(request):
             fn(
                 json.dumps(record['content']),
                 extra={
-                    "tags": record.get('tags'),
-                    "uuid": uuids[i]
+                    "tags": record.get('tags'), "uuid": uuids[i]
                 }
             )
     except Exception as ex:

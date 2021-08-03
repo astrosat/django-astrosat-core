@@ -79,7 +79,6 @@ class ElasticsearchDocumentLogFormatter(LogstashFormatterBase):
     Based on LogstashFormatterBase/Version1 from python-logstash
     https://github.com/vklochan/python-logstash/blob/master/logstash/formatter.py
     """
-
     def __init__(self, constant_fields=dict()):
         self.constant_fields = constant_fields
 
@@ -93,7 +92,9 @@ class ElasticsearchDocumentLogFormatter(LogstashFormatterBase):
         }
 
         # Merge analytics, constant field overrides and meta fields into one dict
-        logstash_message = {**record_fields, **self.constant_fields, **meta_fields}
+        logstash_message = {
+            **record_fields, **self.constant_fields, **meta_fields
+        }
 
         return self.serialize(logstash_message)
 
@@ -104,13 +105,16 @@ class AstrosatAppTCPLogstashLogHandler(TCPLogstashHandler):
     compatible with the Logstash TCP input plugin.
     Adds extra metadata fields to each record about the app instance.
     """
-
-    def __init__(self, host, port, app, instance, environment, stream="default"):
+    def __init__(
+        self, host, port, app, instance, environment, stream="default"
+    ):
         super(TCPLogstashHandler, self).__init__(host, port)
 
-        self.formatter = ElasticsearchDocumentLogFormatter(constant_fields={
-            "app": app,
-            "instance": instance,
-            "environment": environment,
-            "stream": stream,
-        })
+        self.formatter = ElasticsearchDocumentLogFormatter(
+            constant_fields={
+                "app": app,
+                "instance": instance,
+                "environment": environment,
+                "stream": stream,
+            }
+        )

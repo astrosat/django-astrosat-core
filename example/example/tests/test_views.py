@@ -99,19 +99,16 @@ class TestUserTracking:
         # make sure logging is enabled...
         astrosat_settings.enable_db_logging = True
         astrosat_settings.save()
-        log_data = [
-            {
-                "content": {
-                    "key": "Value 1",
-                },
-                "tags": ["dataset"],
-            }, {
-                "content": {
-                    "key": "Value 2",
-                },
-                "tags": ["dataset"]
-            }
-        ]
+        log_data = [{
+            "content": {
+                "key": "Value 1",
+            },
+            "tags": ["dataset"],
+        }, {
+            "content": {
+                "key": "Value 2",
+            }, "tags": ["dataset"]
+        }]
 
         url = reverse("log-tracking")
 
@@ -130,7 +127,6 @@ class TestUserTracking:
         ):
             assert json.dumps(input_data['content']) == output_data['message']
 
-
     def test_tracking_features_level(self, api_client, astrosat_settings):
         """
         Ensure correct log level is used.
@@ -144,7 +140,7 @@ class TestUserTracking:
         assert DatabaseLogRecord.objects.count() == 0
         assert DatabaseLogTag.objects.count() == 0
 
-        data = [{"content": {"foo":"bar"}, "level": "info"}]
+        data = [{"content": {"foo": "bar"}, "level": "info"}]
         response = api_client.post(url, data, format="json")
         log_records = DatabaseLogRecord.objects.all()
         assert log_records.count() == 1
@@ -152,19 +148,19 @@ class TestUserTracking:
 
         assert DatabaseLogRecord.objects.filter(level=logging.INFO).count() == 1
 
-        data = [{"content": {"foo":"bar"}, "level": "error"}]
+        data = [{"content": {"foo": "bar"}, "level": "error"}]
         api_client.post(url, data, format="json")
         log_records = DatabaseLogRecord.objects.all()
         assert log_records.count() == 2
         assert log_records.filter(level=logging.ERROR).count() == 1
 
-        data = [{"content": {"foo":"bar"}, "level": "warning"}]
+        data = [{"content": {"foo": "bar"}, "level": "warning"}]
         api_client.post(url, data, format="json")
         log_records = DatabaseLogRecord.objects.all()
         assert log_records.count() == 3
         assert log_records.filter(level=logging.WARNING).count() == 1
 
-        data = [{"content": {"foo":"bar"}}]
+        data = [{"content": {"foo": "bar"}}]
         api_client.post(url, data, format="json")
         log_records = DatabaseLogRecord.objects.all()
         assert log_records.count() == 4

@@ -25,7 +25,7 @@ install_requires = [
     "python-logstash~=0.4.6",
     # profiling
     "pympler>=0.8",
-]
+]  # yapf: disable
 
 setup(
     name=title,
