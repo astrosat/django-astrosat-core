@@ -9,7 +9,7 @@ test = "pipenv run pytest --disable-warnings"
 watch = "pipenv run ptw"
 
 [packages]
-django = "~=3.0"
+django = "~=3.2"
 django-environ = "*"
 django-filter = "*"
 djangorestframework = "*"
