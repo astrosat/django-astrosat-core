@@ -1,6 +1,7 @@
 import logging
 import json
 import uuid
+from collections import defaultdict
 from itertools import chain, filterfalse, groupby
 from functools import reduce
 
@@ -305,11 +306,10 @@ def remove_urlpatterns(urlpatterns, pattern_names_to_remove):
     """
     # yapf: disable
 
-    urls_to_check = {
-        # split urlpatterns into patterns & resolvers
-        k: list(g)
-        for k, g in groupby(urlpatterns, key=type)
-    }
+    # split urlpatterns into patterns & resolvers
+    urls_to_check = defaultdict(list)
+    for k, g in groupby(urlpatterns, key=type):
+        urls_to_check[k] += list(g)
 
     resolvers_to_keep = filterfalse(
         # note the double-looping to check patterns _w/in_ a resolver
