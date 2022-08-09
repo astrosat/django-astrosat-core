@@ -85,6 +85,7 @@ class Command(DjangoLoadDataCommand):
         load_media = options["load_media"]
         media_path = options["media_path"]
 
+        # figure out where media files are stored...
         if load_media:
             if media_path:
                 media_abspath = os.path.abspath(media_path)
@@ -95,20 +96,25 @@ class Command(DjangoLoadDataCommand):
                     self.media_path = os.path.join(
                         media_dir, os.path.splitext(media_file)[0]
                     )
-                else:
+                elif os.path.isdir(media_abspath):
                     self.media_path = media_abspath
+                else:
+                    raise CommandError(
+                        f"{media_path} must either be a zipfile or a directory"
+                    )
 
             else:
                 self.media_path = None
 
-        # intercept media fields
+        # intercept media fields...
         if load_media:
             for ModelClass in get_models_with_media_fields():
                 pre_save.connect(self.load_media, sender=ModelClass)
 
+        # load data...
         command_result = super().handle(*fixture_labels, **options)
 
-        # stop intercepting media fields
+        # stop intercepting media fields...
         if load_media:
             for ModelClass in get_models_with_media_fields():
                 pre_save.disconnect(self.load_media, sender=ModelClass)
