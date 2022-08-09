@@ -119,3 +119,19 @@ class ExampleConditionallyDeletedThing(models.Model):
 
     def __str__(self):
         return f"{self.name}"
+
+
+def example_media_path(instance, filename):
+    return f"example_media_models/{filename}"
+
+
+class ExampleMediaModel(models.Model):
+    name = models.CharField(unique=True, max_length=255)
+    media = models.FileField(
+        blank=False,
+        null=False,
+        upload_to=example_media_path,
+    )
+
+    def __str__(self):
+        return f"{self.name}"
