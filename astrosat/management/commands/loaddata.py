@@ -35,8 +35,9 @@ class Command(DjangoLoadDataCommand):
         # work out where fixture media files for this model ought to live...
         app_config = apps.get_app_config(sender._meta.app_label)
         if not self.media_path:
-            app_path = app_config.path
-            app_fixture_media_path = os.path.join(app_path, "fixtures/media")
+            app_fixture_media_path = os.path.join(
+                app_config.path, "fixtures/media"
+            )
         else:
             app_fixture_media_path = os.path.join(
                 self.media_path, app_config.name
