@@ -33,11 +33,14 @@ class Command(DjangoLoadDataCommand):
         instance = kwargs["instance"]
 
         # work out where fixture media files for this model ought to live...
+        app_config = apps.get_app_config(sender._meta.app_label)
         if not self.media_path:
-            app_path = apps.get_app_config(sender._meta.app_label).path
+            app_path = app_config.path
             app_fixture_media_path = os.path.join(app_path, "fixtures/media")
         else:
-            app_fixture_media_path = self.media_path
+            app_fixture_media_path = os.path.join(
+                self.media_path, app_config.name
+            )
 
         for field in sender._meta.fields:
 
@@ -84,6 +87,11 @@ class Command(DjangoLoadDataCommand):
 
         load_media = options["load_media"]
         media_path = options["media_path"]
+
+        if media_path and not load_media:
+            raise CommandError(
+                "The '--media-path' argument cannot be used without the '--media' flag."
+            )
 
         # figure out where media files are stored...
         if load_media:
