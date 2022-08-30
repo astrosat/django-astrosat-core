@@ -33,15 +33,3 @@ class TestHashable:
 
         assert test_model.has_hash_source_changed(old_name.encode()) is False
         assert test_model.has_hash_source_changed(new_name.encode()) is True
-
-
-@pytest.mark.django_db
-class TestSingleton:
-    def test_singleton_cannot_create_multiple(self):
-        singleton_1 = factories.ExampleSingletonModelFactory()
-        singleton_2 = factories.ExampleSingletonModelFactory()
-        singleton_1.save()
-        singleton_2.save()
-        assert singleton_1.pk is not None
-        assert singleton_2.pk is None
-        assert factories.ExampleSingletonModel.objects.count() == 1
