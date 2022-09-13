@@ -36,4 +36,6 @@ django-astrosat-core comes w/ an example project to help w/ developing/testing
 
 note that "django-astrosat-core/examples/Pipfile" was created using `pipenv install -e ..`; this uses a pointer to "django-astrosat-core/setup.py" in the virtual environment and creates a entry like [packages.ed0a5ba]; if the distribution changes just run `pipenv update ed0a5ba`, otherwise code changes should just be picked up b/c  of the `-e` flag.
 
-note note that when things go wrong, I tend to get this error: "LookupError: No installed app with label 'admin'."
+Note note that when things go wrong, I tend to get this error: "LookupError: No installed app with label 'admin'."
+
+
