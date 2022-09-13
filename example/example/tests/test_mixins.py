@@ -35,17 +35,9 @@ class TestHashable:
         assert test_model.has_hash_source_changed(new_name.encode()) is True
 
 
-# TODO: VALERIA
-# DEFINE A NEW TEST THAT MAKES SURE THAT YOU CAN NEVER HAVE MORE THAN ONE SINGLETON
-
-
 @pytest.mark.django_db
 class TestSingleton:
     def test_cannot_have_more_than_one_singleton(self):
-        # hint: make sure there are no saved instances of ExampleSingletonModels in the database
-        # hint: create two instances of ExampleSingletonModel
-        # hint: save one of them and check how many instances are in the database
-        # hint: save the other and check how many instances are in the database
 
         number_of_singletons = ExampleSingletonModel.objects.count()
         assert number_of_singletons == 0

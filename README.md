@@ -38,4 +38,4 @@ note that "django-astrosat-core/examples/Pipfile" was created using `pipenv inst
 
 Note note that when things go wrong, I tend to get this error: "LookupError: No installed app with label 'admin'."
 
-hello world
+
