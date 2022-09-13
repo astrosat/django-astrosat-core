@@ -1,6 +1,6 @@
 import pytest
 from django.db import models
-
+from example.models import ExampleSingletonModel
 from . import factories
 
 
@@ -46,4 +46,14 @@ class TestSingleton:
         # hint: create two instances of ExampleSingletonModel
         # hint: save one of them and check how many instances are in the database
         # hint: save the other and check how many instances are in the database
-        assert False
+
+        number_of_singletons = ExampleSingletonModel.objects.count()
+        assert number_of_singletons == 0
+        singleton = ExampleSingletonModel(name="valeria")
+        singleton.save()
+        singleton2 = ExampleSingletonModel(name="test2")
+        singleton2.save()
+        number_of_singletons = ExampleSingletonModel.objects.count()
+        assert number_of_singletons == 1
+        assert singleton2.id == None
+        assert singleton.id != None
